@@ -3,6 +3,7 @@
 ![Code Climate Maintainability](https://api.codeclimate.com/v1/badges/OUR_CODE_CLIMATE_MAINTAINABILITY_BADGE_ID/maintainability)
 ![Code Climate Coverage](https://api.codeclimate.com/v1/badges/OUR_CODE_CLIMATE_COVERAGE_BADGE_ID/test_coverage)
 ![CircleCI](https://circleci.com/gh/OUR_USERNAME/OUR_PROJECT_NAME.svg?style=svg)
+![Coverage Status](https://coveralls.io/repos/github/atlp-rwanda/e-commerce-lydia-32-fn/badge.svg?branch=main)
 
 ## Description
 
