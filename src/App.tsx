@@ -6,7 +6,7 @@ import store from './store';
 import LoginForm from './pages/Login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Layout from './layout';
+import Layout from './layouts/MainLayout';
 
 import AboutUs from './pages/AboutUs';
 
