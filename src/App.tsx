@@ -5,20 +5,26 @@ import { Provider } from 'react-redux'
 import store from './store'
 import LoginForm from './Components/Login'
 import MainLayout from './layouts/MainLayout'
+import ForgotPasswordLayout from './layouts/ForgotPasswordLayout'
+import ResetPasswordLayout from './layouts/ResetPasswordLayout'
 
-const App: React.FC = ()=> {
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path='/' element={<MainLayout/>}>
-        <Route index element={<Home />}/>
-        <Route path='/login' element={<LoginForm/>}/>
-    </Route> 
+const App: React.FC = () => {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <>
+        <Route path='/' element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path='/login' element={<LoginForm />} />
+        </Route>
+        <Route path='/forgot-password' element={<ForgotPasswordLayout />} />
+        <Route path='/reset-password' element={<ResetPasswordLayout />} />
+      </>
+    )
   )
-)
   return (
- <Provider store={store} >
-  <RouterProvider router={router} />
- </Provider>
+    <Provider store={store} >
+      <RouterProvider router={router} />
+    </Provider>
   )
 }
 
