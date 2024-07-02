@@ -1,0 +1,27 @@
+language: node_js
+node_js:
+  - "14"
+
+cache:
+  directories:
+    - node_modules
+
+script:
+  - yarn install
+  - yarn run build
+  - yarn test
+  - yarn run storybook:build
+
+before_script:
+  - yarn global add @storybook/cli
+
+branches:
+  only:
+    - main
+
+notifications:
+  email:
+    recipients:
+      - atlp32tl@gmail.com
+    on_success: always
+    on_failure: always
