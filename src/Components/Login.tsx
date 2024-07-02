@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import toast from 'react-hot-toast';
 import { useLoginByGoogleMutation } from "../slices/authSlice/authApiSlice";
 import { getCredentials } from "../slices/authSlice/authSlice";
@@ -17,8 +17,13 @@ const LoginForm: React.FC = () => {
   const dispatch = useDispatch()
 
   const [loginByGoogle] = useLoginByGoogleMutation()
-
-
+  const {userInfo} = useSelector((state: any) => state.auth) 
+ 
+  useEffect(() => {
+    if(userInfo) {
+      navigate('/')
+     }
+  }, [])
   const handleGoogleSignIn = useGoogleLogin({
     onSuccess: async (response) => {
 

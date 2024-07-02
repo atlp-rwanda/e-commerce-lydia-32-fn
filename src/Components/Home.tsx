@@ -12,13 +12,9 @@ const DisplayTask: React.FC = () => {
     const { data: products, refetch } = useGetProductsQuery(); 
     
     useEffect(() => {
-      const handleData = () => {
-        if(products){
-            dispatch(setProductInfo(products))
-            
-        }
-      }
-      handleData()
+      if(products){
+        dispatch(setProductInfo(products)) 
+    }
     }, [products])
   
     
