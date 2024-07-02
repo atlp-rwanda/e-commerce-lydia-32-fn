@@ -18,6 +18,7 @@ export const userApi = createApi({
         url: 'login/user',
         method: 'POST',
         body: credentials,
+        credentials: 'include',
       }),
     }),
   }),
