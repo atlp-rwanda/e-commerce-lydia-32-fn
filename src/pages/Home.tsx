@@ -12,9 +12,7 @@ const DisplayTask: React.FC = () => {
   
     // @ts-ignore
     const { data: products, refetch } = useGetProductsQuery(); 
-
-  const { productInfo } = useSelector((state:any)=>state.products)
-  console.log('my product info' ,productInfo)
+    
     useEffect(() => {
       const handleData = () => {
         if(products){
