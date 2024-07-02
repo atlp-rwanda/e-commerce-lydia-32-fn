@@ -32,7 +32,7 @@ const Login: React.FC = () => {
       setIsLoading(false);
       return;
     }
-  
+
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(getCredentials({ ...res }));
@@ -58,7 +58,7 @@ const Login: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
       <Link 
         to="/" 
-        className="absolute top-4 left-4 text-3xl text-gray-600 hover:text-black transition-all duration-300 transform hover:scale-110"
+        className="absolute top-9 left-12 text-3xl text-gray-600 hover:text-black transition-all duration-300 transform hover:scale-110"
       >
         <FaHome className="animate-bounce" />
       </Link>
