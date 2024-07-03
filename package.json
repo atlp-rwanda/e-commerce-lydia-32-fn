@@ -20,7 +20,7 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
-    ]
+    ],
     "webpack-build": "webpack --mode production",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
