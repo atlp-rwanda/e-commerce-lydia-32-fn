@@ -3,6 +3,7 @@ import depot from '../assets/depot.jpg'
 import background from '../assets/Background.jpg'
 import Footer from '../Components/footer';
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const AboutUs: React.FC = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -68,12 +69,12 @@ const AboutUs: React.FC = () => {
               At Depot, we are passionate about bringing you the best shopping experience online. Our mission is to provide a wide range of high-quality products at competitive prices, delivered right to your doorstep.
               We envision a world where shopping is not just a necessity, but an enjoyable and fulfilling experience. We strive to create a seamless and personalized shopping journey for each of our customers, ensuring they find exactly what they need and more
             </p>
-            <a href="#" className="text-gray-600 hover:text-black inline-flex items-center">
-              Learn More 
-              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </a>
+            <Link to="/ourTeam" className="group text-gray-600 hover:text-black inline-flex items-center transition duration-300 ease-in-out">
+  Our Team 
+  <svg className="w-4 h-4 ml-2 transition-transform duration-300 ease-in-out group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  </svg>
+</Link>
           </div>
         </div>
       </div>

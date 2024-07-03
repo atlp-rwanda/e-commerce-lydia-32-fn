@@ -21,19 +21,19 @@ import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } 
 import { Provider } from 'react-redux';
 import store from './store';
 import LoginForm from './pages/Login';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Layout from './layouts/MainLayout';
+import MainLayout from './layouts/MainLayout';
+import TeamSection from './pages/ourTeam';
 
 import AboutUs from './pages/AboutUs';
 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route element={<Layout />}>
-      <Route path='/' element={<Home />} />
+      <Route path= '/' element={<MainLayout />}>
+      <Route index element={<Home />} />
       <Route path='/login' element={<LoginForm />} />
       <Route path="/about" element={<AboutUs />} />
+      <Route path="/ourTeam" element={<TeamSection/>} />
     </Route>
     )
   );
@@ -41,7 +41,6 @@ const App = () => {
   return (
     <Provider store={store}>
       <RouterProvider router={router} />
-      <ToastContainer />
     </Provider>
   );
 };
