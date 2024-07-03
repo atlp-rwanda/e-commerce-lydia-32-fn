@@ -1,9 +1,9 @@
 import React from 'react'
-import Home from './Components/Home'
+import Home from './components/Home'
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store'
-import LoginForm from './Components/Login'
+import LoginForm from './components/Login'
 import MainLayout from './layouts/MainLayout'
 
 const App: React.FC = ()=> {
