@@ -1,12 +1,9 @@
-import React, {useState, useEffect} from 'react'
+import React, { useEffect} from 'react'
 import { setProductInfo } from '../slices/productSlice/productSlice';
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
-import { useDispatch,useSelector } from 'react-redux';
-import Navbar from '../Components/navbar';
-import Footer from '../Components/footer';
+import { useDispatch } from 'react-redux';
 
-const DisplayTask: React.FC = () => {
-    const [isLoading, setIsLoading] = useState<Boolean>(false);
+const Home: React.FC = () => {
 
     const dispatch = useDispatch();
   
@@ -14,13 +11,9 @@ const DisplayTask: React.FC = () => {
     const { data: products, refetch } = useGetProductsQuery(); 
     
     useEffect(() => {
-      const handleData = () => {
-        if(products){
-            dispatch(setProductInfo(products))
-            
-        }
-      }
-      handleData()
+      if(products){
+        dispatch(setProductInfo(products)) 
+    }
     }, [products])
   
     
@@ -28,11 +21,8 @@ const DisplayTask: React.FC = () => {
    
  
   return (
-    <>
-  
-
-    </>
+    <></>
   )
 }
 
-export default DisplayTask
+export default Home

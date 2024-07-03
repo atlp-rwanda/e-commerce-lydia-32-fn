@@ -6,6 +6,7 @@ import bahati from '../assets/bahati.jpeg'
 import derrick from '../assets/derrick.png'
 import robert from '../assets/robert.jpeg'
 import pacifique from '../assets/pacifique.png'
+import React from 'react';
 import rodrigue from '../assets/rodrigue.jpeg'
 
 import { FaTwitter, FaLinkedin, FaFacebook } from 'react-icons/fa';
@@ -91,7 +92,7 @@ const teamMembers = [
       },
     { 
       name: "Pacifique Ishimwe", 
-      role: "Project Manager", 
+      role: "Developer", 
       imageUrl: pacifique, 
       description: "pacifique's innovative solutions drive our technical excellence. He is proficient in multiple programming languages and frameworks. " 
 

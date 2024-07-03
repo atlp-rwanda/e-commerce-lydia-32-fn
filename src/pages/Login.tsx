@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { getCredentials } from '../slices/authSlice/authSlice';
-import { useLoginMutation } from '../slices/authSlice/authApiSlice';
+import { FcGoogle } from 'react-icons/fc';
+import { useGoogleLogin } from '@react-oauth/google';
+import { useLoginMutation, useLoginByGoogleMutation } from '../slices/authSlice/authApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaHome } from 'react-icons/fa';
+import Spinner from '../Components/Spinners';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -16,6 +19,7 @@ const Login: React.FC = () => {
 
   const { userInfo } = useSelector((state: any) => state.auth);
   const [login] = useLoginMutation();
+  const [loginByGoogle] = useLoginByGoogleMutation()
 
   useEffect(() => {
     if (userInfo) {
@@ -54,6 +58,30 @@ const Login: React.FC = () => {
       setIsLoading(false);
     }
   };
+
+  const handleGoogleSignIn = useGoogleLogin({
+    onSuccess: async (response) => {
+
+    setIsLoading(true);
+    try {
+      const accessToken = response.access_token
+       const res = await loginByGoogle({accessToken}).unwrap()
+      dispatch(getCredentials({...res}));
+      toast.success('login successfully');
+      navigate('/');
+    } catch (err) {
+        //@ts-ignore
+      toast.error(err?.data?.message || err.error);
+      console.log(err);
+    } finally {
+      setIsLoading(false);
+    }
+    },
+    onError: (error) => {
+      console.log('Google Sign-In failed:', error);
+    },
+
+  });
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
@@ -96,9 +124,32 @@ const Login: React.FC = () => {
             className="w-full bg-black text-white p-3 rounded-md hover:bg-gray-800 transform hover:-translate-y-1 transition duration-300 disabled:opacity-50"
             disabled={isLoading}
           >
-            {isLoading ? 'LOGGING IN...' : 'LOGIN'}
+             {isLoading && <Spinner/>}
           </button>
         </form>
+        <div className="mt-6">
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Or continue with</span>
+            </div>
+          </div>
+        
+           {isLoading && <Spinner/>}
+          <div className="mt-6">
+            <button
+              type="button"
+              onClick={() => handleGoogleSignIn()}
+              className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition duration-300"
+            >
+              <FcGoogle className="h-5 w-5 mr-2" />
+              Sign in with Google
+            </button>
+          </div>
+        </div>
+
         <div className="mt-6 text-center">
           <Link to="/forgot-password" className="text-sm text-gray-600 hover:text-black transition duration-300">LOST YOUR PASSWORD?</Link>
         </div>
