@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { getCredentials } from '../slices/authSlice';
-import { useLoginMutation } from '../slices/userApiSlice';
+import toast from 'react-hot-toast';
+import { getCredentials } from '../slices/authSlice/authSlice';
+import { useLoginMutation } from '../slices/authSlice/authApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaHome } from 'react-icons/fa';
 
@@ -37,6 +37,7 @@ const Login: React.FC = () => {
       const res = await login({ email, password }).unwrap();
       dispatch(getCredentials({ ...res }));
       toast.success('Login successful!');
+
       navigate('/');
     } catch (err: any) {
       console.error(err);
