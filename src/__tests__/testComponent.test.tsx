@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom'; 
 import TestComponent from '../Components/testComponent';
 
 test('renders the component with the correct title', () => {
