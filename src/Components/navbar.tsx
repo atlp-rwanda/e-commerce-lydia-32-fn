@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { logOut } from '../slices/authSlice/authSlice';
+import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logout ]=useLogoutMutation()
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -14,6 +20,32 @@ const Navbar: React.FC = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const handleLogout = async(e: any) =>{
+  e.preventDefault()
+  setIsLoading(true)
+  const userInfo = localStorage.clear()
+  try {
+      const res = await logout(userInfo).unwrap();
+      dispatch(logOut(res));
+      toast.success("You're Logged out");
+      navigate('/')
+
+      navigate('/');
+    }
+  catch(err:any){ if (err?.data?.message) {
+        toast.error(err.data.message);
+      } else if (err.status === 401) {
+        toast.error('Incorrect email or password');
+      } else if (err.status === 404) {
+        toast.error('Email not found. Please check your email or register');
+      } else {
+        toast.error('An error occurred. Please try again later');
+      }
+    }
+    finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <nav className="bg-white fixed top-0 left-0 right-0 z-10">
@@ -53,7 +85,10 @@ const Navbar: React.FC = () => {
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                    <Link to="/logout" className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100">Logout</Link>
+                    <button 
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
+                    onClick={handleLogout}
+                    >Logout</button>
                   </div>
                 )}
               </div>
