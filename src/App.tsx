@@ -6,7 +6,7 @@ import store from './store';
 import LoginForm from './pages/Login';
 import MainLayout from './layouts/MainLayout';
 import TeamSection from './pages/ourTeam';
-
+import NotFoundPage from './pages/NotFoundPage';
 import AboutUs from './pages/AboutUs';
 
 const App = () => {
@@ -14,6 +14,7 @@ const App = () => {
     createRoutesFromElements(
       <Route path= '/' element={<MainLayout />}>
       <Route index element={<Home />} />
+      <Route path='*' element={<NotFoundPage/>}/>
       <Route path='/login' element={<LoginForm />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/ourTeam" element={<TeamSection/>} />

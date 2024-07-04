@@ -119,12 +119,13 @@ const Login: React.FC = () => {
             <input type="checkbox" id="remember" className="mr-2 transform hover:scale-125 transition duration-300" />
             <label htmlFor="remember" className="text-sm text-gray-600 select-none">REMEMBER ME</label>
           </div>
+          {isLoading && <Spinner/>}
           <button
             type="submit"
             className="w-full bg-black text-white p-3 rounded-md hover:bg-gray-800 transform hover:-translate-y-1 transition duration-300 disabled:opacity-50"
             disabled={isLoading}
           >
-             {isLoading && <Spinner/>}
+            Sign in
           </button>
         </form>
         <div className="mt-6">
@@ -137,7 +138,6 @@ const Login: React.FC = () => {
             </div>
           </div>
         
-           {isLoading && <Spinner/>}
           <div className="mt-6">
             <button
               type="button"
