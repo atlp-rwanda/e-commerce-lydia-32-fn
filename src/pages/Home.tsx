@@ -9,6 +9,7 @@ import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
+  // @ts-ignore
   const { data: products, refetch } = useGetProductsQuery()
 
   useEffect(() => {
@@ -22,8 +23,8 @@ const App: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-center mb-12">
           <div className="w-1/2 mt-20">
-            <h1 className="text-lg font-semibold mb-4 font-catamaran">THINK DIFFERENT.</h1>
-            <p className="text-l text-gray-600 font-catamaran font-thin">Depot is a unique & captivating theme designed specifically for<br></br> all types of shops and online stores.</p>
+            <h1 className="text-xl font-semibold mb-4 font-catamaran">THINK DIFFERENT.</h1>
+            <p className="text-l text-gray-600 font-catamaran font-thin">With a wide range of products, from electronics to clothing and food, Depot offers <br></br>a seamless shopping experience for customers</p>
           </div>
           <div className="w-1/2 flex justify-center">
             <img src={chair} alt="Chair" className="w-auto h-auto" />
