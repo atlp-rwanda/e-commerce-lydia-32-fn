@@ -65,7 +65,12 @@ const Login: React.FC = () => {
     setIsLoading(true);
     try {
       const accessToken = response.access_token
-       const res = await loginByGoogle({accessToken}).unwrap()
+      const res = await loginByGoogle({accessToken}).unwrap()
+
+      if(res.message === "2FA code sent to your email") {
+       return toast.success('2FA code sent to your email');
+      }
+
       dispatch(getCredentials({...res}));
       toast.success('login successfully');
       navigate('/');
