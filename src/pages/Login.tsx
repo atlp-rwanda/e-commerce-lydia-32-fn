@@ -39,6 +39,9 @@ const Login: React.FC = () => {
 
     try {
       const res = await login({ email, password }).unwrap();
+      if(res.message === "2FA code sent to your email") {
+        return toast.success('2FA code sent to your email');
+       }
       dispatch(getCredentials({ ...res }));
       toast.success('Login successful!');
 
