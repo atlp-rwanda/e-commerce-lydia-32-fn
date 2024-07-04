@@ -9,9 +9,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: data
             })
-        })
+        }),
+        login: builder.mutation({
+            query: (data) => ({
+                url: `/login/user`,
+                method: 'POST',
+                body: data
+            })
+        }),
     })
 })
 
-
-export const {useLoginByGoogleMutation} = userApiSlice
+export const {useLoginByGoogleMutation, useLoginMutation} = userApiSlice
