@@ -5,7 +5,8 @@ import { useSelector } from 'react-redux';
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const { userInfo } = useSelector((state: any) => state.auth);
+  // const { userInfo } = useSelector((state: any) => state.auth);
+  const userInfo = useSelector((state: any) => state.auth.userInfo);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -46,20 +47,20 @@ const Navbar: React.FC = () => {
           <div className="hidden md:block text-xl font-bold">DEPOT</div>
 
           <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
-            {userInfo ? (
-              <div className="relative">
-                <button onClick={toggleDropdown} className="block text-sm text-gray-600 hover:text-black">
-                  {userInfo.user.firstname}
-                </button>
-                {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                    <Link to="/logout" className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100">Logout</Link>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link to="/login" className="text-sm text-gray-600 hover:text-black">LOGIN</Link>
-            )}
+          {userInfo ? (
+  <div className="relative">
+    <button onClick={toggleDropdown} className="block text-sm text-gray-600 hover:text-black">
+      {userInfo.firstname || userInfo.user?.firstname || 'User'}
+    </button>
+    {isDropdownOpen && (
+      <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+        <Link to="/logout" className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100">Logout</Link>
+      </div>
+    )}
+  </div>
+) : (
+  <Link to="/login" className="text-sm text-gray-600 hover:text-black">LOGIN</Link>
+)}
             <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART (50)</Link>
             <button className="text-gray-600 hover:text-black">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
