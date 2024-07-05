@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
       const res = await logout(userInfo).unwrap();
       dispatch(logOut(res));
       toast.success("You're Logged out");
-      navigate('/')
+      navigate('/login')
     }
   catch(err:any){ if (err?.data?.message) {
         toast.error(err.data.message);
