@@ -29,17 +29,15 @@ const Navbar: React.FC = () => {
       dispatch(logOut(res));
       toast.success("You're Logged out");
       navigate('/')
-
-      navigate('/');
     }
   catch(err:any){ if (err?.data?.message) {
         toast.error(err.data.message);
+      } else if (err.status === 400) {
+        toast.error('already logged out or not logged in');
       } else if (err.status === 401) {
-        toast.error('Incorrect email or password');
-      } else if (err.status === 404) {
-        toast.error('Email not found. Please check your email or register');
+        toast.error('User is not authenticated');
       } else {
-        toast.error('An error occurred. Please try again later');
+        toast.error('Internal Server Error');
       }
     }
     finally {
