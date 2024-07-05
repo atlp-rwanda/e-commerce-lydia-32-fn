@@ -5,8 +5,8 @@ import { Provider } from 'react-redux'
 import store from './store'
 import LoginForm from './Components/Login'
 import MainLayout from './layouts/MainLayout'
-import ForgotPasswordLayout from './layouts/ForgotPasswordLayout'
-import ResetPasswordLayout from './layouts/ResetPasswordLayout'
+import ForgotPasswordLayout from './pages/ForgotPassword'
+import ResetPasswordLayout from './pages/ResetPassword'
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
