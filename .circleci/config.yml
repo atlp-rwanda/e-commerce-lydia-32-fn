@@ -1,0 +1,58 @@
+version: 2.1
+jobs:
+  build:
+    docker:
+      - image: cimg/node:21.7.1-browsers
+
+    steps:
+      - checkout
+      - run:
+          name: "Say hello"
+          command: "echo Hello, World!"
+      - run:
+          name: Install Dependencies
+          command: yarn install
+      - run:
+          name: Build app
+          command: yarn run build
+      - run:
+          name: Run Tests
+          command: yarn run test
+      - run:
+          name: Upload Coverage to CodeClimate
+          command: |
+            ./cc-test-reporter before-build
+            yarn test
+            ./cc-test-reporter after-build --exit-code $?
+          environment:
+            CC_TEST_REPORTER_ID: your-codeclimate-test-reporter-id
+
+  store_test_results:
+    docker:
+      - image: cimg/node:21.7.1-browsers
+
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: yarn install
+      - store_test_results:
+          path: ~/project/test-results
+          destination: test-results
+  deploy:
+    docker:
+      - image: cimg/node:21.7.1-browsers
+    steps:
+      - checkout
+      - run:
+          name: Deploy to Render
+          command: |
+            curl -X POST -H "Content-Type: application/json" -H "Authorization: Bearer ${RENDER_API_KEY}" -d '{"branch":"develop"}' https://api.render.com/deploy/srv-cq2gra3v2p9s73esijgg?key=${RENDER_DEPLOY_HOOK}
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - store_test_results:
+          requires:
+            - build
+      - deploy
