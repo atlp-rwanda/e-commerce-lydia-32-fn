@@ -9,10 +9,10 @@ import TeamSection from './pages/ourTeam';
 import ForgotPasswordLayout from './pages/ForgotPassword'
 import ResetPasswordLayout from './pages/ResetPassword'
 import AboutUs from './pages/AboutUs';
+import SignupForm from './pages/Register';
+import EmailVerificationPage from './pages/verified';
+import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
-import SignupForm from './Components/Register';
-import EmailVerificationPage from './Components/common/verified';
-import EmailVerificationFailedPage from './Components/common/verifyFailed';
 
 const App:React.FC = () => {
   const router = createBrowserRouter(

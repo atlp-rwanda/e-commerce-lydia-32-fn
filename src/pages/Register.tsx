@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
-import Spinner from "./Spinners";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useLoginByGoogleMutation } from "../slices/authSlice/authApiSlice";
+import Spinner from "../Components/Spinners";
+import { useRegisterByGoogleMutation, useUserRegisterMutation } from "../slices/authSlice/authApiSlice";
 import { useGoogleLogin } from "@react-oauth/google";
-import { getCredentials } from "../slices/authSlice/authSlice";
 import toast from "react-hot-toast";
-import { useUserRegisterMutation } from "../slices/signupSlice/signupApiSlice";
+import { FaHome } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const SignupForm: React.FC = () => {
   const [firstname, setFirstname] = useState("");
@@ -22,21 +21,24 @@ const SignupForm: React.FC = () => {
   const [postalcode, setPostalcode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const [loginByGoogle] = useLoginByGoogleMutation();
+  const [registerByGoogle] = useRegisterByGoogleMutation();
   const [userRegister] = useUserRegisterMutation();
+  const navigate = useNavigate();
+  const {userInfo} = useSelector((state: any) => state.auth)
+  useEffect(() =>{
+    if(userInfo){
+      navigate('/')
+    }
+  }, [])
 
-  const handleGoogleSignIn = useGoogleLogin({
+  const handleGoogleRegister = useGoogleLogin({
     onSuccess: async (response) => {
       setIsLoading(true);
       try {
         const accessToken = response.access_token;
-        const res = await loginByGoogle({ accessToken }).unwrap();
-        dispatch(getCredentials({ ...res }));
-        toast.success("Login successfully");
-        navigate("/");
+        const res = await registerByGoogle({ accessToken }).unwrap();
+        toast.success(res.message);
       } catch (err) {
         //@ts-ignore
         toast.error(err?.data?.message || err.error);
@@ -50,7 +52,7 @@ const SignupForm: React.FC = () => {
     },
   });
 
-  const handleRegister = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -89,6 +91,8 @@ const SignupForm: React.FC = () => {
       toast.error(errorMessages[0] || err?.data?.message);
       //@ts-ignore
       console.log(errorMessages[0], err?.data?.message);
+      console.log(err);
+
     } finally {
       setIsLoading(false);
     }
@@ -96,6 +100,13 @@ const SignupForm: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
+
+<Link 
+        to="/" 
+        className="absolute top-9 left-12 text-3xl text-gray-600 hover:text-black transition-all duration-300 transform hover:scale-110"
+      >
+        <FaHome className="animate-bounce" />
+      </Link>
       <div className="w-full max-w-xl bg-white rounded-lg shadow-lg p-8">
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 transform hover:scale-105 transition duration-300">
           REGISTER
@@ -271,11 +282,11 @@ const SignupForm: React.FC = () => {
           <div className="mt-6">
             <button
               type="button"
-              onClick={() => handleGoogleSignIn()}
+              onClick={() => handleGoogleRegister()}
               className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition duration-300"
             >
               <FcGoogle className="h-5 w-5 mr-2" />
-              Sign in with Google
+              Sign up with Google
             </button>
           </div>
         </div>
