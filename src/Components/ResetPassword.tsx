@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const ResetPassword: React.FC = () => {
@@ -7,6 +7,7 @@ const ResetPassword: React.FC = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [token, setToken] = useState('');
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const location = useLocation();
 
@@ -22,6 +23,7 @@ const ResetPassword: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
 
         if (password !== confirmPassword) {
             toast.error('Passwords do not match.');
@@ -44,10 +46,14 @@ const ResetPassword: React.FC = () => {
                 body: JSON.stringify({ password }),
             });
 
+
             const data = await response.json();
 
             if (response.ok) {
                 toast.success(data.message);
+                setTimeout(() => {
+                    navigate('/login');
+                }, 3000);
             } else {
                 toast.error(data.error || 'Something went wrong');
             }

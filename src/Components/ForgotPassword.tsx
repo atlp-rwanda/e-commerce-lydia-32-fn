@@ -67,7 +67,7 @@ const ForgotPassword: React.FC = () => {
                 </form>
                 <div className="mt-8 text-center">
                     <span className="text-sm text-gray-500">Still Remember Your Password? </span>
-                    <a href="#" className="text-sm text-blue-500 hover:text-blue-700 transition duration-300">Login</a>
+                    <a href="/login" className="text-sm text-blue-500 hover:text-blue-700 transition duration-300">Login</a>
                 </div>
             </div>
         </div>
