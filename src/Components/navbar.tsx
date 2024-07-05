@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { logOut } from '../slices/authSlice/authSlice';
+import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logout ]=useLogoutMutation()
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -14,6 +20,30 @@ const Navbar: React.FC = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const handleLogout = async(e: any) =>{
+  e.preventDefault()
+  setIsLoading(true)
+  try {
+    //@ts-ignore
+      await logout().unwrap();
+      dispatch(logOut());
+      toast.success("You're Logged out");
+      navigate('/login')
+    }
+  catch(err:any){ if (err?.data?.message) {
+        toast.error(err.data.message);
+      } else if (err.status === 400) {
+        toast.error('already logged out or not logged in');
+      } else if (err.status === 401) {
+        toast.error('User is not authenticated');
+      } else {
+        toast.error('Internal Server Error');
+      }
+    }
+    finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <nav className="bg-white fixed top-0 left-0 right-0 z-10">
@@ -46,20 +76,23 @@ const Navbar: React.FC = () => {
           <div className="hidden md:block text-xl font-bold">DEPOT</div>
 
           <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
-          {userInfo ? (
-  <div className="relative">
-    <button onClick={toggleDropdown} className="block text-sm text-gray-600 hover:text-black">
-      {userInfo.firstname || userInfo.user?.firstname || 'User'}
-    </button>
-    {isDropdownOpen && (
-      <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-        <Link to="/logout" className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100">Logout</Link>
-      </div>
-    )}
-  </div>
-) : (
-  <Link to="/login" className="text-sm text-gray-600 hover:text-black">LOGIN</Link>
-)}
+            {userInfo ? (
+              <div className="relative">
+                <button onClick={toggleDropdown} className="block text-sm text-gray-600 hover:text-black">
+                  {userInfo.user.firstname}
+                </button>
+                {isDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+                    <button 
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
+                    onClick={handleLogout}
+                    >Logout</button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <Link to="/login" className="text-sm text-gray-600 hover:text-black">LOGIN</Link>
+            )}
             <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART (50)</Link>
             <button className="text-gray-600 hover:text-black">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
