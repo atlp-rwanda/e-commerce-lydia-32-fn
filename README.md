@@ -1,8 +1,10 @@
 # E-Commerce-LYDIA-32 React/Redux Frontend Project
 
+# Badges
+
 ![Code Climate Maintainability](https://api.codeclimate.com/v1/badges/OUR_CODE_CLIMATE_MAINTAINABILITY_BADGE_ID/maintainability)
 ![Code Climate Coverage](https://api.codeclimate.com/v1/badges/OUR_CODE_CLIMATE_COVERAGE_BADGE_ID/test_coverage)
-![CircleCI](https://circleci.com/gh/OUR_USERNAME/OUR_PROJECT_NAME.svg?style=svg)
+[![CircleCI](https://circleci.com/gh/atlp-rwanda/e-commerce-lydia-32-fn.svg?style=svg)](https://circleci.com/gh/atlp-rwanda/e-commerce-lydia-32-fn)
 ![Coverage Status](https://coveralls.io/repos/github/atlp-rwanda/e-commerce-lydia-32-fn/badge.svg?branch=main)
 
 ## Description
@@ -23,24 +25,24 @@ To get started with this project, follow these steps:
 2. **Install dependencies:**
 
    ```bash
-   npm install
+   yarn install
    ```
 
 3. **Run the development server:**
 
    ```bash
-   npm run dev
+   yarn run dev
    ```
 
 4. **Build the project for production:**
 
    ```bash
-   npm run build
+   yarn run build
    ```
 
 5. **Run tests:**
    ```bash
-   npm test
+   yarn test
    ```
 
 ## Dependencies
@@ -66,18 +68,18 @@ To ensure code quality and functionality, this project includes a comprehensive 
 1. **Run all tests:**
 
    ```bash
-   npm test
+   yarn test
    ```
 
 2. **Run tests in watch mode:**
 
    ```bash
-   npm test -- --watch
+   yarn test -- --watch
    ```
 
 3. **Generate a coverage report:**
    ```bash
-   npm test -- --coverage
+   yarn test -- --coverage
    ```
 
 ## Badges
