@@ -23,10 +23,10 @@ const Navbar: React.FC = () => {
   const handleLogout = async(e: any) =>{
   e.preventDefault()
   setIsLoading(true)
-  const userInfo = localStorage.clear()
   try {
-      const res = await logout(userInfo).unwrap();
-      dispatch(logOut(res));
+    //@ts-ignore
+      await logout().unwrap();
+      dispatch(logOut());
       toast.success("You're Logged out");
       navigate('/login')
     }
