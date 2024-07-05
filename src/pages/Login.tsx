@@ -68,7 +68,12 @@ const Login: React.FC = () => {
     setIsLoading(true);
     try {
       const accessToken = response.access_token
-       const res = await loginByGoogle({accessToken}).unwrap()
+      const res = await loginByGoogle({accessToken}).unwrap()
+
+      if(res.message === "2FA code sent to your email") {
+       return toast.success('2FA code sent to your email');
+      }
+
       dispatch(getCredentials({...res}));
       toast.success('login successfully');
       navigate('/');
@@ -122,11 +127,13 @@ const Login: React.FC = () => {
             <input type="checkbox" id="remember" className="mr-2 transform hover:scale-125 transition duration-300" />
             <label htmlFor="remember" className="text-sm text-gray-600 select-none">REMEMBER ME</label>
           </div>
+          {isLoading && <Spinner/>}
           <button
             type="submit"
             className="w-full bg-black text-white p-3 rounded-md hover:bg-gray-800 transform hover:-translate-y-1 transition duration-300 disabled:opacity-50"
             disabled={isLoading}
           >
+            Sign in
           </button>
         </form>
         <div className="mt-6">
@@ -139,7 +146,6 @@ const Login: React.FC = () => {
             </div>
           </div>
         
-           {isLoading && <Spinner/>}
           <div className="mt-6">
             <button
               type="button"

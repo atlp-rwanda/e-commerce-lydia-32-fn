@@ -10,12 +10,14 @@ import TeamSection from './pages/ourTeam';
 import ForgotPasswordLayout from './pages/ForgotPassword'
 import ResetPasswordLayout from './pages/ResetPassword'
 import AboutUs from './pages/AboutUs';
+import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path= '/' element={<MainLayout />}>
       <Route index element={<Home />} />
+      <Route path='*' element={<NotFoundPage/>}/>
       <Route path='/login' element={<LoginForm />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/ourTeam" element={<TeamSection/>} />
