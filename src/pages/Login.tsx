@@ -39,6 +39,9 @@ const Login: React.FC = () => {
 
     try {
       const res = await login({ email, password }).unwrap();
+      if(res.message === "2FA code sent to your email") {
+        return toast.success('2FA code sent to your email');
+       }
       dispatch(getCredentials({ ...res }));
       toast.success('Login successful!');
 
@@ -124,7 +127,6 @@ const Login: React.FC = () => {
             className="w-full bg-black text-white p-3 rounded-md hover:bg-gray-800 transform hover:-translate-y-1 transition duration-300 disabled:opacity-50"
             disabled={isLoading}
           >
-             {isLoading && <Spinner/>}
           </button>
         </form>
         <div className="mt-6">
