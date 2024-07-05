@@ -27,5 +27,4 @@ package-lock.json
 yarn.lock
 
 # CUSTOM FILES
-
 .env
