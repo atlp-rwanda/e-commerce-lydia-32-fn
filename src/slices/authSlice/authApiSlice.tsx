@@ -17,7 +17,15 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 body: data
             })
         }),
+        loginTwoFa: builder.mutation({
+          query:  (data) => ({
+            url: `${BASE_URL}/factor`,
+            method: 'POST',
+            body: data
+          })
+        })
     })
+
 })
 
-export const {useLoginByGoogleMutation, useLoginMutation} = userApiSlice
+export const {useLoginByGoogleMutation, useLoginMutation, useLoginTwoFaMutation} = userApiSlice

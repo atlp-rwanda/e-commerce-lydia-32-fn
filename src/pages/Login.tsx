@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { getCredentials } from '../slices/authSlice/authSlice';
 import { FcGoogle } from 'react-icons/fc';
 import { useGoogleLogin } from '@react-oauth/google';
-import { useLoginMutation, useLoginByGoogleMutation } from '../slices/authSlice/authApiSlice';
+import { useLoginMutation, useLoginByGoogleMutation, useLoginTwoFaMutation } from '../slices/authSlice/authApiSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaHome } from 'react-icons/fa';
 import Spinner from '../Components/Spinners';
@@ -13,8 +13,8 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [is2FARequired, setIs2FARequired] = useState<boolean>(false);
   const [twoFactorCode, setTwoFactorCode] = useState<string>('');
+  const [is2FARequired, setIs2FARequired] = useState(false)
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,6 +22,7 @@ const Login: React.FC = () => {
   const { userInfo } = useSelector((state: any) => state.auth);
   const [login] = useLoginMutation();
   const [loginByGoogle] = useLoginByGoogleMutation()
+  const [login2FA] = useLoginTwoFaMutation()
 
   useEffect(() => {
     if (userInfo) {
@@ -42,13 +43,13 @@ const Login: React.FC = () => {
     try {
       const res = await login({ email, password }).unwrap();
       if (res.message === "2FA code sent to your email") {
-        setIs2FARequired(true);
-        toast.success('2FA code sent to your email');
-      } else {
-        dispatch(getCredentials({ ...res }));
-        toast.success('Login successful!');
-        navigate('/');
-      }
+
+        setIs2FARequired(true)
+        return toast.success('2FA code sent to your email');
+      } 
+      dispatch(getCredentials({ ...res }));
+      toast.success('Login successful!');
+      navigate('/');
     } catch (err: any) {
       console.error(err);
       if (err?.data?.message) {
@@ -69,14 +70,9 @@ const Login: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (!twoFactorCode) {
-      toast.error('Please enter the 2FA code');
-      setIsLoading(false);
-      return;
-    }
 
     try {
-      const res = await login({ email, password, twoFactorCode }).unwrap();
+      const res = await login2FA({ twoFactorCode }).unwrap();
       dispatch(getCredentials({ ...res }));
       toast.success('Login successful!');
       navigate('/');
@@ -162,6 +158,8 @@ const Login: React.FC = () => {
             </button>
           </form>
         ) : (
+
+          // 2 factor form design
           <form onSubmit={handleSubmit2FA} className="space-y-6">
             <div className="relative">
               <input

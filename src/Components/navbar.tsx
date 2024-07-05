@@ -5,8 +5,7 @@ import { useSelector } from 'react-redux';
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  // const { userInfo } = useSelector((state: any) => state.auth);
-  const userInfo = useSelector((state: any) => state.auth.userInfo);
+  const { userInfo } = useSelector((state: any) => state.auth);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
