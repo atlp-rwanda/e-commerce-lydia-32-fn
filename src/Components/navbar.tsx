@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { logOut } from '../slices/authSlice/authSlice';
+import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logout ]=useLogoutMutation()
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -14,6 +20,30 @@ const Navbar: React.FC = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const handleLogout = async(e: any) =>{
+  e.preventDefault()
+  setIsLoading(true)
+  try {
+    //@ts-ignore
+      await logout().unwrap();
+      dispatch(logOut());
+      toast.success("You're Logged out");
+      navigate('/login')
+    }
+  catch(err:any){ if (err?.data?.message) {
+        toast.error(err.data.message);
+      } else if (err.status === 400) {
+        toast.error('already logged out or not logged in');
+      } else if (err.status === 401) {
+        toast.error('User is not authenticated');
+      } else {
+        toast.error('Internal Server Error');
+      }
+    }
+    finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <nav className="bg-white fixed top-0 left-0 right-0 z-10">
@@ -53,7 +83,10 @@ const Navbar: React.FC = () => {
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                    <Link to="/logout" className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100">Logout</Link>
+                    <button 
+                    className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
+                    onClick={handleLogout}
+                    >Logout</button>
                   </div>
                 )}
               </div>
