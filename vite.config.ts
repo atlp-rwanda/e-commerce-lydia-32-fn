@@ -10,18 +10,13 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
-  server:{
+  server: {
     proxy: {
       "/api": {
         target: "https://team-lydia-demo.onrender.com",
         changeOrigin: true,
       },
-    },
-  },
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true
-      }
     }
   }
-});
+}
+);
