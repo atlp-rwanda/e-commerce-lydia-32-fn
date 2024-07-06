@@ -10,7 +10,7 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
-  server:{
+  server: {
     proxy: {
       "/api": {
         target: process.env.VITE_BACKEND_URL,
