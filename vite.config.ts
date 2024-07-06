@@ -13,15 +13,9 @@ export default defineConfig({
   server:{
     proxy: {
       "/api": {
-        target: "https://team-lydia-demo.onrender.com",
+        target: process.env.VITE_BACKEND_URL,
         changeOrigin: true,
       },
     },
   },
-      '/api': {
-        target: 'http://localhost:3000',
-        changeOrigin: true
-      }
-    }
-  }
 });
