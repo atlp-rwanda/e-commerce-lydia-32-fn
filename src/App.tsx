@@ -13,6 +13,7 @@ import AboutUs from './pages/AboutUs';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App = () => {
+  
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path= '/' element={<MainLayout />}>
