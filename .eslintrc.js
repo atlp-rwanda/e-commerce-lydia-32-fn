@@ -4,13 +4,15 @@ module.exports = {
         es2021: true,
     },
     extends: [
-        'airbnb',
-        'airbnb/hooks',
-        'plugin:react/recommended',
-        'plugin:jsx-a11y/recommended',
-        'plugin:import/errors',
-        'plugin:import/warnings',
-        'plugin:import/typescript',
+        "airbnb",
+        "airbnb/hooks",
+        "plugin:react/recommended",
+        "plugin:jsx-a11y/recommended",
+        "plugin:import/errors",
+        "plugin:import/warnings",
+        "plugin:import/typescript",
+        "plugin:storybook/recommended",
+        "plugin:storybook/recommended"
     ],
     parserOptions: {
         ecmaFeatures: {
