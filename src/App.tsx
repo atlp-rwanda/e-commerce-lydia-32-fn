@@ -13,6 +13,7 @@ import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
+import Profile from './pages/Profile';
 
 const App:React.FC = () => {
   const router = createBrowserRouter(
@@ -27,6 +28,7 @@ const App:React.FC = () => {
       <Route path='/reset-password' element={<ResetPasswordLayout />} />
       <Route path="/register" element={<SignupForm />} />
         <Route path="/verified" element={<EmailVerificationPage />} />
+        <Route path='/profile' element={<Profile/>}/>
         <Route
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
