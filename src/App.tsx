@@ -13,25 +13,33 @@ import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
+import SellerAllProductsPage from './pages/SellerAllProductsPage';
+import SellerSingleProductPage from './pages/SellerSingleProductPage';
+import SellerLayout from './layouts/SellerLayout';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path= '/' element={<MainLayout />}>
-      <Route index element={<Home />} />
-      <Route path='*' element={<NotFoundPage/>}/>
-      <Route path='/login' element={<LoginForm />} />
-      <Route path="/about" element={<AboutUs />} />
-      <Route path="/ourTeam" element={<TeamSection/>} />
-      <Route path='/forgot-password' element={<ForgotPasswordLayout />} />
-      <Route path='/reset-password' element={<ResetPasswordLayout />} />
-      <Route path="/register" element={<SignupForm />} />
+      <Route path='/' element={<MainLayout />}>
+        <Route index element={<Home />} />
+        <Route path='*' element={<NotFoundPage />} />
+        <Route path='/login' element={<LoginForm />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/ourTeam" element={<TeamSection />} />
+        <Route path='/forgot-password' element={<ForgotPasswordLayout />} />
+        <Route path='/reset-password' element={<ResetPasswordLayout />} />
+        <Route path="/register" element={<SignupForm />} />
         <Route path="/verified" element={<EmailVerificationPage />} />
         <Route
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
         />
-    </Route>
+
+        <Route path="seller" element={<SellerLayout />}>
+          <Route path="/seller/product/:id" element={<SellerSingleProductPage />} />
+          <Route path="/seller/products" element={<SellerAllProductsPage />} />
+        </Route>
+      </Route>
     )
   );
 

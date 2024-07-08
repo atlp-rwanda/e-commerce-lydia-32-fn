@@ -29,3 +29,4 @@ yarn.lock
 # CUSTOM FILES
 *storybook.log
 .env
+/drafts/
