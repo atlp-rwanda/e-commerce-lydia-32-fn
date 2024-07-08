@@ -44,9 +44,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
               body: data,
             }),
           }),
+          checkPasswordExpiry: builder.query({
+            query: () => ({
+                url: `${BASE_URL}/check-password-expiry`,
+                method: 'GET',
+            }),
+        }),
+        
     })
     
 
 })
 
-export const { useLoginByGoogleMutation, useLoginMutation, useLogoutMutation, useUserRegisterMutation, useRegisterByGoogleMutation, useLoginTwoFaMutation } = userApiSlice
+export const { useLoginByGoogleMutation, useLoginMutation, useLogoutMutation, useUserRegisterMutation, useRegisterByGoogleMutation, useLoginTwoFaMutation, useCheckPasswordExpiryQuery  } = userApiSlice
