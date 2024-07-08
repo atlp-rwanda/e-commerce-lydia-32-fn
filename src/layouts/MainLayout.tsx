@@ -9,7 +9,7 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const MainLayout: React.FC = () => {
   const location = useLocation();
-  const isLoginPage = location.pathname === "/login";
+  const isLoginPage = location.pathname === "/login" || location.pathname === "/register"  || location.pathname === "/verified"  || location.pathname === "/verification/failed";
 
   return (
     <div className="flex flex-col min-h-screen">
