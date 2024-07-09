@@ -26,7 +26,12 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      if (userInfo.isPasswordExpired) {
+        toast.error('Your password is expired. Please update your password.');
+        navigate('/update-password');
+      } else {
+        navigate('/');
+      }
     }
   }, [userInfo, navigate]);
 

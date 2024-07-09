@@ -18,7 +18,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
         loginTwoFa: builder.mutation({
-          query:  (data) => ({
+          query: (data) => ({
             url: `${BASE_URL}/factor`,
             method: 'POST',
             body: data
@@ -32,9 +32,9 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
         logout: builder.mutation({
-            query:()=>({
+            query: () => ({
                 url: `${BASE_URL}/logout`,
-                method:'POST'
+                method: 'POST'
             })
         }),
         userRegister: builder.mutation({
@@ -43,17 +43,23 @@ export const userApiSlice = apiSlice.injectEndpoints({
               method: "POST",
               body: data,
             }),
-          }),
-          checkPasswordExpiry: builder.query({
-            query: () => ({
-                url: `${BASE_URL}/check-password-expiry`,
-                method: 'GET',
-            }),
         }),
-        
+        changePassword: builder.mutation({
+            query: (data) => ({
+                url: `${BASE_URL}/changepassword`,
+                method: 'PATCH',
+                body: data
+            })
+        }),
     })
-    
+});
 
-})
-
-export const { useLoginByGoogleMutation, useLoginMutation, useLogoutMutation, useUserRegisterMutation, useRegisterByGoogleMutation, useLoginTwoFaMutation, useCheckPasswordExpiryQuery  } = userApiSlice
+export const { 
+    useLoginByGoogleMutation, 
+    useLoginMutation, 
+    useLogoutMutation, 
+    useUserRegisterMutation, 
+    useRegisterByGoogleMutation, 
+    useLoginTwoFaMutation, 
+    useChangePasswordMutation 
+} = userApiSlice;
