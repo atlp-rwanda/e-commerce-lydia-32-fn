@@ -4,11 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { logOut } from '../slices/authSlice/authSlice';
 import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
+import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
+  const { data: cart} = useGetCartQuery();
   const [isLoading, setIsLoading] = useState<boolean>(false);
    const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,6 +49,7 @@ const Navbar: React.FC = () => {
   }
 
   const loggedUserInfo = localStorage.getItem('userInfo');
+  const cartSize = cart?.items?.length || 0;
 
   return (
     <nav className="bg-white fixed top-0 left-0 right-0 z-10">
@@ -96,7 +99,7 @@ const Navbar: React.FC = () => {
             ) : (
               <Link to="/login" className="text-sm text-gray-600 hover:text-black">LOGIN</Link>
             )}
-           {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART (50)</Link>}
+           {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
             <button className="text-gray-600 hover:text-black">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
