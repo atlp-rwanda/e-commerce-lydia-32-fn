@@ -33,6 +33,29 @@ const roleSlice = createSlice({
           state.error = action.error.message;
         }
       );
+  builder
+      .addMatcher(
+        roleApiSlice.endpoints.requestToBeBuyer.matchPending,
+        (state) => {
+          state.loading = true;
+          state.error = null;
+          state.success = false;
+        }
+      )
+      .addMatcher(
+        roleApiSlice.endpoints.requestToBeBuyer.matchFulfilled,
+        (state) => {
+          state.loading = false;
+          state.success = true;
+        }
+      )
+      .addMatcher(
+        roleApiSlice.endpoints.requestToBeBuyer.matchRejected,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.error.message;
+        }
+      );
   },
 });
 
