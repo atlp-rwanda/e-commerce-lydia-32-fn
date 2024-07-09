@@ -46,14 +46,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
           }),
           updateUser:builder.mutation({
             query:(data)=>({
-                url:`${BASE_URL}/changepassword`,
+                url:`${BASE_URL}/update`,
                 method: 'PATCH',
                 body:data
             })
           }),
           changePassword:builder.mutation({
             query:(data)=>({
-                url:`${BASE_URL}/update`,
+                url:`${BASE_URL}/changepassword`,
                 method: 'PATCH',
                 body:data
             })
