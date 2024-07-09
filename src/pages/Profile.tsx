@@ -8,6 +8,15 @@ import { getCredentials } from "../slices/authSlice/authSlice";
 const Profile: React.FC = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo") as string);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (!userInfo || !userInfo.user) {
+      navigate("/");
+    }
+  }, [userInfo, navigate]);
+
+  if (!userInfo || !userInfo.user) {
+    return null;
+  }
   const [firstnameError, setFirstnameError] = useState<string | null>(null);
   const [nameError, setothernameError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
@@ -30,6 +39,9 @@ const Profile: React.FC = () => {
   const [postalcode, setPostalcode] = useState(userInfo.user.postal_code);
   const [isLoading, setIsLoading] = useState(false);
   const [isChangePassword, setIsChangePassword] = useState(false);
+
+    
+
 
   const validateName = () => {
     if (!firstname || firstname.trim() === "") {
@@ -155,15 +167,7 @@ const Profile: React.FC = () => {
   }
  
 
-  useEffect(() => {
-    if (!userInfo || !userInfo.user) {
-      navigate("/");
-    }
-  }, [userInfo, navigate]);
-  if (!userInfo || !userInfo.user) {
-    return null;
-  }
-
+ 
   return (
     <div className="min-h-screen  bg-white py-12">
       <div
