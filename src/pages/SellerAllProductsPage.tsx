@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import Spinner from '../Components/Spinners';
 import { setProductInfo } from '../slices/productSlice/productSlice';
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
+import SellerProductCard from '../Components/SellerProductCard';
 
 const SellerAllProductsPage: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch()
-    // @ts-ignore
     const { data: products, refetch } = useGetProductsQuery()
 
     useEffect(() => {
@@ -27,10 +27,10 @@ const SellerAllProductsPage: React.FC = () => {
                         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">CLOTHES</a>
                         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">FOOD</a>
                     </nav>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="flex flex-col">
                         {products?.products ? (
                             products.products.map((product: any) => (
-                                <ProductCard key={product.productId} product={product} />
+                                <SellerProductCard key={product.productId} product={product} />
                             ))
                         ) : (
                             <div className="col-span-full flex justify-center items-center">
