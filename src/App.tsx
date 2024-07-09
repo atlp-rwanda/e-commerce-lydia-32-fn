@@ -16,7 +16,8 @@ import NotFoundPage from './pages/NotFoundPage';
 import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path= '/' element={<MainLayout />}>
