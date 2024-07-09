@@ -43,27 +43,30 @@ const { data: productsData, isLoading } = useGetProductsQuery();
         SetCartItemQty(Number(e.target.value));
     }
     const handleAddToCart = async () => {
-    try {
-      const data = {
-        productId: id,
-        quantity: cartItemQty,
-      };
-        const response = await addToCart(data).unwrap();
-        if (response.message=='Item added to cart successfully') {
-            toast.success('Product added to cart successfully!');
-        }
-        else {
-            toast.error(response.message);
-        }
-    } catch (error:any) {
-    if (error.status==400) {
-      toast.error("Product Already In Your Cart. Please Consider updating quantities !");
-    } else {
-      toast.error('Failed to add product to cart.');
-    }
+        try {
+            const userInfo = localStorage.getItem("userInfo");
+            if (userInfo) {
+                const data = { productId: id, quantity: cartItemQty };
+                const response = await addToCart(data).unwrap();
+                if (response.message == 'Item added to cart successfully') {
+                    toast.success('Product added to cart successfully!');
+                }
+                else {
+                    toast.error(response.message);
+                }
+            }
+             else {
+                toast.error('Please Login First To Proceed ')
+            };
+        } catch (error:any) {
+             if (error.status==400) {
+                  toast.error("Product Already In Your Cart. Please Consider updating quantities !");
+               } else {
+                   toast.error('Failed to add product to cart.');
+               }
     
-    console.error('Error adding product to cart:', error.status);
-  }
+                console.error('Error adding product to cart:', error.status);
+            }  
   };
 
   if (isLoading) {
