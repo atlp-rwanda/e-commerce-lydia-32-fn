@@ -77,20 +77,31 @@ const { data: productsData, isLoading } = useGetProductsQuery();
     return <div>Product not found</div>;
   }
 
+  const sideImages = product.images.length <= 1 ? new Array(4).fill(product.images[0]) : product.images;
+
   return (
     <div className="container mx-auto px-4 py-8 mt-20">
       <div className="flex flex-col md:flex-row">
-          <div className="md:w-1/2 flex flex-row justify-center items-center">
+          <div className="md:w-1/2 flex flex-row mr-20 justify-center items-center">
             <div className="md:w-1/2 flex flex-col justify-center items-center">
-              {product.images.map((image, index) => (
-                <img key={index} src={image} alt={`Product ${index + 1}`} className="w-20 h-20" />
+              {sideImages.map((image, index) => (
+                <img key={index} src={image} alt={`Product ${index + 1}`} className="bg-gray-100 mb-2 w-20" />
               ))}
             </div>
-            <img src={product.images[0]} alt={product.productName} className="w-80 rounded mb-4" />
+          <div className="md:w-1/2 bg-gray-100 w-full m-0 h-35" >
+            <img src={product.images[0]} alt={product.productName} className="w-full" />
+            </div>
         </div>
         <div className="md:w-1/2 md:pl-8">
           <h1 className="text-3xl font-semibold mb-2"> {product.productName}</h1>
           <p className="text-xl text-gray-700 mb-4">Rwf  {product.price}</p>
+          <div className="flex items-center mb-2">
+        {[...Array(5)].map((_, index) => (
+          <svg key={index} className="w-5 h-5 text-yellow-100 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M12 .587l3.668 7.568L24 9.423l-6 6.097 1.428 8.485L12 18.908l-7.428 5.097L6 15.52 0 9.423l8.332-1.268L12 .587z"/>
+      </svg> 
+    ))}
+  </div>
           <p className="text-gray-600 mb-4">{product.description}.</p>
           <div className='flex items-center justify-start align-middle '>
             <div className="flex items-center">
