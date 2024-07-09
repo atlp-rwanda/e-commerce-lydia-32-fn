@@ -5,13 +5,14 @@ import { useSearchProductsQuery, Product } from '../slices/productSlice/productA
 import { RootState } from '../store';
 import ProductCard from './product';
 import toast from 'react-hot-toast';
+import Spinner from './Spinners';
 
 interface SearchProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
-const ITEMS_PER_PAGE = 1;
+const ITEMS_PER_PAGE = 6;
 
 const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
 
@@ -66,6 +67,7 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
       localStorage.setItem('searchResults', JSON.stringify(searchResults.products));
       setLocalSearchResults(searchResults.products.slice(0, ITEMS_PER_PAGE));
     }
+    setIsSearching(false);
   }, [searchResults]);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -90,9 +92,9 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
       setCurrentPage(1);
     } else {
       toast.error('Please provide at least one search parameter');
+      setIsSearching(false);
     }
     
-    setIsSearching(false);
   };
 
   const handleClear = () => {
@@ -176,7 +178,7 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
       </div>
 
       {isLoading || isSearching ? (
-        <p>Loading...</p>
+        <Spinner/>
       ) : isError && error ? (
         <p>Error occurred while searching: {
           typeof error === 'object' && error !== null && 'data' in error
