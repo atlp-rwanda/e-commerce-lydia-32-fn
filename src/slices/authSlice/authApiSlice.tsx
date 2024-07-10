@@ -43,23 +43,24 @@ export const userApiSlice = apiSlice.injectEndpoints({
               method: "POST",
               body: data,
             }),
-        }),
-        changePassword: builder.mutation({
-            query: (data) => ({
-                url: `${BASE_URL}/changepassword`,
+          }),
+          updateUser:builder.mutation({
+            query:(data)=>({
+                url:`${BASE_URL}/update`,
                 method: 'PATCH',
-                body: data
+                body:data
             })
-        }),
+          }),
+          changePassword:builder.mutation({
+            query:(data)=>({
+                url:`${BASE_URL}/changepassword`,
+                method: 'PATCH',
+                body:data
+            })
+          })
     })
-});
+    
 
-export const { 
-    useLoginByGoogleMutation, 
-    useLoginMutation, 
-    useLogoutMutation, 
-    useUserRegisterMutation, 
-    useRegisterByGoogleMutation, 
-    useLoginTwoFaMutation, 
-    useChangePasswordMutation 
-} = userApiSlice;
+})
+
+export const { useLoginByGoogleMutation, useLoginMutation, useLogoutMutation, useUserRegisterMutation, useRegisterByGoogleMutation, useLoginTwoFaMutation, useUpdateUserMutation, useChangePasswordMutation } = userApiSlice
