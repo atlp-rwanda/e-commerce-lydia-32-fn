@@ -1,39 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { roleApiSlice } from "./requestroleApiSlice";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+const roleInfo = localStorage.getItem('roleInfo');
+const parsedRoleInfo = roleInfo ? JSON.parse(roleInfo) : [];
+
+const initialState = {
+  roleInfo: Array.isArray(parsedRoleInfo) ? parsedRoleInfo : []
+};
 
 const roleSlice = createSlice({
-  name: "role",
-  initialState: {
-    loading: false,
-    success: false,
-    error: null,
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addMatcher(
-        roleApiSlice.endpoints.requestToBeSeller.matchPending,
-        (state) => {
-          state.loading = true;
-          state.error = null;
-          state.success = false;
-        }
-      )
-      .addMatcher(
-        roleApiSlice.endpoints.requestToBeSeller.matchFulfilled,
-        (state) => {
-          state.loading = false;
-          state.success = true;
-        }
-      )
-      .addMatcher(
-        roleApiSlice.endpoints.requestToBeSeller.matchRejected,
-        (state, action) => {
-          state.loading = false;
-          state.error = action.error.message;
-        }
-      );
-  },
+  name: 'roles',
+  initialState,
+  reducers: {
+    setRoleInfo(state, action: PayloadAction<any[]>) {
+      state.roleInfo = action.payload;
+      localStorage.setItem('roleInfo', JSON.stringify(action.payload));
+    }
+  }
 });
 
+export const { setRoleInfo } = roleSlice.actions;
 export default roleSlice.reducer;

@@ -13,6 +13,14 @@ import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminPageOnly from './pages/admin/AdminPageOnly';
+import AdminCreateRole from './pages/admin/AdminCreateRole';
+import AdminCreatePermission from './pages/admin/AdminCreatePermission';
+import AdminAssignPermiToRole from './pages/admin/AdminAssignPermiToRole';
+import AdminDeletePermiFromRole from './pages/admin/AdminDeletePermiFromRole';
+import AdminAssignRoleToUser from './pages/admin/AdminAssignRoleToUser';
+import AdminEditRole from './pages/admin/AdminEditRole';
 
 const App:React.FC = () => {
   const router = createBrowserRouter(
@@ -31,6 +39,16 @@ const App:React.FC = () => {
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
         />
+        <Route path='' element={<AdminPageOnly/>}>
+           <Route path='/admin/dashboard' element={<AdminDashboard/>}/>  
+           <Route path='/admin/create/role' element={<AdminCreateRole/>}/>  
+           <Route path='/admin/create/permission' element={<AdminCreatePermission/>}/>  
+           <Route path='/admin/assign/permission/:id' element={<AdminAssignPermiToRole/>}/>  
+           <Route path='/admin/delete/permission/:id' element={<AdminDeletePermiFromRole/>}/>  
+           <Route path='/admin/assign/role/:id' element={<AdminAssignRoleToUser/>}/>  
+           <Route path='/admin/edit/role/:id' element={<AdminEditRole/>}/>  
+        </Route>
+       
     </Route>
     )
   );
