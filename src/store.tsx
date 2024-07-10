@@ -4,6 +4,7 @@ import authSlice from "./slices/authSlice/authSlice";
 import { apiSlice } from "./slices/apiSlice";
 import searchSlice from './slices/searchSlice';
 import requestRoleSlice from "./slices/roleSlice/requestRoleSlice";
+import cartSlice from "./slices/cartSlice/cartSlice";
 
 const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ const store = configureStore({
     auth: authSlice,
     search: searchSlice,
     role: requestRoleSlice,
+    cart: cartSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) => 
@@ -18,8 +20,8 @@ const store = configureStore({
   devTools: true
 });
 
-  export type RootState = ReturnType<typeof store.getState>;
-  export type AppDispatch = typeof store.dispatch;
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export default store;
 
