@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">PROFILE</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="text-gray-400 hover:text-white">My Account</a></li>
+              <li><a href="/profile" className="text-gray-400 hover:text-white">My Account</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white">Checkout</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white">Order Tracking</a></li>
               <li><a href="#" className="text-gray-400 hover:text-white">Help & Support</a></li>

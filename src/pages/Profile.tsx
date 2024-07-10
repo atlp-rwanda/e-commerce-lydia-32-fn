@@ -10,7 +10,7 @@ const Profile: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (!userInfo || !userInfo.user) {
-      navigate("/");
+      navigate("/login");
     }
   }, [userInfo, navigate]);
 
