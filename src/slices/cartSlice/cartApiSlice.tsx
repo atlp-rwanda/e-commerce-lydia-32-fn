@@ -29,7 +29,7 @@ export const cartApiSlice = apiSlice.injectEndpoints({
                  method: 'DELETE',
             }),
         }),
-         clearCart: builder.mutation({
+        clearCart: builder.mutation({
             query: () => ({
                  url: `${BASE_URL}/delete`,
                  method: 'DELETE',
