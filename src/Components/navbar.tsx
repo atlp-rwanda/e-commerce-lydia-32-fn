@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { logOut } from '../slices/authSlice/authSlice';
 import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
+import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
+  const { data: cart} = useGetCartQuery();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [cartSize, setCartSize] = useState(0);
   const [logout ]=useLogoutMutation()
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -27,6 +30,7 @@ const Navbar: React.FC = () => {
     //@ts-ignore
       await logout().unwrap();
       dispatch(logOut());
+      localStorage.removeItem('userInfo');
       toast.success("You're Logged out");
       navigate('/login')
     }
@@ -44,6 +48,11 @@ const Navbar: React.FC = () => {
       setIsLoading(false);
     }
   }
+
+  const loggedUserInfo = localStorage.getItem('userInfo');
+  useEffect(() => {
+    setCartSize(cart?.items?.length || 0);
+  }, [cart]);
 
   return (
     <nav className="bg-white fixed top-0 left-0 right-0 z-10">
@@ -143,9 +152,7 @@ const Navbar: React.FC = () => {
                 LOGIN
               </Link>
             )}
-            <Link to="/cart" className="text-sm text-gray-600 hover:text-black">
-              CART (50)
-            </Link>
+           {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
             <button className="text-gray-600 hover:text-black">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -170,36 +177,11 @@ const Navbar: React.FC = () => {
           }`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              to="/"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              HOME
-            </Link>
-            <Link
-              to="/shop"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              SHOP
-            </Link>
-            <Link
-              to="/about"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              ABOUT
-            </Link>
-            <Link
-              to="/chat"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              CHAT
-            </Link>
-            <Link
-              to="/cart"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              CART (50)
-            </Link>
+            <Link to="/" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">HOME</Link>
+            <Link to="/shop" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">SHOP</Link>
+            <Link to="/about" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">ABOUT</Link>
+            <Link to="/chat" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CHAT</Link>
+            {loggedUserInfo &&  <Link to="/cart" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CART ({cartSize})</Link>}
             {userInfo ? (
               <Link
                 to="/logout"

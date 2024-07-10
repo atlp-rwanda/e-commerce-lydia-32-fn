@@ -5,13 +5,16 @@ import { useDispatch } from 'react-redux';
 import Spinner from '../Components/Spinners';
 import { setProductInfo } from '../slices/productSlice/productSlice';
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
+import { logOut } from '../slices/authSlice/authSlice';
 
 const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
   // @ts-ignore
   const { data: products, refetch } = useGetProductsQuery()
-
+  setTimeout(()=>{
+    dispatch(logOut())
+  },1000*60*60)
   useEffect(() => {
     if (products) {
       dispatch(setProductInfo(products))

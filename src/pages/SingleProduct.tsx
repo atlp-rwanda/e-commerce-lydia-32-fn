@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAddToCartMutation } from '../slices/cartSlice/cartApiSlice';
-import { useDispatch } from 'react-redux';
+import { useAddToCartMutation, useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
 import ProductCard from '../Components/product';
 import Spinner from '../Components/Spinners';
@@ -22,15 +21,15 @@ interface ProductCardProps {
 }
 
 const SingleProduct: React.FC = () => {
-const { id } = useParams();
-const navigate = useNavigate()
-const [product, setProduct] = useState<ProductCardProps['product'] | null>(null);
-const [relatedProducts, setRelatedProducts] = useState([]);
-    const [cartItemQty, SetCartItemQty] = useState(1);
-const [addToCart] = useAddToCartMutation();
-const dispatch = useDispatch();
-// @ts-ignore
-const { data: productsData, isLoading } = useGetProductsQuery();
+  const { id } = useParams();
+  const [product, setProduct] = useState<ProductCardProps['product'] | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [cartItemQty, SetCartItemQty] = useState(1);
+  const [addToCart] = useAddToCartMutation();
+  const {refetch} = useGetCartQuery();
+const [addingToCart, setAddingToCart] = useState<boolean>(false);
+// const dispatch = useDispatch();
+const { data: productsData, isLoading} = useGetProductsQuery();
 
   useEffect(() => {
     if (productsData && id) {
@@ -48,11 +47,13 @@ const { data: productsData, isLoading } = useGetProductsQuery();
     const handleAddToCart = async () => {
         try {
             const userInfo = localStorage.getItem("userInfo");
-            if (userInfo) {
+          if (userInfo) {
+                setAddingToCart(true);
                 const data = { productId: id, quantity: cartItemQty };
                 const response = await addToCart(data).unwrap();
                 if (response.message == 'Item added to cart successfully') {
-                    toast.success('Product added to cart successfully!');
+                  toast.success('Product added to cart successfully!');
+                  refetch();
                 }
                 else {
                     toast.error(response.message);
@@ -72,8 +73,11 @@ const { data: productsData, isLoading } = useGetProductsQuery();
 
                }
     
-                console.error('Error adding product to cart:', err.status);
-            }  
+                console.error('Error adding product to cart:', error.status);
+      }  
+        finally {
+          setAddingToCart(false);
+      }
   };
 
   if (isLoading) {
@@ -116,7 +120,7 @@ const { data: productsData, isLoading } = useGetProductsQuery();
             <input type="number" min="1" max={product.quantity} value={cartItemQty}
               onChange={handleQtyChange} className="border rounded w-16 p-1 text-center" />
           </div>
-             <button onClick={handleAddToCart} className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105">Add to Cart</button>
+            <button onClick={handleAddToCart} className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105">{addingToCart ? 'Adding Item To Cart ....' : 'Add to Cart' }</button>
           </div>
           <div className="mt-4">
             <button className="text-gray-500">Add to Wishlist</button>

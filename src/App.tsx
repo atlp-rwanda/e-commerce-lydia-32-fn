@@ -18,7 +18,8 @@ import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
 import Profile from './pages/Profile';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path= '/' element={<MainLayout />}>
