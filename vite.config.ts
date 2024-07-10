@@ -7,12 +7,13 @@ dotenv.config();
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  build: {
+    sourcemap: true,
+  },
   server: {
-    host: "0.0.0.0",
-    port: parseInt(process.env.PORT || "5173", 10),
     proxy: {
       "/api": {
-        target: "https://team-lydia-demo.onrender.com",
+        target: process.env.VITE_BACKEND_URL,
         changeOrigin: true,
       },
     },
