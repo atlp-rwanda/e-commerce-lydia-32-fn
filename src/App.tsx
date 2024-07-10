@@ -13,6 +13,8 @@ import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
+import SingleProduct from './pages/SingleProduct';
+import Cart from './pages/Cart';
 import Profile from './pages/Profile';
 
 const App:React.FC = () => {
@@ -33,7 +35,10 @@ const App:React.FC = () => {
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
         />
+        <Route path='/singleProduct/:id' element={<SingleProduct />} />
+        <Route path='/cart' element={<Cart/> } />
     </Route>
+    
     )
   );
 
