@@ -13,6 +13,8 @@ import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
+import SingleProduct from './pages/SingleProduct';
+import Cart from './pages/Cart';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminPageOnly from './pages/admin/AdminPageOnly';
 import AdminCreateRole from './pages/admin/AdminCreateRole';
@@ -39,6 +41,8 @@ const App:React.FC = () => {
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
         />
+        <Route path='/singleProduct/:id' element={<SingleProduct />} />
+        <Route path='/cart' element={<Cart/> } />
         <Route path='' element={<AdminPageOnly/>}>
            <Route path='/admin/dashboard' element={<AdminDashboard/>}/>  
            <Route path='/admin/create/role' element={<AdminCreateRole/>}/>  
@@ -48,8 +52,8 @@ const App:React.FC = () => {
            <Route path='/admin/assign/role/:id' element={<AdminAssignRoleToUser/>}/>  
            <Route path='/admin/edit/role/:id' element={<AdminEditRole/>}/>  
         </Route>
-       
     </Route>
+    
     )
   );
 
