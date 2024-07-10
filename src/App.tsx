@@ -14,6 +14,7 @@ import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
 import SingleProduct from './pages/SingleProduct';
+import Cart from './pages/Cart';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminPageOnly from './pages/admin/AdminPageOnly';
 import AdminCreateRole from './pages/admin/AdminCreateRole';
@@ -22,7 +23,6 @@ import AdminAssignPermiToRole from './pages/admin/AdminAssignPermiToRole';
 import AdminDeletePermiFromRole from './pages/admin/AdminDeletePermiFromRole';
 import AdminAssignRoleToUser from './pages/admin/AdminAssignRoleToUser';
 import AdminEditRole from './pages/admin/AdminEditRole';
-import Cart from './pages/Cart';
 
 const App:React.FC = () => {
   const router = createBrowserRouter(
