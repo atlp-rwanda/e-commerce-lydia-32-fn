@@ -24,6 +24,7 @@ const Profile: React.FC = () => {
   const [streetError, setStreetError] = useState<string | null>(null);
   const [cityError, setCityError] = useState<string | null>(null);
   const [countryError, setCountryError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const [updateUser] = useUpdateUserMutation();
   const [changePassword] = useChangePasswordMutation();
@@ -113,11 +114,20 @@ const Profile: React.FC = () => {
        setStreetError(null);
        return true;
      };
-  
+     const validatePassword = () => {
+    if (!newPassword || newPassword.trim() === "") {
+      setPasswordError("Password is required");
+      return false;
+    }}
+  const isUserValidated = () =>{
+  if(!validateCity || !validatePhone || !validateName || !validateOtherName || !validateCountry || !validatePassword || !validateState){
+    return false
+  }
+  return true
+  }
   const handleUpdate = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsLoading(true);
-   
     try {
       const res = await updateUser({
         firstname: firstname,
@@ -174,7 +184,9 @@ const Profile: React.FC = () => {
         className="w-full h-64  mt-20 place-content-center "
         style={{ backgroundImage: "url('./Background.jpg')" }}
       >
-        <h5 className="font-bold text-center text-white text-3xl">MY ACCOUNT</h5>
+        <h5 className="font-bold text-center text-white text-3xl">
+          MY ACCOUNT
+        </h5>
       </div>
       <div className=" flex flex-col md:flex-row lg:flex-row items-center justify-center lg:justify-around mt-24 ">
         <div className=" flex flex-col text-start">
@@ -309,6 +321,7 @@ const Profile: React.FC = () => {
               <button
                 onClick={handleUpdate}
                 className="bg-black w-32 text-white p-2 hover:text-gray-400 hover:bg-slate-900"
+                
               >
                 {isLoading ? "Saving..." : "Save Changes"}
               </button>
@@ -319,24 +332,26 @@ const Profile: React.FC = () => {
               Change Password
             </h5>
             <div className="mb-4">
-            <p className="font-semibold">Old Password</p>
-            <input
-              type="password"
-              className="border border-gray-400 text-gray-500 rounded  bg-white min-w-24    p-1 pr-0 lg:pr-96  "
-              onChange={(e) => {
-                setOldPassword(e.target.value);
-              }}
-            />
+              <p className="font-semibold">Old Password</p>
+              <input
+                type="password"
+                className="border border-gray-400 text-gray-500 rounded  bg-white min-w-24    p-1 pr-0 lg:pr-96  "
+                onChange={(e) => {
+                  setOldPassword(e.target.value);
+                }}
+              />
             </div>
-             <div className="mb-4">
-            <p className="font-semibold">New Password</p>
-            <input
-              type="password"
-              className="border border-gray-400 text-gray-500 rounded  bg-white min-w-24   p-1  pr-0 lg:pr-96 "
-              onChange={(e) => {
-                setNewPassword(e.target.value);
-              }}
-            />
+            <div className="mb-4">
+              <p className="font-semibold">New Password</p>
+              <input
+                type="password"
+                className="border border-gray-400 text-gray-500 rounded  bg-white min-w-24   p-1  pr-0 lg:pr-96 "
+                onChange={(e) => {
+                  setNewPassword(e.target.value);
+                }}
+                onBlur={validatePassword}
+              />
+              {passwordError && <p className="text-red-500">{passwordError}</p>}
             </div>
           </div>
           <button
