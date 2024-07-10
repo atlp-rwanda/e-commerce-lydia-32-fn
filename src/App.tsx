@@ -23,6 +23,7 @@ import AdminAssignPermiToRole from './pages/admin/AdminAssignPermiToRole';
 import AdminDeletePermiFromRole from './pages/admin/AdminDeletePermiFromRole';
 import AdminAssignRoleToUser from './pages/admin/AdminAssignRoleToUser';
 import AdminEditRole from './pages/admin/AdminEditRole';
+import Profile from './pages/Profile';
 
 const App:React.FC = () => {
   const router = createBrowserRouter(
@@ -37,6 +38,7 @@ const App:React.FC = () => {
       <Route path='/reset-password' element={<ResetPasswordLayout />} />
       <Route path="/register" element={<SignupForm />} />
         <Route path="/verified" element={<EmailVerificationPage />} />
+        <Route path='/profile' element={<Profile/>}/>
         <Route
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
