@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAddToCartMutation } from '../slices/cartSlice/cartApiSlice';
-import { useDispatch } from 'react-redux';
+import { useAddToCartMutation, useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
 import ProductCard from '../Components/product';
 import Spinner from '../Components/Spinners';
@@ -21,14 +20,15 @@ interface ProductCardProps {
 }
 
 const SingleProduct: React.FC = () => {
-const { id } = useParams();
-const [product, setProduct] = useState<ProductCardProps['product'] | null>(null);
-const [relatedProducts, setRelatedProducts] = useState([]);
-const [cartItemQty, SetCartItemQty] = useState(1);
-const [addToCart] = useAddToCartMutation();
+  const { id } = useParams();
+  const [product, setProduct] = useState<ProductCardProps['product'] | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [cartItemQty, SetCartItemQty] = useState(1);
+  const [addToCart] = useAddToCartMutation();
+  const {refetch} = useGetCartQuery();
 const [addingToCart, setAddingToCart] = useState<boolean>(false);
 // const dispatch = useDispatch();
-const { data: productsData, isLoading,refetch } = useGetProductsQuery();
+const { data: productsData, isLoading} = useGetProductsQuery();
 
   useEffect(() => {
     if (productsData && id) {

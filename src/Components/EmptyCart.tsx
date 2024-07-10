@@ -11,7 +11,6 @@ interface UserInfo {
 const EmptyCart: React.FC = () => {
 
   const userInfo: UserInfo | null =localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')!) : null;
-    console.log(userInfo);
  return (
     <div className="flex mx-auto mt-60 mb-40 justify-center items-center h-full">
       <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-lg text-center transition-all duration-300 transform hover:scale-105">

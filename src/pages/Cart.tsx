@@ -40,6 +40,7 @@ const Cart: React.FC = () => {
   const navigate = useNavigate();
   const [isLoadingCart, setIsLoadingCart] = useState<boolean>(true);
   const [clearingCart, setClearingCart] = useState<boolean>(false);
+  const [isEmpty, setIsEmpty] = useState<boolean> (true);
 
   useEffect(() => {
     const userInfo = localStorage.getItem("userInfo");
@@ -52,6 +53,7 @@ const Cart: React.FC = () => {
    
     try {
       if (cart && cart.items && products?.products && Array.isArray(products.products)) {
+        setIsEmpty(false);
         const cartItemsWithDetails = cart.items.map(item => {
           const productDetails = products.products.find(p => p.productId === item.productId);
           return { ...item, ...productDetails, quantity: item.quantity, maxQuantity: productDetails?.quantity || item.quantity, };
@@ -91,22 +93,23 @@ const Cart: React.FC = () => {
      try {
       setDeletingItemId(itemId);
       await deleteCartItem(itemId);
-      toast.success('Item deleted successfully');
       refetch();
+      toast.success('Item deleted successfully');
     } catch (error) {
       toast.error('Failed to delete item');
      }
      finally {
       setDeletingItemId(null); 
     }
-  };
+   };
+
 
    const handleClearCart = async () => {
      try {
       setClearingCart(true);
       //await clearCart();
-      toast.success('Cart Cleared successfully');
       refetch();
+      toast.success('Cart Cleared successfully');
     } catch (error) {
       toast.error('Failed to clear cart');
      }
@@ -139,14 +142,17 @@ const Cart: React.FC = () => {
 
   if (isLoading || !products) return <div>Loading...</div>;
   if (error) return <div>Error loading cart</div>;
-  const isEmpty = cartProducts.length === 0;
+
+  if (!cart.items) {
+    return <EmptyCart/>
+  }
 
   return (
       <>
        {isEmpty ? (
         <EmptyCart/>
       ) : (
-    <div className="container mx-auto mt-60 py-0 mb-10 px-10 flex flex-col lg:flex-row justify gap-20">
+    <div className="container mx-auto mt-20 py-10 mb-10 px-10 flex flex-col lg:flex-row justify gap-20">
       {
         isLoadingCart || isLoading || !products && <h1 className='text-black font-semibold mt-60'>Wait while your cart is loading .....</h1>
       }
@@ -157,7 +163,7 @@ const Cart: React.FC = () => {
      <h2 className="text-3xl font-bold mb-6 text-center">Shopping Cart</h2>
               <button onClick={()=>handleClearCart} className='bg-black px-10 py-2 font-size-large text-lg text-white rounded mt-4 hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'>{clearingCart ? 'Clearing Cart ....': 'Clear Cart'}</button>
           {cartProducts.map(item => (
-            <div key={item.productId} className="relative flex flex-col lg:flex-row justify-between items-center mb-4 p-4 border-b">
+            <div key={item.productId} className={`relative ${deletingItemId == item.id ? 'opacity-50' : ''} flex flex-col lg:flex-row justify-between items-center mb-4 p-4 border-b`}>
               <div className="flex items-center">
                 <img src={item.images[0]} alt={item.productName} className="w-20 h-20 mr-4" />
                 <div>
