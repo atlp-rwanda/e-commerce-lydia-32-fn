@@ -12,7 +12,13 @@ export const roleApiSlice = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    requestToBeBuyer: builder.mutation({
+      query: () => ({
+        url: `${BASE_URL.roles}/requestTobeBuyer`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-export const { useRequestToBeSellerMutation } = roleApiSlice;
+export const { useRequestToBeSellerMutation,useRequestToBeBuyerMutation } = roleApiSlice;
