@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import ProductCard from '../Components/product';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Spinner from '../Components/Spinners';
 import { setProductInfo } from '../slices/productSlice/productSlice';
-import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
+import { useGetProductsQuery } from '../slices/productSlice/sellerproductApiSlice';
 import SellerProductCard from '../Components/SellerProductCard';
 
 const SellerAllProductsPage: React.FC = () => {
-    const [isLoading, setIsLoading] = useState(false)
     const dispatch = useDispatch()
-    const { data: products, refetch } = useGetProductsQuery()
+    const { data: products } = useGetProductsQuery()
 
     useEffect(() => {
         if (products) {
@@ -29,7 +27,7 @@ const SellerAllProductsPage: React.FC = () => {
                     </nav>
                     <div className="flex flex-col">
                         {products?.products ? (
-                            products.products.map((product: any) => (
+                            products.products.map((product) => (
                                 <SellerProductCard key={product.productId} product={product} />
                             ))
                         ) : (
