@@ -32,22 +32,33 @@ export const productApiSlice = apiSlice.injectEndpoints({
     getProducts: builder.query<Product[], void>({
       query: () => ({
         url: `${BASE_URL}/available`,
-        method: 'GET'
-      })
+        method: "GET",
+      }),
     }),
     searchProducts: builder.query<SearchProductsResponse, string>({
       query: (searchParams) => ({
         url: `${BASE_URL}/search?${searchParams}`,
-        method: 'GET',
+        method: "GET",
       }),
-      transformErrorResponse: (response: { status: string, data: any }) => {
+      transformErrorResponse: (response: { status: string; data: any }) => {
         if (response.data && response.data.error) {
           return response.data.error;
         }
-        return 'An unknown error occurred';
+        return "An unknown error occurred";
       },
-    })
-  })
+    }),
+    addProduct: builder.mutation({
+      query: (data) => ({
+        url: `${BASE_URL}/create`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+  }),
 });
 
-export const { useGetProductsQuery, useSearchProductsQuery } = productApiSlice;   
+export const {
+  useGetProductsQuery,
+  useSearchProductsQuery,
+  useAddProductMutation,
+} = productApiSlice;
