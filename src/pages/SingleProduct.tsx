@@ -115,7 +115,7 @@ const { data: productsData, isLoading} = useGetProductsQuery();
             <input type="number" min="1" max={product.quantity} value={cartItemQty}
               onChange={handleQtyChange} className="border rounded w-16 p-1 text-center" />
           </div>
-            <button onClick={handleAddToCart} className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105">{addingToCart ? 'Adding Item To Cart ....' : 'Add to Cart' }</button>
+            <button onClick={handleAddToCart} className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105">{addingToCart ? 'Adding Item To Cart ......' : 'Add to Cart' }</button>
           </div>
           <div className="mt-4">
             <button className="text-gray-500">Add to Wishlist</button>
