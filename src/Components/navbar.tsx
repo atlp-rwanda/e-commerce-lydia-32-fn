@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { logOut } from '../slices/authSlice/authSlice';
 import {FiSearch} from 'react-icons/fi';
 import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
+import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 
 interface NavbarProps {
   onSearchToggle: () => void;
