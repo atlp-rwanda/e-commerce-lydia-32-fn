@@ -29,7 +29,6 @@ const SingleProduct: React.FC = () => {
   const { refetch } = useGetCartQuery();
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
   const navigate = useNavigate()
-  const dispatch = useDispatch();
   const { data: productsData, isLoading } = useGetProductsQuery();
 
   useEffect(() => {
@@ -50,7 +49,7 @@ const SingleProduct: React.FC = () => {
       const userInfo = localStorage.getItem("userInfo");
       if (userInfo) {
         setAddingToCart(true);
-        const data = { productId: id, quantity: cartItemQty };
+        const data = { productId: Number(id), quantity: Number(cartItemQty) };
         const response = await addToCart(data).unwrap();
         if (response.message == 'Item added to cart successfully') {
           toast.success('Product added to cart successfully!');

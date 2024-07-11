@@ -72,15 +72,36 @@ const Cart: React.FC = () => {
     refetchCart();
   }, [updateCartItem, deleteCartItem, clearCart]);
 
-  const handleQuantityChange = (productId: number, newQuantity: number, cartItemId: number) => {
-    setChangedItems(prev => ({ ...prev, [productId]: { quantity: newQuantity, cartItemId } }));
-  };
+ const handleQuantityChange = (productId: number, newQuantity: number, cartItemId: number) => {
+  setChangedItems(prev => ({
+    ...prev,
+    [productId]: { quantity: newQuantity, cartItemId: cartItemId }
+  }));
+};
+
+
+const incrementQuantity = (productId: number, cartItemId: number) => {
+  const currentQuantity = (changedItems[productId]?.quantity ?? initialQuantities[productId]) + 1;
+  const maxQuantity = cartProducts.find(item => item.productId === productId)?.maxQuantity;
+
+  if (currentQuantity <= (maxQuantity ?? Infinity)) {
+    handleQuantityChange(productId, currentQuantity, cartItemId);
+  }
+};
+
+const decrementQuantity = (productId: number, cartItemId: number) => {
+  const currentQuantity = (changedItems[productId]?.quantity ?? initialQuantities[productId]) - 1;
+
+  if (currentQuantity >= 1) {
+    handleQuantityChange(productId, currentQuantity, cartItemId);
+  }
+};
 
   const handleSaveChanges = async () => {
     try {
       setIsSavingChanges(true);
       for (const [productId, { quantity, cartItemId }] of Object.entries(changedItems)) {
-        const res = await updateCartItem({ id: cartItemId, quantity });
+        const res = await updateCartItem({ id: Number(cartItemId), quantity: Number(quantity) });
       }
       toast.success('Cart updated successfully');
       setChangedItems({});
@@ -128,14 +149,14 @@ const Cart: React.FC = () => {
   };
 
   const calculateSubtotal = (item: CartItem) => {
-    const quantity = changedItems[item.productId]?.quantity ?? item.quantity;
-    return quantity * item.price;
+    const quantity = changedItems[item.productId]?.quantity ?? Number(item.quantity);
+    return Number(quantity * item.price);
   };
 
   const calculateTotal = (items: CartItem[]) => {
     const newTotal = items.reduce((acc, item) => {
-      const quantity = changedItems[item.productId]?.quantity ?? item.quantity;
-      return acc + (quantity * item.price);
+      const quantity = changedItems[item.productId]?.quantity ?? Number(item.quantity);
+      return acc + Number(quantity * item.price);
     }, 0);
     setTotal(newTotal);
   };
@@ -168,76 +189,96 @@ const Cart: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto mt-20 py-10 mb-10 px-10 flex flex-col lg:flex-row justify gap-20">
+    <div className="container mx-auto mt-20 py-10 mb-10 px-10 flex flex-col lg:flex-row justify-between gap-20">
       <div className="w-full lg:w-2/3">
         <h2 className="text-3xl font-bold mb-6 text-center">Shopping Cart</h2>
-        <button onClick={() => handleClearCart()} className='bg-black px-10 py-2 font-size-large text-lg text-white rounded mt-4 hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'>{clearingCart ? 'Clearing Cart .....' : 'Clear Cart'}</button>
-        {cartProducts.map(item => (
-          <div key={item.productId} className={`relative ${deletingItemId === item.id ? 'opacity-50' : ''} flex flex-col lg:flex-row justify-between items-center mb-4 p-4 border-b`}>
-            <div className="flex items-center">
-              <img src={item.images[0]} alt={item.productName} className="w-20 h-20 mr-4" />
-              <div>
-                <h2 className="text-lg font-semibold">{item.productName}</h2>
-                <h3 className="text-lg">Category: {item.productCategory}</h3>
-              </div>
-            </div>
-            <div className="flex items-center justify-start">
-              <input
-                type="number"
-                min={1}
-                max={item.maxQuantity}
-                value={changedItems[item.productId]?.quantity ?? item.quantity}
-                onChange={(e) => handleQuantityChange(item.productId, parseInt(e.target.value, 10), item.id)}
-                className="border rounded w-16 p-1 text-center mr-4"
-              />
-              <p className="text-lg font-semibold">Rwf {item.price}</p>
-            </div>
-            <div className="text-left">
-              <p>Sub-Total: <span className='font-bold'>Rwf {calculateSubtotal(item)}</span></p>
-            </div>
-            {deletingItemId === item.id ? (
-              <p className="absolute top-10 m-auto ml-20 w-400 px-40 h-10 flex rounded items-center justify-center bg-black font-bold text-white z-10">
-                Deleting Cart Item....
-              </p>
-            ) : (
-                <button
-                  onClick={() => handleDeleteItem(item.id)}
-                  className="ml-4 text-red-600"
-                >
-                  <FaTrash />
-                </button>
-              )}
-          </div>
-        ))}
+        <button onClick={() => handleClearCart()} className='bg-black px-10 py-2 text-lg text-white rounded mt-4 hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'>{clearingCart ? 'Clearing Cart .....' : 'Clear Cart'}</button>
+        <table className="min-w-full bg-white border-collapse">
+          <thead>
+            <tr>
+              <th className="border py-2">Product</th>
+              <th className="border py-2">Category</th>
+              <th className="border py-2">Quantity</th>
+              <th className="border py-2">Unit Price</th>
+              <th className="border py-2">Subtotal</th>
+              <th className="border py-2">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartProducts.map(item => (
+              <tr key={item.productId} className={`relative ${deletingItemId === item.id ? 'opacity-50' : ''}`}>
+                {deletingItemId === item.id && 
+                  <p className="absolute top-10 m-auto ml-20 w-400 px-40 h-10 flex rounded items-center justify-center bg-black font-bold text-white z-10">
+                    Deleting Cart Item....
+                  </p>
+                }
+                <td className="border px-4 py-2">
+                  <div className="flex items-center">
+                    <img src={item.images[0]} alt={item.productName} className="w-20 h-20 mr-4" />
+                    <div>
+                      <h2 className="text-lg font-semibold">{item.productName}</h2>
+                    </div>
+                  </div>
+                </td>
+                <td className="border px-4 py-2">{item.productCategory}</td>
+                <td className="border px-4 py-2">
+                 <div className="flex items-center">
+                    <button
+                      onClick={() => decrementQuantity(item.productId, item.id)}
+                      className="text-lg px-2 py-1 w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
+                    >
+                      -
+                    </button>
+                    <span className="px-4 py-1 text-lg justify-center items-center">{changedItems[item.productId]?.quantity ?? item.quantity}</span>
+                    <button
+                      onClick={() => incrementQuantity(item.productId, item.id)}
+                      className="text-lg px-2 py-1 w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+                  </div>
+                </td>
+                <td className="border px-4 py-2">Rwf {item.price}</td>
+                <td className="border px-4 py-2">Rwf {calculateSubtotal(item)}</td>
+                <td className="border px-4 py-2">
+                  <button
+                    onClick={() => handleDeleteItem(item.id)}
+                    className="text-red-500 hover:text-red-700 transition-all transform">
+                    <FaTrash />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <button
           onClick={handleSaveChanges}
           disabled={isSaveButtonDisabled()}
-          className={`w-full py-2 ${isSavingChanges ? 'bg-gray-500' : 'bg-black'} ${isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}
-        >
+          className={`w-full py-2 ${isSavingChanges ? 'bg-gray-500' : 'bg-black'} ${isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}>
           {isSavingChanges ? 'Saving Changes ....' : 'Save Changes'}
         </button>
-      </div>
-      <div className="w-full bg-gray lg:w-1/3 lg:mt-20">
-        <div className="border p-4">
-          <h2 className="text-2xl font-bold mb-4">Cart Totals</h2>
-          <div className="flex justify-between mb-2">
-            <span>Shipping</span>
-            <span>Free</span>
-          </div>
-          <div className="flex justify-between mb-4">
-            <span>Grand Total</span>
-            <span>Rwf {total}</span>
-          </div>
-          <button disabled={!isSaveButtonDisabled()} className={`w-full py-2 ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}>Proceed to Checkout</button>
-        </div>
-      </div>
-      {showConfirmation && (
+           {showConfirmation && (
         <ConfirmationDialog
           message="Are you sure you want to clear your cart ?"
           onConfirm={confirmClearCart}
           onCancel={cancelClearCart}
         />
       )}
+      </div>
+      <div className="w-full lg:w-1/3 lg:mt-20">
+        <div className="border p-4">
+          <h2 className="text-2xl font-bold mb-4">Cart Totals</h2>
+          <div className="flex justify-between mb-2">
+            <span>Shipping</span>
+            <span>Free</span>
+          </div>
+          <div className="flex justify-between mb-4 ">
+            <span>Grand Total</span>
+            <span className='text-xl font-bold'>Rwf {total}</span>
+          </div>
+          <button disabled={!isSaveButtonDisabled()} className={`w-full py-2 ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}>Proceed to Checkout</button>
+        </div>
+      </div>
     </div>
   );
 };
