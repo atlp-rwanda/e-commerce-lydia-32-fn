@@ -56,6 +56,7 @@ const Login: React.FC = () => {
         setIs2FARequired(true)
         return toast.success('2FA code sent to your email');
       } 
+      
   
 
       if(res.user.roleId === 1) {
