@@ -283,4 +283,5 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
   );
 };
 
+
 export default Cart;
