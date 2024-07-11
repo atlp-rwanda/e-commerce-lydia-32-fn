@@ -13,6 +13,7 @@ import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
+import UpdatePassword from './pages/updatePassword';
 import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -25,13 +26,15 @@ import AdminAssignRoleToUser from './pages/admin/AdminAssignRoleToUser';
 import AdminEditRole from './pages/admin/AdminEditRole';
 import Profile from './pages/Profile';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path= '/' element={<MainLayout />}>
       <Route index element={<Home />} />
       <Route path='*' element={<NotFoundPage/>}/>
       <Route path='/login' element={<LoginForm />} />
+      <Route path='/update-password' element={<UpdatePassword />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/ourTeam" element={<TeamSection/>} />
       <Route path='/forgot-password' element={<ForgotPasswordLayout />} />

@@ -25,11 +25,16 @@ const Login: React.FC = () => {
   const [login2FA] = useLoginTwoFaMutation()
 
   useEffect(() => {
-    if (userInfo && userInfo.user) {
-      if (userInfo.user.roleId === 3) {
-        navigate('/');
-      } else if (userInfo.user.roleId === 1) {
-        navigate('/admin/dashboard');
+    if (userInfo) {
+      if (userInfo.isPasswordExpired) {
+        toast.error('Your password is expired. Please update your password.');
+        navigate('/update-password');
+      } else if (userInfo.user) {
+        if (userInfo.user.roleId === 3) {
+          navigate('/');
+        } else if (userInfo.user.roleId === 1) {
+          navigate('/admin/dashboard');
+        }
       }
     }
   }, [userInfo, navigate]);
