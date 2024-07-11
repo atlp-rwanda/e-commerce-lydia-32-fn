@@ -15,6 +15,7 @@ import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
 import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
+import Profile from './pages/Profile';
 
 const App: React.FC = () => {
 
@@ -30,6 +31,7 @@ const App: React.FC = () => {
       <Route path='/reset-password' element={<ResetPasswordLayout />} />
       <Route path="/register" element={<SignupForm />} />
         <Route path="/verified" element={<EmailVerificationPage />} />
+        <Route path='/profile' element={<Profile/>}/>
         <Route
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
