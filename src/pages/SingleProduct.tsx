@@ -6,6 +6,7 @@ import ProductCard from '../Components/product';
 import Spinner from '../Components/Spinners';
 import { toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css'
+import { useNavigate } from 'react-router-dom';
 
 interface ProductCardProps {
   product: {
@@ -29,7 +30,6 @@ const SingleProduct: React.FC = () => {
 const [addingToCart, setAddingToCart] = useState<boolean>(false);
 // const dispatch = useDispatch();
 const { data: productsData, isLoading} = useGetProductsQuery();
-
   useEffect(() => {
     if (productsData && id) {
       const currentProduct = productsData.products.find((p: any) => p.productId.toString() === id);
@@ -58,16 +58,21 @@ const { data: productsData, isLoading} = useGetProductsQuery();
                     toast.error(response.message);
                 }
             }
-             else {
+             else {sideImages
                 toast.error('Please Login First To Proceed ')
             };
-        } catch (error:any) {
-             if (error.status==400) {
+        } catch (err:any) {
+             if (err.status==400) {
                   toast.error("Product Already In Your Cart. Please Consider updating quantities !");
-               } else {
-                   toast.error('Failed to add product to cart.');
+               } else if(err.status === 403){
+                // @ts-ignore
+                   toast.error(err?.data?.message);
+                   console.log(err);
+                   navigate('/update-password')
+
                }
     
+
                 console.error('Error adding product to cart:', error.status);
       }  
         finally {

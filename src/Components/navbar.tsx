@@ -19,7 +19,9 @@ const Navbar: React.FC = () => {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
+  setTimeout(()=>{
+    dispatch(logOut())
+  },1000*60*60)
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -34,7 +36,8 @@ const Navbar: React.FC = () => {
       toast.success("You're Logged out");
       navigate('/login')
     }
-  catch(err:any){ if (err?.data?.message) {
+  catch(err:any){ 
+    if (err?.data?.message) {
         toast.error(err.data.message);
       } else if (err.status === 400) {
         toast.error('already logged out or not logged in');
