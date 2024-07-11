@@ -18,7 +18,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
         loginTwoFa: builder.mutation({
-          query:  (data) => ({
+          query: (data) => ({
             url: `${BASE_URL}/factor`,
             method: 'POST',
             body: data
@@ -32,9 +32,9 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
         logout: builder.mutation({
-            query:()=>({
+            query: () => ({
                 url: `${BASE_URL}/logout`,
-                method:'POST'
+                method: 'POST'
             })
         }),
         userRegister: builder.mutation({

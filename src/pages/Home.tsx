@@ -11,7 +11,6 @@ const App: React.FC = () => {
   const dispatch = useDispatch()
   // @ts-ignore
   const { data: products, refetch } = useGetProductsQuery()
-
   useEffect(() => {
     if (products) {
       dispatch(setProductInfo(products))

@@ -9,17 +9,33 @@ import { Outlet, useLocation } from "react-router-dom";
 
 const MainLayout: React.FC = () => {
   const location = useLocation();
-  const isLoginPage = location.pathname === "/login" || location.pathname === "/register"  || location.pathname === "/verified"  || location.pathname === "/verification/failed";
+  const path = location.pathname;
+
+  const routesWithoutNavbarFooter = [
+    "/login",
+    "/register",
+    "/verified",
+    "/verification/failed",
+    "/admin/dashboard",
+    "/admin/create/role",
+    "/admin/create/permission",
+    "/admin/edit/role/",
+    "/admin/delete/permission",
+    "/admin/assign/role"
+  ];
+
+  const isExcludedRoute = routesWithoutNavbarFooter.some(route => path.startsWith(route)) || 
+                          /\/admin\/assign\/permission\/\d+$/.test(path);
 
   return (
     <div className="flex flex-col min-h-screen">
-      {!isLoginPage && <Navbar />}
+      {!isExcludedRoute && <Navbar />}
       <main className="flex-grow">
-        <Toaster />
+        <Toaster /> 
         <ToastContainer />
         <Outlet />
       </main>
-      {!isLoginPage && <Footer />}
+      {!isExcludedRoute && <Footer />}
     </div>
   );
 };
