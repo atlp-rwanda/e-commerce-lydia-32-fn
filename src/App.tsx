@@ -13,28 +13,50 @@ import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
 import EmailVerificationFailedPage from './pages/verifyFailed';
 import NotFoundPage from './pages/NotFoundPage';
+import UpdatePassword from './pages/updatePassword';
 import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminPageOnly from './pages/admin/AdminPageOnly';
+import AdminCreateRole from './pages/admin/AdminCreateRole';
+import AdminCreatePermission from './pages/admin/AdminCreatePermission';
+import AdminAssignPermiToRole from './pages/admin/AdminAssignPermiToRole';
+import AdminDeletePermiFromRole from './pages/admin/AdminDeletePermiFromRole';
+import AdminAssignRoleToUser from './pages/admin/AdminAssignRoleToUser';
+import AdminEditRole from './pages/admin/AdminEditRole';
+import Profile from './pages/Profile';
 
-const App:React.FC = () => {
+const App: React.FC = () => {
+
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path= '/' element={<MainLayout />}>
       <Route index element={<Home />} />
       <Route path='*' element={<NotFoundPage/>}/>
       <Route path='/login' element={<LoginForm />} />
+      <Route path='/update-password' element={<UpdatePassword />} />
       <Route path="/about" element={<AboutUs />} />
       <Route path="/ourTeam" element={<TeamSection/>} />
       <Route path='/forgot-password' element={<ForgotPasswordLayout />} />
       <Route path='/reset-password' element={<ResetPasswordLayout />} />
       <Route path="/register" element={<SignupForm />} />
         <Route path="/verified" element={<EmailVerificationPage />} />
+        <Route path='/profile' element={<Profile/>}/>
         <Route
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}
         />
         <Route path='/singleProduct/:id' element={<SingleProduct />} />
         <Route path='/cart' element={<Cart/> } />
+        <Route path='' element={<AdminPageOnly/>}>
+           <Route path='/admin/dashboard' element={<AdminDashboard/>}/>  
+           <Route path='/admin/create/role' element={<AdminCreateRole/>}/>  
+           <Route path='/admin/create/permission' element={<AdminCreatePermission/>}/>  
+           <Route path='/admin/assign/permission/:id' element={<AdminAssignPermiToRole/>}/>  
+           <Route path='/admin/delete/permission/:id' element={<AdminDeletePermiFromRole/>}/>  
+           <Route path='/admin/assign/role/:id' element={<AdminAssignRoleToUser/>}/>  
+           <Route path='/admin/edit/role/:id' element={<AdminEditRole/>}/>  
+        </Route>
     </Route>
     
     )

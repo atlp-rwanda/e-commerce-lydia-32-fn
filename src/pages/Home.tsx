@@ -18,7 +18,6 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
   const { data: products, refetch } = useGetProductsQuery()
-
   useEffect(() => {
     if (products) {
       dispatch(setProductInfo(products))

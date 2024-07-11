@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
@@ -15,14 +15,18 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
+  const { data: cart} = useGetCartQuery();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-   const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [cartSize, setCartSize] = useState(0);
   const [logout ]=useLogoutMutation()
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
+  setTimeout(()=>{
+    dispatch(logOut())
+  },1000*60*60)
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -37,10 +41,12 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
     //@ts-ignore
       await logout().unwrap();
       dispatch(logOut());
+      localStorage.removeItem('userInfo');
       toast.success("You're Logged out");
       navigate('/login')
     }
-  catch(err:any){ if (err?.data?.message) {
+  catch(err:any){ 
+    if (err?.data?.message) {
         toast.error(err.data.message);
       } else if (err.status === 400) {
         toast.error('already logged out or not logged in');
@@ -55,15 +61,31 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
     }
   }
 
+  const loggedUserInfo = localStorage.getItem('userInfo');
+  useEffect(() => {
+    setCartSize(cart?.items?.length || 0);
+  }, [cart]);
+
   return (
     <nav className="bg-white fixed top-0 left-0 right-0 z-10">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
-            <Link to="/" className="text-sm text-gray-600 hover:text-black">HOME</Link>
-            <Link to="/shop" className="text-sm text-gray-600 hover:text-black">SHOP</Link>
-            <Link to="/about" className="text-sm text-gray-600 hover:text-black">ABOUT</Link>
-            <Link to="/chat" className="text-sm text-gray-600 hover:text-black">CHAT</Link>
+            <Link to="/" className="text-sm text-gray-600 hover:text-black">
+              HOME
+            </Link>
+            <Link to="/shop" className="text-sm text-gray-600 hover:text-black">
+              SHOP
+            </Link>
+            <Link
+              to="/about"
+              className="text-sm text-gray-600 hover:text-black"
+            >
+              ABOUT
+            </Link>
+            <Link to="/chat" className="text-sm text-gray-600 hover:text-black">
+              CHAT
+            </Link>
           </div>
 
           <div className="hidden md:block text-xl font-bold">DEPOT</div>
@@ -74,20 +96,36 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
           <div className="hidden md:flex items-center space-x-4 sm:space-x-6 ml-60">
             {userInfo ? (
               <div className="relative">
-                <button onClick={toggleDropdown} className="block text-sm text-gray-600 hover:text-black">
+                <button
+                  onClick={toggleDropdown}
+                  className="block text-sm text-gray-600 hover:text-black"
+                >
                   {userInfo.user.firstname}
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                    <button 
-                    className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
-                    onClick={handleLogout}
-                    >Logout</button>
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                    <Link
+                      to="/profile"
+                      className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
+                    >
+                      Profile
+                    </Link>
                   </div>
                 )}
               </div>
             ) : (
-              <Link to="/login" className="text-sm text-gray-600 hover:text-black">LOGIN</Link>
+              <Link
+                to="/login"
+                className="text-sm text-gray-600 hover:text-black"
+              >
+                LOGIN
+              </Link>
             )}
             <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART (50)</Link>
             
@@ -98,9 +136,9 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
         </div>
 
         {/* Mobile menu */}
-        <div 
+        <div
           className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -108,11 +146,21 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
             <Link to="/shop" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">SHOP</Link>
             <Link to="/about" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">ABOUT</Link>
             <Link to="/chat" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CHAT</Link>
-            <Link to="/cart" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CART (50)</Link>
+            {loggedUserInfo &&  <Link to="/cart" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CART ({cartSize})</Link>}
             {userInfo ? (
-              <Link to="/logout" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">LOGOUT</Link>
+              <Link
+                to="/logout"
+                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+              >
+                LOGOUT
+              </Link>
             ) : (
-              <Link to="/login" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">LOGIN</Link>
+              <Link
+                to="/login"
+                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+              >
+                LOGIN
+              </Link>
             )}
           </div>
         </div>
