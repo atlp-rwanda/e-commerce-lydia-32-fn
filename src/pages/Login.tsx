@@ -29,8 +29,12 @@ const Login: React.FC = () => {
       if (userInfo.isPasswordExpired) {
         toast.error('Your password is expired. Please update your password.');
         navigate('/update-password');
-      } else {
-        navigate('/');
+      } else if (userInfo.user) {
+        if (userInfo.user.roleId === 3) {
+          navigate('/');
+        } else if (userInfo.user.roleId === 1) {
+          navigate('/admin/dashboard');
+        }
       }
     }
   }, [userInfo, navigate]);
@@ -52,9 +56,20 @@ const Login: React.FC = () => {
         setIs2FARequired(true)
         return toast.success('2FA code sent to your email');
       } 
-      dispatch(getCredentials({ ...res }));
-      toast.success('Login successful!');
-      navigate('/');
+  
+
+      if(res.user.roleId === 1) {
+        dispatch(getCredentials({ ...res }));
+        toast.success('Login successful!');
+        navigate('/admin/dashboard');
+      
+      } else {
+        dispatch(getCredentials({ ...res }));
+        toast.success('Login successful!');
+        navigate('/');
+      }
+
+      
     } catch (err: any) {
       console.error(err);
       if (err?.data?.message) {
