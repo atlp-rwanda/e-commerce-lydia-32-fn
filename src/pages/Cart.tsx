@@ -9,7 +9,7 @@ import {
 } from '../slices/cartSlice/cartApiSlice';
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import toast from 'react-hot-toast'
 import 'react-toastify/dist/ReactToastify.css';
 import EmptyCart from '../Components/EmptyCart';
 import ConfirmationDialog from '../Components/ConfirmationDialog';
@@ -60,7 +60,7 @@ const Cart: React.FC = () => {
       });
       setCartProducts(cartItemsWithDetails);
       const initialQuantities = cartItemsWithDetails.reduce((acc: { [key: number]: number }, item: CartItem) => {
-        acc[item.id] = item.quantity;
+        acc[item.productId] = item.quantity;
         return acc;
       }, {} as { [key: number]: number });
       setInitialQuantities(initialQuantities);
@@ -72,15 +72,40 @@ const Cart: React.FC = () => {
     refetchCart();
   }, [updateCartItem, deleteCartItem, clearCart]);
 
-  const handleQuantityChange = (productId: number, newQuantity: number, cartItemId: number) => {
-    setChangedItems(prev => ({ ...prev, [productId]: { quantity: newQuantity, cartItemId } }));
-  };
+  const incrementQuantity = (productId: number, cartItemId: number) =>{
+  setChangedItems(prev => {
+    const currentQuantity = (prev[productId]?.quantity ?? initialQuantities[productId]) + 1;
+    const maxQuantity = cartProducts.find(item => item.productId === productId)?.maxQuantity;
+
+    if (currentQuantity <= (maxQuantity ?? Infinity)) {
+      return {
+        ...prev,
+        [productId]: { quantity: currentQuantity, cartItemId: cartItemId }
+      };
+    }
+    return prev;
+  });
+};
+
+const decrementQuantity = (productId: number, cartItemId: number) => {
+  setChangedItems(prev => {
+    const currentQuantity = (prev[productId]?.quantity ?? initialQuantities[productId]) - 1;
+
+    if (currentQuantity >= 1) {
+      return {
+        ...prev,
+        [productId]: { quantity: currentQuantity, cartItemId: cartItemId }
+      };
+    }
+    return prev;
+  });
+};
 
   const handleSaveChanges = async () => {
     try {
       setIsSavingChanges(true);
       for (const [productId, { quantity, cartItemId }] of Object.entries(changedItems)) {
-        const res = await updateCartItem({ id: cartItemId, quantity });
+        const res = await updateCartItem({ id: Number(cartItemId), quantity: Number(quantity) });
       }
       toast.success('Cart updated successfully');
       setChangedItems({});
@@ -128,14 +153,14 @@ const Cart: React.FC = () => {
   };
 
   const calculateSubtotal = (item: CartItem) => {
-    const quantity = changedItems[item.productId]?.quantity ?? item.quantity;
-    return quantity * item.price;
+    const quantity = changedItems[item.productId]?.quantity ?? Number(item.quantity);
+    return Number(quantity * item.price);
   };
 
   const calculateTotal = (items: CartItem[]) => {
     const newTotal = items.reduce((acc, item) => {
-      const quantity = changedItems[item.productId]?.quantity ?? item.quantity;
-      return acc + (quantity * item.price);
+      const quantity = changedItems[item.productId]?.quantity ?? Number(item.quantity);
+      return acc + Number(quantity * item.price);
     }, 0);
     setTotal(newTotal);
   };
@@ -166,70 +191,89 @@ const Cart: React.FC = () => {
   if (!cart.items || isEmpty) {
     return <EmptyCart />;
   }
-
   return (
-    <div className="container mx-auto mt-20 py-10 mb-10 px-10 flex flex-col lg:flex-row justify gap-20">
-      <div className="w-full lg:w-2/3">
-        <h2 className="text-3xl font-bold mb-6 text-center">Shopping Cart</h2>
-        <button onClick={() => handleClearCart()} className='bg-black px-10 py-2 font-size-large text-lg text-white rounded mt-4 hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'>{clearingCart ? 'Clearing Cart .....' : 'Clear Cart'}</button>
-        {cartProducts.map(item => (
-          <div key={item.productId} className={`relative ${deletingItemId === item.id ? 'opacity-50' : ''} flex flex-col lg:flex-row justify-between items-center mb-4 p-4 border-b`}>
-            <div className="flex items-center">
-              <img src={item.images[0]} alt={item.productName} className="w-20 h-20 mr-4" />
-              <div>
-                <h2 className="text-lg font-semibold">{item.productName}</h2>
-                <h3 className="text-lg">Category: {item.productCategory}</h3>
-              </div>
-            </div>
-            <div className="flex items-center justify-start">
-              <input
-                type="number"
-                min={1}
-                max={item.maxQuantity}
-                value={changedItems[item.productId]?.quantity ?? item.quantity}
-                onChange={(e) => handleQuantityChange(item.productId, parseInt(e.target.value, 10), item.id)}
-                className="border rounded w-16 p-1 text-center mr-4"
-              />
-              <p className="text-lg font-semibold">Rwf {item.price}</p>
-            </div>
-            <div className="text-left">
-              <p>Sub-Total: <span className='font-bold'>Rwf {calculateSubtotal(item)}</span></p>
-            </div>
-            {deletingItemId === item.id ? (
-              <p className="absolute top-10 m-auto ml-20 w-400 px-40 h-10 flex rounded items-center justify-center bg-black font-bold text-white z-10">
-                Deleting Cart Item....
-              </p>
-            ) : (
-                <button
-                  onClick={() => handleDeleteItem(item.id)}
-                  className="ml-4 text-red-600"
-                >
-                  <FaTrash />
-                </button>
-              )}
-          </div>
-        ))}
+  <div className="container mx-auto mt-2 py-0 mb-10 px-10 sm:m-20 sm:py-10 mb-5 sm:mb-10 px-4 sm:px-10 flex flex-col lg:flex-row justify-between gap-10 lg:gap-20">
+    <div className="w-full lg:w-2/3 ">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">Shopping Cart</h2>
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white border-collapse">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border py-2 px-3 sm:px-4">Product</th>
+              <th className="border py-2 px-3 sm:px-4 hidden sm:table-cell">Category</th>
+              <th className="border py-2 px-3 sm:px-4">Quantity</th>
+              <th className="border py-2 px-3 sm:px-4">Unit Price</th>
+              <th className="border py-2 px-3 sm:px-4 hidden sm:table-cell">Subtotal</th>
+              <th className="border py-2 px-3 sm:px-4">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartProducts.map(item => (
+              <tr key={item.productId} className={`relative ${deletingItemId === item.id ? 'opacity-50' : ''}`}>
+                <td className="border px-3 sm:px-4 py-2">
+                  <div className="flex flex-col items-center text-center">
+                    <img src={item.images[0]} alt={item.productName} className="w-16 h-16 sm:w-20 sm:h-20 mb-2" />
+                    <h2 className="text-sm sm:text-base font-semibold">{item.productName}</h2>
+                  </div>
+                </td>
+                <td className="border px-3 sm:px-4 py-2 hidden sm:table-cell">{item.productCategory}</td>
+                <td className="border px-3 sm:px-4 py-2">
+                  <div className="flex items-center justify-center">
+                    <button
+                      onClick={() => decrementQuantity(item.productId, item.id)}
+                      className="text-lg px-2 py-1 w-8 sm:w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
+                    >
+                      -
+                    </button>
+                    <span className="px-2 sm:px-4 py-1 text-sm sm:text-lg justify-center items-center">
+                      {changedItems[item.productId]?.quantity ?? initialQuantities[item.productId] ?? item.quantity}
+                    </span>
+                    <button
+                      onClick={() => incrementQuantity(item.productId, item.id)}
+                      className="text-lg px-2 py-1 w-8 sm:w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+                  </div>
+                </td>
+                <td className="border px-3 sm:px-4 py-2 text-sm sm:text-base">Rwf {item.price}</td>
+                <td className="border px-3 sm:px-4 py-2 hidden sm:table-cell">Rwf {calculateSubtotal(item)}</td>
+                <td className="border px-3 sm:px-4 py-2">
+                  <div className='group relative text-center'>
+                    <button onClick={() => handleDeleteItem(item.id)} className="text-red-500 hover:text-red-700 transition-all transform">
+                     <FaTrash />
+                     </button>
+                     <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-600 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap mb-2">
+                      Delete Item
+                    </span>
+                  </div>
+                </td>
+                 {deletingItemId === item.id && 
+                <div className="absolute inset-0 z-10 bg-black bg-opacity-75 flex items-center justify-center">
+                   <span className="text-white font-bold">
+                     Deleting Cart Item...
+                    </span>
+                </div>
+                }
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className='flex flex-col sm:flex-row justify-center align-middle gap-4 sm:gap-8 mt-4 sm:mt-6'>
+        <button 
+          onClick={() => handleClearCart()} 
+          className='bg-black w-full sm:w-1/2 px-4 sm:px-10 py-2 text-sm sm:text-lg text-white rounded hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'
+        >
+          {clearingCart ? 'Clearing Cart .....' : 'Clear Cart'}
+        </button>
         <button
           onClick={handleSaveChanges}
           disabled={isSaveButtonDisabled()}
-          className={`w-full py-2 ${isSavingChanges ? 'bg-gray-500' : 'bg-black'} ${isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}
+          className={`w-full sm:w-1/2 py-2 text-sm sm:text-lg ${isSavingChanges ? 'bg-gray-500' : 'bg-black'} ${isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded`}
         >
           {isSavingChanges ? 'Saving Changes ....' : 'Save Changes'}
         </button>
-      </div>
-      <div className="w-full bg-gray lg:w-1/3 lg:mt-20">
-        <div className="border p-4">
-          <h2 className="text-2xl font-bold mb-4">Cart Totals</h2>
-          <div className="flex justify-between mb-2">
-            <span>Shipping</span>
-            <span>Free</span>
-          </div>
-          <div className="flex justify-between mb-4">
-            <span>Grand Total</span>
-            <span>Rwf {total}</span>
-          </div>
-          <button disabled={!isSaveButtonDisabled()} className={`w-full py-2 ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}>Proceed to Checkout</button>
-        </div>
       </div>
       {showConfirmation && (
         <ConfirmationDialog
@@ -239,7 +283,28 @@ const Cart: React.FC = () => {
         />
       )}
     </div>
-  );
+    <div className="w-full lg:w-1/3 mt-8 lg:mt-16">
+      <div className="border p-4 sm:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">Cart Totals</h2>
+        <div className="flex justify-between mb-2 text-sm sm:text-base">
+          <span>Shipping</span>
+          <span>Free</span>
+        </div>
+        <div className="flex justify-between mb-4 text-sm sm:text-base">
+          <span>Grand Total</span>
+          <span className='text-lg sm:text-xl font-bold'>Rwf {total}</span>
+        </div>
+        <button 
+          disabled={!isSaveButtonDisabled()} 
+          className={`w-full py-2 sm:py-3 text-sm sm:text-lg ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4 transition-colors duration-300`}
+        >
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+);
 };
+
 
 export default Cart;
