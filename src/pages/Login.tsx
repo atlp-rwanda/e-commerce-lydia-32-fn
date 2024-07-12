@@ -74,7 +74,6 @@ const Login: React.FC = () => {
         navigate('/');
       }
 
-      
     } catch (err: any) {
       console.error(err);
       if (err?.data?.message) {
