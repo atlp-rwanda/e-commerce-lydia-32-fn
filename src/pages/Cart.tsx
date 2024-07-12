@@ -60,7 +60,7 @@ const Cart: React.FC = () => {
       });
       setCartProducts(cartItemsWithDetails);
       const initialQuantities = cartItemsWithDetails.reduce((acc: { [key: number]: number }, item: CartItem) => {
-        acc[item.id] = item.quantity;
+        acc[item.productId] = item.quantity;
         return acc;
       }, {} as { [key: number]: number });
       setInitialQuantities(initialQuantities);
@@ -79,22 +79,33 @@ const Cart: React.FC = () => {
   }));
 };
 
+  const incrementQuantity = (productId: number, cartItemId: number) =>{
+  setChangedItems(prev => {
+    const currentQuantity = (prev[productId]?.quantity ?? initialQuantities[productId]) + 1;
+    const maxQuantity = cartProducts.find(item => item.productId === productId)?.maxQuantity;
 
-const incrementQuantity = (productId: number, cartItemId: number) => {
-  const currentQuantity = (changedItems[productId]?.quantity ?? initialQuantities[productId]) + 1;
-  const maxQuantity = cartProducts.find(item => item.productId === productId)?.maxQuantity;
-
-  if (currentQuantity <= (maxQuantity ?? Infinity)) {
-    handleQuantityChange(productId, currentQuantity, cartItemId);
-  }
+    if (currentQuantity <= (maxQuantity ?? Infinity)) {
+      return {
+        ...prev,
+        [productId]: { quantity: currentQuantity, cartItemId: cartItemId }
+      };
+    }
+    return prev;
+  });
 };
 
 const decrementQuantity = (productId: number, cartItemId: number) => {
-  const currentQuantity = (changedItems[productId]?.quantity ?? initialQuantities[productId]) - 1;
+  setChangedItems(prev => {
+    const currentQuantity = (prev[productId]?.quantity ?? initialQuantities[productId]) - 1;
 
-  if (currentQuantity >= 1) {
-    handleQuantityChange(productId, currentQuantity, cartItemId);
-  }
+    if (currentQuantity >= 1) {
+      return {
+        ...prev,
+        [productId]: { quantity: currentQuantity, cartItemId: cartItemId }
+      };
+    }
+    return prev;
+  });
 };
 
   const handleSaveChanges = async () => {
@@ -187,100 +198,117 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
   if (!cart.items || isEmpty) {
     return <EmptyCart />;
   }
-
   return (
-    <div className="container mx-auto mt-20 py-10 mb-10 px-10 flex flex-col lg:flex-row justify-between gap-20">
-      <div className="w-full lg:w-2/3">
-        <h2 className="text-3xl font-bold mb-6 text-center">Shopping Cart</h2>
-        <button onClick={() => handleClearCart()} className='bg-black px-10 py-2 text-lg text-white rounded mt-4 hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'>{clearingCart ? 'Clearing Cart .....' : 'Clear Cart'}</button>
+  <div className="container mx-auto mt-2 py-0 mb-10 px-10 sm:m-20 sm:py-10 mb-5 sm:mb-10 px-4 sm:px-10 flex flex-col lg:flex-row justify-between gap-10 lg:gap-20">
+    <div className="w-full lg:w-2/3 ">
+      <h2 className="text-2xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">Shopping Cart</h2>
+      <div className="overflow-x-auto">
         <table className="min-w-full bg-white border-collapse">
-          <thead>
+          <thead className="bg-gray-100">
             <tr>
-              <th className="border py-2">Product</th>
-              <th className="border py-2">Category</th>
-              <th className="border py-2">Quantity</th>
-              <th className="border py-2">Unit Price</th>
-              <th className="border py-2">Subtotal</th>
-              <th className="border py-2">Action</th>
+              <th className="border py-2 px-3 sm:px-4">Product</th>
+              <th className="border py-2 px-3 sm:px-4 hidden sm:table-cell">Category</th>
+              <th className="border py-2 px-3 sm:px-4">Quantity</th>
+              <th className="border py-2 px-3 sm:px-4">Unit Price</th>
+              <th className="border py-2 px-3 sm:px-4 hidden sm:table-cell">Subtotal</th>
+              <th className="border py-2 px-3 sm:px-4">Action</th>
             </tr>
           </thead>
           <tbody>
             {cartProducts.map(item => (
               <tr key={item.productId} className={`relative ${deletingItemId === item.id ? 'opacity-50' : ''}`}>
                 {deletingItemId === item.id && 
-                  <p className="absolute top-10 m-auto ml-20 w-400 px-40 h-10 flex rounded items-center justify-center bg-black font-bold text-white z-10">
+                  <p className="absolute top-0 left-0 right-0 m-auto h-10 flex items-center justify-center bg-black font-bold text-white z-10">
                     Deleting Cart Item....
                   </p>
                 }
-                <td className="border px-4 py-2">
-                  <div className="flex items-center">
-                    <img src={item.images[0]} alt={item.productName} className="w-20 h-20 mr-4" />
-                    <div>
-                      <h2 className="text-lg font-semibold">{item.productName}</h2>
-                    </div>
+                <td className="border px-3 sm:px-4 py-2">
+                  <div className="flex flex-col items-center text-center">
+                    <img src={item.images[0]} alt={item.productName} className="w-16 h-16 sm:w-20 sm:h-20 mb-2" />
+                    <h2 className="text-sm sm:text-base font-semibold">{item.productName}</h2>
                   </div>
                 </td>
-                <td className="border px-4 py-2">{item.productCategory}</td>
-                <td className="border px-4 py-2">
-                 <div className="flex items-center">
+                <td className="border px-3 sm:px-4 py-2 hidden sm:table-cell">{item.productCategory}</td>
+                <td className="border px-3 sm:px-4 py-2">
+                  <div className="flex items-center justify-center">
                     <button
                       onClick={() => decrementQuantity(item.productId, item.id)}
-                      className="text-lg px-2 py-1 w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
+                      className="text-lg px-2 py-1 w-8 sm:w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
                     >
                       -
                     </button>
-                    <span className="px-4 py-1 text-lg justify-center items-center">{changedItems[item.productId]?.quantity ?? item.quantity}</span>
+                    <span className="px-2 sm:px-4 py-1 text-sm sm:text-lg justify-center items-center">
+                      {changedItems[item.productId]?.quantity ?? initialQuantities[item.productId] ?? item.quantity}
+                    </span>
                     <button
                       onClick={() => incrementQuantity(item.productId, item.id)}
-                      className="text-lg px-2 py-1 w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
+                      className="text-lg px-2 py-1 w-8 sm:w-10 bg-gray-200 justify-center items-center text-gray-700 rounded hover:bg-gray-300"
                     >
                       +
                     </button>
                   </div>
                 </td>
-                <td className="border px-4 py-2">Rwf {item.price}</td>
-                <td className="border px-4 py-2">Rwf {calculateSubtotal(item)}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    onClick={() => handleDeleteItem(item.id)}
-                    className="text-red-500 hover:text-red-700 transition-all transform">
-                    <FaTrash />
-                  </button>
+                <td className="border px-3 sm:px-4 py-2 text-sm sm:text-base">Rwf {item.price}</td>
+                <td className="border px-3 sm:px-4 py-2 hidden sm:table-cell">Rwf {calculateSubtotal(item)}</td>
+                <td className="border px-3 sm:px-4 py-2">
+                  <div className='group relative text-center'>
+                    <button onClick={() => handleDeleteItem(item.id)} className="text-red-500 hover:text-red-700 transition-all transform">
+                     <FaTrash />
+                     </button>
+                     <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-gray-600 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap mb-2">
+                      Delete Item
+                    </span>
+                  </div>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+      <div className='flex flex-col sm:flex-row justify-center align-middle gap-4 sm:gap-8 mt-4 sm:mt-8'>
+        <button 
+          onClick={() => handleClearCart()} 
+          className='bg-black w-full sm:w-1/2 px-4 sm:px-10 py-2 text-sm sm:text-lg text-white rounded hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'
+        >
+          {clearingCart ? 'Clearing Cart .....' : 'Clear Cart'}
+        </button>
         <button
           onClick={handleSaveChanges}
           disabled={isSaveButtonDisabled()}
-          className={`w-full py-2 ${isSavingChanges ? 'bg-gray-500' : 'bg-black'} ${isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}>
+          className={`w-full sm:w-1/2 py-2 text-sm sm:text-lg ${isSavingChanges ? 'bg-gray-500' : 'bg-black'} ${isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded`}
+        >
           {isSavingChanges ? 'Saving Changes ....' : 'Save Changes'}
         </button>
-           {showConfirmation && (
+      </div>
+      {showConfirmation && (
         <ConfirmationDialog
           message="Are you sure you want to clear your cart ?"
           onConfirm={confirmClearCart}
           onCancel={cancelClearCart}
         />
       )}
-      </div>
-      <div className="w-full lg:w-1/3 lg:mt-20">
-        <div className="border p-4">
-          <h2 className="text-2xl font-bold mb-4">Cart Totals</h2>
-          <div className="flex justify-between mb-2">
-            <span>Shipping</span>
-            <span>Free</span>
-          </div>
-          <div className="flex justify-between mb-4 ">
-            <span>Grand Total</span>
-            <span className='text-xl font-bold'>Rwf {total}</span>
-          </div>
-          <button disabled={!isSaveButtonDisabled()} className={`w-full py-2 ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4`}>Proceed to Checkout</button>
+    </div>
+    <div className="w-full lg:w-1/3 mt-8 lg:mt-16">
+      <div className="border p-4 sm:p-6 rounded-lg shadow-md">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4">Cart Totals</h2>
+        <div className="flex justify-between mb-2 text-sm sm:text-base">
+          <span>Shipping</span>
+          <span>Free</span>
         </div>
+        <div className="flex justify-between mb-4 text-sm sm:text-base">
+          <span>Grand Total</span>
+          <span className='text-lg sm:text-xl font-bold'>Rwf {total}</span>
+        </div>
+        <button 
+          disabled={!isSaveButtonDisabled()} 
+          className={`w-full py-2 sm:py-3 text-sm sm:text-lg ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4 transition-colors duration-300`}
+        >
+          Proceed to Checkout
+        </button>
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 
