@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaTrash } from 'react-icons/fa';
 import {
-  useGetCartQuery,
+ useGetCartQuery,
   useUpdateCartItemMutation,
   useDeleteCartItemMutation,
   useClearCartMutation,
