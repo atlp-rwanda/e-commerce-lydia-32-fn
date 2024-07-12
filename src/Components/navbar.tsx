@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
-// import Search from './search';
 import { logOut } from '../slices/authSlice/authSlice';
-import {FiSearch} from 'react-icons/fi';
 import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 
 interface NavbarProps {
   onSearchToggle: () => void;
 }
+
 
 const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,8 +32,9 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
   };
 
   const toogleSearch = () => {
-      onSearchToggle();
-  };
+    onSearchToggle();
+};
+
   const handleLogout = async(e: any) =>{
   e.preventDefault()
   setIsLoading(true)
@@ -89,12 +89,49 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
             </Link>
           </div>
 
+          {/* Mobile layout */}
+          <div className="flex items-center justify-between w-full md:hidden">
+            <button
+              onClick={toggleMenu}
+              className="text-gray-600 hover:text-black"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+
+            <div className="text-xl font-bold">DEPOT</div>
+
+            <button className="text-gray-600 hover:text-black">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+
           <div className="hidden md:block text-xl font-bold">DEPOT</div>
-          
-            {/* <div className='mt-20'>
-               <Search  isVisible={isInputVisible} onClose={() => setIsInputVisible(false)}/>
-            </div> */}
-          <div className="hidden md:flex items-center space-x-4 sm:space-x-6 ml-60">
+
+          <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
             {userInfo ? (
               <div className="relative">
                 <button
@@ -111,6 +148,9 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
                     >
                       Logout
                     </button>
+
+
+
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
@@ -119,6 +159,8 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
                     </Link>
                   </div>
                 )}
+
+                
               </div>
             ) : (
               <Link
@@ -127,12 +169,14 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
               >
                 LOGIN
               </Link>
+
+              
             )}
-            <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART (50)</Link>
-            
-            <button onClick={ toogleSearch } className="text-gray-600 hover:text-black">
-               <FiSearch className="h-5 w-5" />
-            </button>
+           {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
+                  <button onClick={ toogleSearch } className="text-gray-600 hover:text-black">
+                        <FiSearch className="h-5 w-5" />
+                   </button>
+        
           </div>
         </div>
 
