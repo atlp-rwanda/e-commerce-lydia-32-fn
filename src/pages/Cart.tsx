@@ -72,13 +72,6 @@ const Cart: React.FC = () => {
     refetchCart();
   }, [updateCartItem, deleteCartItem, clearCart]);
 
- const handleQuantityChange = (productId: number, newQuantity: number, cartItemId: number) => {
-  setChangedItems(prev => ({
-    ...prev,
-    [productId]: { quantity: newQuantity, cartItemId: cartItemId }
-  }));
-};
-
   const incrementQuantity = (productId: number, cartItemId: number) =>{
   setChangedItems(prev => {
     const currentQuantity = (prev[productId]?.quantity ?? initialQuantities[productId]) + 1;
@@ -217,13 +210,6 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
           <tbody>
             {cartProducts.map(item => (
               <tr key={item.productId} className={`relative ${deletingItemId === item.id ? 'opacity-50' : ''}`}>
-                {deletingItemId === item.id && 
-                <div className="absolute inset-0 z-10 bg-black bg-opacity-75 flex items-center justify-center">
-                   <span className="text-white font-bold">
-                     Deleting Cart Item...
-                    </span>
-                </div>
-                }
                 <td className="border px-3 sm:px-4 py-2">
                   <div className="flex flex-col items-center text-center">
                     <img src={item.images[0]} alt={item.productName} className="w-16 h-16 sm:w-20 sm:h-20 mb-2" />
@@ -262,6 +248,13 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
                     </span>
                   </div>
                 </td>
+                 {deletingItemId === item.id && 
+                <div className="absolute inset-0 z-10 bg-black bg-opacity-75 flex items-center justify-center">
+                   <span className="text-white font-bold">
+                     Deleting Cart Item...
+                    </span>
+                </div>
+                }
               </tr>
             ))}
           </tbody>
