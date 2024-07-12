@@ -4,7 +4,7 @@ import { useAddToCartMutation, useGetCartQuery } from '../slices/cartSlice/cartA
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
 import ProductCard from '../Components/product';
 import Spinner from '../Components/Spinners';
-import { toast } from 'react-toastify'; 
+import toast from 'react-hot-toast'
 import 'react-toastify/dist/ReactToastify.css'
 import { useNavigate } from 'react-router-dom';
 
