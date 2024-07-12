@@ -27,8 +27,7 @@ const Login: React.FC = () => {
   useEffect(() => {
     if (userInfo) {
       if (userInfo.isPasswordExpired) {
-        toast.error('Your password is expired. Please update your password.');
-        navigate('/update-password');
+        navigate('/update-password'); 
       } else if (userInfo.user) {
         if (userInfo.user.roleId === 3) {
           navigate('/');
@@ -51,14 +50,19 @@ const Login: React.FC = () => {
 
     try {
       const res = await login({ email, password }).unwrap();
+
       if (res.message === "2FA code sent to your email") {
 
         setIs2FARequired(true)
         return toast.success('2FA code sent to your email');
       } 
       
-  
-
+     if(res.isPasswordExpired){
+      dispatch(getCredentials({ ...res }));
+      navigate('/update-password'); 
+      return toast.error('Your password is expired. Please update your password.');
+     
+     }
       if(res.user.roleId === 1) {
         dispatch(getCredentials({ ...res }));
         toast.success('Login successful!');
@@ -70,7 +74,6 @@ const Login: React.FC = () => {
         navigate('/');
       }
 
-      
     } catch (err: any) {
       console.error(err);
       if (err?.data?.message) {
@@ -94,6 +97,12 @@ const Login: React.FC = () => {
 
     try {
       const res = await login2FA({ twoFactorCode }).unwrap();
+      if(res.isPasswordExpired){
+        dispatch(getCredentials({ ...res }));
+        navigate('/update-password'); 
+        return toast.error('Your password is expired. Please update your password.');
+       
+       }
       dispatch(getCredentials({ ...res }));
       toast.success('Login successful!');
       navigate('/');
