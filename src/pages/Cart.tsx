@@ -218,9 +218,11 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
             {cartProducts.map(item => (
               <tr key={item.productId} className={`relative ${deletingItemId === item.id ? 'opacity-50' : ''}`}>
                 {deletingItemId === item.id && 
-                  <p className="absolute top-0 left-0 right-0 m-auto h-10 flex items-center justify-center bg-black font-bold text-white z-10">
-                    Deleting Cart Item....
-                  </p>
+                <div className="absolute inset-0 z-10 bg-black bg-opacity-75 flex items-center justify-center">
+                   <span className="text-white font-bold">
+                     Deleting Cart Item...
+                    </span>
+                </div>
                 }
                 <td className="border px-3 sm:px-4 py-2">
                   <div className="flex flex-col items-center text-center">
@@ -265,7 +267,7 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
           </tbody>
         </table>
       </div>
-      <div className='flex flex-col sm:flex-row justify-center align-middle gap-4 sm:gap-8 mt-4 sm:mt-8'>
+      <div className='flex flex-col sm:flex-row justify-center align-middle gap-4 sm:gap-8 mt-4 sm:mt-6'>
         <button 
           onClick={() => handleClearCart()} 
           className='bg-black w-full sm:w-1/2 px-4 sm:px-10 py-2 text-sm sm:text-lg text-white rounded hover:bg-gray-900 hover:text-gray-100 duration-300 transition-all transform'

@@ -22,13 +22,13 @@ interface ProductCardProps {
 
 const SingleProduct: React.FC = () => {
   const { id } = useParams();
+  const navigate = useNavigate()
   const [product, setProduct] = useState<ProductCardProps['product'] | null>(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [cartItemQty, SetCartItemQty] = useState(1);
   const [addToCart] = useAddToCartMutation();
   const { refetch } = useGetCartQuery();
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
-  const navigate = useNavigate()
   const { data: productsData, isLoading } = useGetProductsQuery();
 
   useEffect(() => {

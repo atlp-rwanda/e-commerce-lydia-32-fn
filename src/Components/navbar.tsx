@@ -5,8 +5,15 @@ import toast from 'react-hot-toast';
 import { logOut } from '../slices/authSlice/authSlice';
 import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
+import {FiSearch} from 'react-icons/fi';
 
-const Navbar: React.FC = () => {
+
+interface NavbarProps {
+  onSearchToggle: () => void;
+}
+
+
+const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
@@ -25,6 +32,11 @@ const Navbar: React.FC = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const toogleSearch = () => {
+    onSearchToggle();
+};
+
   const handleLogout = async(e: any) =>{
   e.preventDefault()
   setIsLoading(true)
@@ -138,6 +150,9 @@ const Navbar: React.FC = () => {
                     >
                       Logout
                     </button>
+
+
+
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
@@ -146,6 +161,8 @@ const Navbar: React.FC = () => {
                     </Link>
                   </div>
                 )}
+
+                
               </div>
             ) : (
               <Link
@@ -154,22 +171,14 @@ const Navbar: React.FC = () => {
               >
                 LOGIN
               </Link>
+
+              
             )}
            {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
-            <button className="text-gray-600 hover:text-black">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
+                  <button onClick={ toogleSearch } className="text-gray-600 hover:text-black">
+                        <FiSearch className="h-5 w-5" />
+                   </button>
+        
           </div>
         </div>
 
