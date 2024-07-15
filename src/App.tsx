@@ -35,6 +35,7 @@ import SellerDashboardLayout from "./layouts/sellerDashboardLayout";
 import AddNewProduct from "./pages/seller/AddProduct";
 import Dashboard from "./pages/seller/GeneralAnalysis";
 import NotificationBar from "./pages/seller/NotificationBar";
+import Checkout from "./pages/Checkout";
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
@@ -92,6 +93,7 @@ const App: React.FC = () => {
           <Route path="/seller/dashboard" element={<Dashboard />} />
           <Route path="/seller/notifications" element={<NotificationBar />} />
         </Route>
+        <Route path='/checkout' element={<Checkout/>}/>
       </Route>
     )
   );
