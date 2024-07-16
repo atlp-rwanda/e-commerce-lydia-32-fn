@@ -25,6 +25,10 @@ import AdminDeletePermiFromRole from './pages/admin/AdminDeletePermiFromRole';
 import AdminAssignRoleToUser from './pages/admin/AdminAssignRoleToUser';
 import AdminEditRole from './pages/admin/AdminEditRole';
 import Profile from './pages/Profile';
+import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
+import PaymentSuccessPage from './pages/PaymentSuccess';
+import PaymentErrorPage from './pages/PyamentErroPage';
 
 const App: React.FC = () => {
 
@@ -47,7 +51,11 @@ const App: React.FC = () => {
           element={<EmailVerificationFailedPage />}
         />
         <Route path='/singleProduct/:id' element={<SingleProduct />} />
-        <Route path='/cart' element={<Cart/> } />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/checkout' element={<Checkout />} />
+        <Route path='/orderConfirmation/:sessionId/:orderId' element={<OrderConfirmation />} />
+        <Route path="/payment-success" element={<PaymentSuccessPage />} />
+        <Route path="/payment-error" element={<PaymentErrorPage />} />
         <Route path='' element={<AdminPageOnly/>}>
            <Route path='/admin/dashboard' element={<AdminDashboard/>}/>  
            <Route path='/admin/create/role' element={<AdminCreateRole/>}/>  

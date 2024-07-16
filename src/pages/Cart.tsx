@@ -295,6 +295,7 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
           <span className='text-lg sm:text-xl font-bold'>Rwf {total}</span>
         </div>
         <button 
+          onClick={()=>{navigate('/checkout')}}
           disabled={!isSaveButtonDisabled()} 
           className={`w-full py-2 sm:py-3 text-sm sm:text-lg ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4 transition-colors duration-300`}
         >
