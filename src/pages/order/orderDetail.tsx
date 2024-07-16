@@ -43,6 +43,9 @@ const OrderDetailsComponent: React.FC = () => {
   const currentItems = currentOrder.items ? currentOrder.items.slice(indexOfFirstItem, indexOfLastItem) : [];
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    // Calculate the price of a single item
+    const totalAmount = parseFloat(currentOrder.totalAmount);
+    const singleItemPrice = totalAmount / currentOrder.items[0].quantity;
 
   return (
     <div className="bg-gradient-to-br from-black via-gray-800 to-gray-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 mt-20">
@@ -66,16 +69,16 @@ const OrderDetailsComponent: React.FC = () => {
             </div>
 
             <div className="mb-6">
-              <div className="flex space-x-4 mb-4">
+            <div className="flex space-x-4 mb-4">
                 <button
                   onClick={() => setActiveSection('items')}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${activeSection === 'items' ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-white'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${activeSection === 'items' ? 'bg-pink-500 text-white' : 'bg-white bg-opacity-20 text-white'}`}
                 >
                   Items
                 </button>
                 <button
                   onClick={() => setActiveSection('address')}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${activeSection === 'address' ? 'bg-gray-200 text-gray-800' : 'bg-gray-800 text-white'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${activeSection === 'address' ? 'bg-pink-500 text-white' : 'bg-white bg-opacity-20 text-white'}`}
                 >
                   Shipping Address
                 </button>
@@ -92,7 +95,7 @@ const OrderDetailsComponent: React.FC = () => {
                         <div>
                           <p className="font-semibold text-lg text-white mb-1">{item.product?.productName || 'Unknown Product'}</p>
                           <p className="text-gray-300 text-sm">Quantity: {item.quantity}</p>
-                          <p className="text-gray-300 text-sm">Price: ${parseFloat(item.price).toFixed(2)}</p>
+                          <p className="text-gray-300 text-sm">Price: ${singleItemPrice.toFixed(2)}</p>
                         </div>
                       </div>
                     ))}
