@@ -35,6 +35,9 @@ import SellerDashboardLayout from "./layouts/sellerDashboardLayout";
 import AddNewProduct from "./pages/seller/AddProduct";
 import Dashboard from "./pages/seller/GeneralAnalysis";
 import NotificationBar from "./pages/seller/NotificationBar";
+import BuyerOrdersComponent from "./pages/order/orderHistory";
+import OrderDetailComponent from "./pages/order/orderDetail";
+import CustomerSupportPage from './pages/customerSupport';
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
@@ -51,6 +54,9 @@ const App: React.FC = () => {
         <Route path="/register" element={<SignupForm />} />
         <Route path="/verified" element={<EmailVerificationPage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/my-orders" element={<BuyerOrdersComponent />} />
+        <Route path="/order/:id" element={<OrderDetailComponent />} />
+        <Route path="/customer-support" element={<CustomerSupportPage />} />
         <Route
           path="/verification/failed"
           element={<EmailVerificationFailedPage />}

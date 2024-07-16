@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useUpdateUserMutation, useChangePasswordMutation } from "../slices/authSlice/authApiSlice";
 import toast from "react-hot-toast";
 import { getCredentials } from "../slices/authSlice/authSlice";
+import { Link } from "react-router-dom";
 const Profile: React.FC = () => {
   const userInfo = JSON.parse(localStorage.getItem("userInfo") as string);
   const navigate = useNavigate();
@@ -199,7 +200,9 @@ const Profile: React.FC = () => {
           </div>
           <div className="lg:flex md:flex md:flex-col lg:flex-col grid grid-cols-2 gap-x-8 font-sans text-gray-400">
             <p>Dashboard</p>
-            <p>Orders</p>
+            <Link to="/my-orders" style={{ textDecoration: 'none', color: 'inherit' }}>
+  <p>Orders</p>
+</Link>
             <p>Account</p>
             <p className="font-bold cursor-pointer text-black">Edit Profile</p>
             {/* <p>Logout</p> */}
