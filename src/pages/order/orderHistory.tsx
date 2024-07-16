@@ -36,7 +36,7 @@ const BuyerOrdersComponent: React.FC = () => {
     </div>
   );
   if (isError) return (
-    <div className="text-center py-10 text-red-400 text-xl bg-gray-900">Error fetching orders. Please try again later.</div>
+    <div className="text-center py-10 text-red-400 text-xl bg-gray-900 mt-20">Error fetching orders. Please try again later.</div>
   );
 
   // Get current orders
@@ -96,9 +96,12 @@ const BuyerOrdersComponent: React.FC = () => {
             <h3 className="mt-2 text-xl font-medium text-white">No orders yet</h3>
             <p className="mt-1 text-gray-400">Start shopping to see your orders here!</p>
             <div className="mt-6">
+              <Link to='/'>
               <button className="bg-white text-gray-900 hover:bg-gray-200 font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1">
                 Explore Products
               </button>
+              </Link>
+            
             </div>
           </div>
         )}
