@@ -38,6 +38,8 @@ import NotificationBar from "./pages/seller/NotificationBar";
 import BuyerOrdersComponent from "./pages/order/orderHistory";
 import OrderDetailComponent from "./pages/order/orderDetail";
 import CustomerSupportPage from './pages/customerSupport';
+import SellerAllProductsPage from './pages/SellerAllProductsPage';
+import SellerSingleProductPage from './pages/SellerSingleProductPage';
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
@@ -97,6 +99,8 @@ const App: React.FC = () => {
           <Route path="/seller/newproduct" element={<AddNewProduct />} />
           <Route path="/seller/dashboard" element={<Dashboard />} />
           <Route path="/seller/notifications" element={<NotificationBar />} />
+          <Route path="/seller/product/:id" element={<SellerSingleProductPage />} />
+          <Route path="/seller/products" element={<SellerAllProductsPage />} />
         </Route>
       </Route>
     )

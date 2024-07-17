@@ -33,7 +33,7 @@ const OrderDetailsComponent: React.FC = () => {
     }
   }, [data, dispatch]);
 
-  // if (isLoading) return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-gray-500"></div></div>;
+  if (isLoading) return <div className="flex justify-center items-center h-screen"><div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-gray-500"></div></div>;
   if (isError) return <div className="text-center py-8 text-red-500 text-lg">Error loading order details. Please try again later.</div>;
   if (!currentOrder) return <div className="text-center py-8 text-gray-500 text-lg">No order found</div>;
 
@@ -62,6 +62,7 @@ const OrderDetailsComponent: React.FC = () => {
               <h1 className="text-3xl sm:text-4xl font-extrabold text-white mb-3 sm:mb-0">Order #{currentOrder.orderId}</h1>
               <StatusBadge status={currentOrder.status} />
             </div>
+
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
               <div className="bg-gray-800 rounded-xl p-4">
@@ -157,17 +158,32 @@ const OrderDetailsComponent: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mt-6">
               <Link to="/customer-support" className="text-gray-300 hover:text-white transition-colors text-sm">
-                Need help?
+                Customer support?
               </Link>
-              <div className="text-center">
+              <div className="space-x-4">
+                {currentOrder.status !== 'cancelled' && currentOrder.status !== 'completed' && (
+                  <button
+                    className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300 "
+                  >
+                    Cancel Order
+                  </button>
+                )}
+                {currentOrder.status !== 'completed' && currentOrder.status !== 'cancelled' && (
+                  <button
+                    className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
+                  >
+                    Complete Order
+                  </button>
+                )}
                 <Link to="/my-orders" className="bg-gray-800 text-white px-6 py-3 rounded-full hover:bg-gray-700 transition duration-300 inline-flex items-center">
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                   Back to Orders
                 </Link>
               </div>
             </div>
+          </div>
           </div>
           <div className="bg-gray-800 px-6 py-4">
             <p className="text-xs text-gray-400">Order placed on: <span className="font-semibold text-white">
@@ -179,7 +195,7 @@ const OrderDetailsComponent: React.FC = () => {
           </div>
         </div>
       </div>
-    </div>
+   
   );
 };
 

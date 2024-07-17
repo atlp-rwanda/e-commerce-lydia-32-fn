@@ -32,11 +32,11 @@ const BuyerOrdersComponent: React.FC = () => {
     }
   }, [buyerOrders, dispatch]);
 
-  // if (isLoading) return (
-  //   <div className="flex justify-center items-center h-screen bg-gray-900">
-  //     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
-  //   </div>
-  // );
+  if (isLoading) return (
+    <div className="flex justify-center items-center h-screen bg-gray-900">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
+    </div>
+  );
   if (isError) return (
     <div className="text-center py-10 text-red-400 text-xl bg-gray-900 mt-20">Error fetching orders. Please try again later.</div>
   );
