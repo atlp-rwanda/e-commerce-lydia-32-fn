@@ -46,6 +46,15 @@ const OrderDetailsComponent: React.FC = () => {
     toast.error("Failed to cancel order. Please try again.");
   }
 };
+
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    refetch();
+  }, 2000); 
+
+  return () => clearInterval(intervalId); 
+}, [refetch]);
+
   useEffect(() => {
     if (data) {
       dispatch(setCurrentOrder(data.order));
