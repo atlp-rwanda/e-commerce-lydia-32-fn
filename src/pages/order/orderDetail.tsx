@@ -102,7 +102,7 @@ const OrderDetailsComponent: React.FC = () => {
                         <div>
                           <p className="font-semibold text-lg text-white mb-1">{item.product?.productName || 'Unknown Product'}</p>
                           <p className="text-gray-300 text-sm">Quantity: {item.quantity}</p>
-                          <p className="text-gray-300 text-sm">Price: Rwf {(pricePerItem * item.quantity).toFixed(2)}</p>
+                          <p className="text-gray-300 text-sm">Price: ${(pricePerItem * item.quantity).toFixed(2)}</p>
                         </div>
                       </div>
                     ))}
@@ -164,22 +164,28 @@ const OrderDetailsComponent: React.FC = () => {
               <div className="space-x-4">
                 {currentOrder.status !== 'cancelled' && currentOrder.status !== 'completed' && (
                   <button
-                    className="bg-red-600 text-white px-4 py-2 rounded-full hover:bg-red-700 transition duration-300 "
+                    className="bg-red-600 text-white hover:bg-red-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider "
                   >
                     Cancel Order
                   </button>
                 )}
                 {currentOrder.status !== 'completed' && currentOrder.status !== 'cancelled' && (
                   <button
-                    className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300"
+                  className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-green-600 text-white  hover:bg-green-700 transition duration-300"
+
                   >
                     Complete Order
                   </button>
                 )}
-                <Link to="/my-orders" className="bg-gray-800 text-white px-6 py-3 rounded-full hover:bg-gray-700 transition duration-300 inline-flex items-center">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-                  Back to Orders
+                <Link to="/my-orders">
+                <button
+                  className="bg-gray-800 text-white hover:bg-gray-700 transition duration-300 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+
+                  >
+                    Back to orders
+                  </button>
                 </Link>
+               
               </div>
             </div>
           </div>
