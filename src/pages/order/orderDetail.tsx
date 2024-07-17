@@ -102,7 +102,7 @@ const OrderDetailsComponent: React.FC = () => {
                         <div>
                           <p className="font-semibold text-lg text-white mb-1">{item.product?.productName || 'Unknown Product'}</p>
                           <p className="text-gray-300 text-sm">Quantity: {item.quantity}</p>
-                          <p className="text-gray-300 text-sm">Price: Rwf {(pricePerItem * item.quantity).toFixed(2)}</p>
+                          <p className="text-gray-300 text-sm">Price: ${(pricePerItem * item.quantity).toFixed(2)}</p>
                         </div>
                       </div>
                     ))}
