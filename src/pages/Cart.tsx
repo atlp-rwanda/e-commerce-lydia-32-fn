@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import EmptyCart from '../Components/EmptyCart';
 import ConfirmationDialog from '../Components/ConfirmationDialog';
 
-interface CartItem {
+export interface CartItem {
   id: number;
   productId: number;
   images: string[];

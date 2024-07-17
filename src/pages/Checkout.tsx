@@ -4,6 +4,18 @@ import { useBuyerPlaceOrderMutation } from '../slices/orderSlice/orderApiSlice';
 import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 import toast from 'react-hot-toast';
 import { useNewPaymentMutation } from '../slices/paymentSlice/paymentApiSlice';
+import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
+
+export interface CartItem {
+  id: number;
+  productId: number;
+  images: string[];
+  productName: string;
+  price: number;
+  description: string;
+  productCategory: string;
+  quantity: number;
+}
 
 interface Address {
   street: string;
@@ -27,6 +39,8 @@ const Checkout: React.FC = () => {
     payment: '',
     address: [{ street: '', city: '', country: '' }],
   });
+  const [cartProducts, setCartProducts] = useState<CartItem[]>([]);
+  const { data: products, isLoading: productsLoading } = useGetProductsQuery();
   const [total, setTotal] = useState<number>(0);
   const [buyerPlaceOrder, { isLoading }] = useBuyerPlaceOrderMutation();
   const [newPayment] = useNewPaymentMutation();
@@ -55,7 +69,17 @@ const Checkout: React.FC = () => {
       toast.error('Your cart is empty. Please add items before proceeding to checkout.');
       navigate('/cart');
     }
-  }, [cart, isCartLoading, navigate]);
+ }, [cart, isCartLoading, navigate]);
+  
+  useEffect(() => {
+    if (cart && cart.items && products?.products && Array.isArray(products.products)) {
+      const cartItemsWithDetails = cart.items.map(item => {
+        const productDetails = products.products.find(p => p.productId === item.productId);
+        return { ...item, ...productDetails, quantity: item.quantity, maxQuantity: productDetails?.quantity || item.quantity };
+      });
+      setCartProducts(cartItemsWithDetails);
+    }
+  }, [cart, products]);
     
   useEffect(() => {
   if (cart && cart.total !== undefined) {
@@ -157,19 +181,39 @@ const Checkout: React.FC = () => {
             <div className="p-6">
               <h2 className="text-2xl font-semibold mb-6 text-center">Order Summary</h2>
               <div className="space-y-4">
-                <div className="flex justify-between items-center">
+                 <table className="min-w-full bg-white border-collapse">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="border text-left py-2 px-3 sm:px-4">Products</th>
+                        <th className="border text-right py-2 px-3 sm:px-4 hidden sm:table-cell">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cartProducts.map(item => (
+                      <tr key={item.productId} className={`relative`}>
+                         <td className="border px-3 sm:px-4 py-2">
+                           <h3 className="text-sm sm:text-base font-semibold">{item.productName}</h3>      
+                         </td>
+                         <td className="border px-3 sm:px-4 py-2">
+                           <h3 className="text-sm text-right sm:text-base font-semibold">Rwf {item.price}  (X{item.quantity})</h3>      
+                         </td>
+                       </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                <div className="flex justify-between mx-1 items-center">
                   <span className="text-gray-600">Total Items:</span>
                   <span className="font-semibold">{cart?.items?.length || 0}</span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between mx-1 items-center">
                   <span className="text-gray-600">Order Cost:</span>
                   <span className="font-semibold">Rwf {total.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-600">Shipping:</span>
+                <div className="flex justify-between mx-1 items-center">
+                  <span className="text-gray-600">Shipping Fee:</span>
                   <span className="font-semibold">Free</span>
                 </div>
-                <div className="border-t pt-4 mt-4">
+                <div className="border-t pt-4 mt-4 mx-1">
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold">Total Cost:</span>
                     <span className="text-xl font-bold text-green-600">Rwf {total.toFixed(2)}</span>
