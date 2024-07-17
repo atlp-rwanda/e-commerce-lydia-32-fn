@@ -54,6 +54,7 @@ const Dashboard: React.FC = () => {
   )[0];
 
   const totalCategories = Object.keys(productsByCategory).length;
+  console.log(totalCategories)
 
   //@ts-ignore
   const totalProducts = products.reduce((acc, products) => {

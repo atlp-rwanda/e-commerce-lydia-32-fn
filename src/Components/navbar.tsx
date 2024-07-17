@@ -6,7 +6,8 @@ import { logOut } from '../slices/authSlice/authSlice';
 import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 import {FiSearch} from 'react-icons/fi';
-
+import NotificationBar from '../pages/seller/NotificationBar';
+import notificationIcon from "../assets/notification.svg";
 
 interface NavbarProps {
   onSearchToggle: () => void;
@@ -14,6 +15,7 @@ interface NavbarProps {
 
 
 const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
+  const [showNotifications, setShowNotifications] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
@@ -33,6 +35,9 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const handleNotificationClick = () => {
+    setShowNotifications(!showNotifications);
+  };
   const toogleSearch = () => {
     onSearchToggle();
 };
@@ -132,8 +137,16 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
           </div>
 
           <div className="hidden md:block text-xl font-bold">DEPOT</div>
-
+ 
           <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
+          {userInfo ? <div onClick={handleNotificationClick} className="relative">
+            <img
+              src={notificationIcon}
+              alt="Notification icon"
+              className="w-7 hover:cursor-pointer h-5"
+            />
+            {showNotifications && <NotificationBar />}
+          </div> : ''}
             {userInfo ? (
               <div className="relative">
                 <button
@@ -174,6 +187,7 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
 
               
             )}
+            
            {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
                   <button onClick={ toogleSearch } className="text-gray-600 hover:text-black">
                         <FiSearch className="h-5 w-5" />
