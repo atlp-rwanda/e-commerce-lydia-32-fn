@@ -40,7 +40,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
         url: `${BASE_URL}/search?${searchParams}`,
         method: "GET",
       }),
-      transformErrorResponse: (response: { status: string; data: any }) => {
+      transformErrorResponse: (response: { status: string; data: any; }) => {
         if (response.data && response.data.error) {
           return response.data.error;
         }
