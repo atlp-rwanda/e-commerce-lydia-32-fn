@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { FcGoogle } from "react-icons/fc";
 import Spinner from "../Components/Spinners";
-import { useRegisterByGoogleMutation, useUserRegisterMutation } from "../slices/authSlice/authApiSlice";
+import {
+  useRegisterByGoogleMutation,
+  useUserRegisterMutation,
+} from "../slices/authSlice/authApiSlice";
 import { useGoogleLogin } from "@react-oauth/google";
 import toast from "react-hot-toast";
 import { FaHome } from "react-icons/fa";
@@ -21,16 +24,15 @@ const SignupForm: React.FC = () => {
   const [postalcode, setPostalcode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-
   const [registerByGoogle] = useRegisterByGoogleMutation();
   const [userRegister] = useUserRegisterMutation();
   const navigate = useNavigate();
-  const {userInfo} = useSelector((state: any) => state.auth)
-  useEffect(() =>{
-    if(userInfo){
-      navigate('/')
+  const { userInfo } = useSelector((state: any) => state.auth);
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/");
     }
-  }, [])
+  }, []);
 
   const handleGoogleRegister = useGoogleLogin({
     onSuccess: async (response) => {
@@ -92,7 +94,6 @@ const SignupForm: React.FC = () => {
       //@ts-ignore
       console.log(errorMessages[0], err?.data?.message);
       console.log(err);
-
     } finally {
       setIsLoading(false);
     }
@@ -100,9 +101,8 @@ const SignupForm: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-
-<Link 
-        to="/" 
+      <Link
+        to="/"
         className="absolute top-9 left-12 text-3xl text-gray-600 hover:text-black transition-all duration-300 transform hover:scale-110"
       >
         <FaHome className="animate-bounce" />

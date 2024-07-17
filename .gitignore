@@ -24,9 +24,7 @@ dist-ssr
 *.sw?
 
 package-lock.json
-yarn.lock
-
 # CUSTOM FILES
 *storybook.log
 .env
-/drafts/
+yarn.lock

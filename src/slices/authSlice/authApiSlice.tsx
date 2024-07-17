@@ -18,7 +18,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
         loginTwoFa: builder.mutation({
-          query:  (data) => ({
+          query: (data) => ({
             url: `${BASE_URL}/factor`,
             method: 'POST',
             body: data
@@ -32,9 +32,9 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
         logout: builder.mutation({
-            query:()=>({
+            query: () => ({
                 url: `${BASE_URL}/logout`,
-                method:'POST'
+                method: 'POST'
             })
         }),
         userRegister: builder.mutation({
@@ -44,9 +44,23 @@ export const userApiSlice = apiSlice.injectEndpoints({
               body: data,
             }),
           }),
+          updateUser:builder.mutation({
+            query:(data)=>({
+                url:`${BASE_URL}/update`,
+                method: 'PATCH',
+                body:data
+            })
+          }),
+          changePassword:builder.mutation({
+            query:(data)=>({
+                url:`${BASE_URL}/changepassword`,
+                method: 'PATCH',
+                body:data
+            })
+          })
     })
     
 
 })
 
-export const { useLoginByGoogleMutation, useLoginMutation, useLogoutMutation, useUserRegisterMutation, useRegisterByGoogleMutation, useLoginTwoFaMutation } = userApiSlice
+export const { useLoginByGoogleMutation, useLoginMutation, useLogoutMutation, useUserRegisterMutation, useRegisterByGoogleMutation, useLoginTwoFaMutation, useUpdateUserMutation, useChangePasswordMutation } = userApiSlice

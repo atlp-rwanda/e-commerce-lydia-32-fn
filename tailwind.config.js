@@ -22,6 +22,11 @@ export default {
         'width': 'width',
         'spacing': 'margin, padding',
       },
+      colors: {
+        gray: {
+          'aaa': '#AAAAAA',
+        },
+      }
     },
   },
   plugins: [],
