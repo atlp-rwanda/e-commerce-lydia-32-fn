@@ -43,10 +43,16 @@ const OrderDetailsComponent: React.FC = () => {
   const currentItems = currentOrder.items ? currentOrder.items.slice(indexOfFirstItem, indexOfLastItem) : [];
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-    // Calculate the price of a single item
-    const totalAmount = parseFloat(currentOrder.totalAmount);
-    const singleItemPrice = totalAmount / currentOrder.items[0].quantity;
+  const calculatePricePerItem = () => {
+    if (currentOrder.items && currentOrder.items.length > 0 && currentOrder.totalAmount) {
+      const totalAmount = parseFloat(currentOrder.totalAmount);
+      const totalQuantity = currentOrder.items.reduce((sum: any, item: { quantity: any; }) => sum + item.quantity, 0);
+      return totalAmount / totalQuantity;
+    }
+    return 0;
+  };
 
+  const pricePerItem = calculatePricePerItem();
   return (
     <div className="bg-gradient-to-br from-black via-gray-800 to-gray-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 mt-20">
       <div className="max-w-4xl mx-auto">
@@ -95,7 +101,7 @@ const OrderDetailsComponent: React.FC = () => {
                         <div>
                           <p className="font-semibold text-lg text-white mb-1">{item.product?.productName || 'Unknown Product'}</p>
                           <p className="text-gray-300 text-sm">Quantity: {item.quantity}</p>
-                          <p className="text-gray-300 text-sm">Price: ${singleItemPrice.toFixed(2)}</p>
+                          <p className="text-gray-300 text-sm">Price: ${(pricePerItem * item.quantity).toFixed(2)}</p>
                         </div>
                       </div>
                     ))}
