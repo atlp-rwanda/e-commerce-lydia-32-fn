@@ -11,6 +11,13 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         method: "GET"
       }),
     }),
+    cancelOrder: builder.mutation({
+      query: (id) => ({
+        url: `/order/cancel/${id}`,
+        method: 'DELETE',
+      }),
+    }),
+
     getOrderById: builder.query({
       query: (id) => ({
         url: `${BASE_URL}/${id}`,
@@ -29,5 +36,6 @@ export const orderApiSlice = apiSlice.injectEndpoints({
 export const { 
   useGetAllOrdersByBuyerQuery,
   useGetOrderByIdQuery,
+  useCancelOrderMutation,
   useAdminGetAllOrdersQuery
 } = orderApiSlice;
