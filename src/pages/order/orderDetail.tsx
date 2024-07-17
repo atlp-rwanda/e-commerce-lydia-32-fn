@@ -157,7 +157,6 @@ const OrderDetailsComponent: React.FC = () => {
                 )}
               </div>
             </div>
-
             <div className="flex justify-between items-center mt-6">
               <Link to="/customer-support" className="text-gray-300 hover:text-white transition-colors text-sm">
                 Customer support?
