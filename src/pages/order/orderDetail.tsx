@@ -46,6 +46,15 @@ const OrderDetailsComponent: React.FC = () => {
     toast.error("Failed to cancel order. Please try again.");
   }
 };
+
+useEffect(() => {
+  const intervalId = setInterval(() => {
+    refetch();
+  }, 2000); 
+
+  return () => clearInterval(intervalId); 
+}, [refetch]);
+
   useEffect(() => {
     if (data) {
       dispatch(setCurrentOrder(data.order));
@@ -190,14 +199,7 @@ const OrderDetailsComponent: React.FC = () => {
          {isCancelling ? 'Cancelling...' : 'Cancel Order'}
        </button>
                 )}
-                {currentOrder.status !== 'completed' && currentOrder.status !== 'cancelled' && (
-                  <button
-                  className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-green-600 text-white  hover:bg-green-700 transition duration-300"
-
-                  >
-                    Complete Order
-                  </button>
-                )}
+                
                 <Link to="/my-orders">
                 <button
                   className="bg-gray-800 text-white hover:bg-gray-700 transition duration-300 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
