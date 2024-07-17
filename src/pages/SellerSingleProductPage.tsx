@@ -17,7 +17,7 @@ interface Product {
 }
 
 const SellerSingleProductPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string; }>();
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -41,6 +41,10 @@ const SellerSingleProductPage: React.FC = () => {
         };
 
         fetchProduct();
+    }, [id]);
+
+    useEffect(() => {
+
     }, [id]);
 
     if (loading) {
