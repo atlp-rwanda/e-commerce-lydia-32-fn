@@ -22,12 +22,6 @@ const PaymentConfirmation: React.FC = () => {
    
   useEffect(() => {
     console.log("Response data: ", data);
-    // if (data && data.status===200) {
-    //   setLoading(false);
-    //   setTimeout(() => {
-    //     navigate('/payment-success'); 
-    //   }, 2000); 
-      // } else
       if (error) {
       console.log('Error',error)
       setLoading(false);
