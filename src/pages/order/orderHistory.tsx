@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useGetAllOrdersByBuyerQuery } from '../../slices/orderSlice/orderApiSlice';
 import { setBuyerOrders } from '../../slices/orderSlice/orderSlice';
 import { RootState } from '../../store';
-import { Link } from 'react-router-dom';
+import { Link, useLocation  } from 'react-router-dom';
 
 const StatusIndicator = ({ status }: { status: string }) => {
   const statusStyles = {
@@ -21,10 +21,15 @@ const StatusIndicator = ({ status }: { status: string }) => {
 
 const BuyerOrdersComponent: React.FC = () => {
   const dispatch = useDispatch();
-  const { data: buyerOrders, isLoading, isError } = useGetAllOrdersByBuyerQuery();
+  const location = useLocation();
+  const { data: buyerOrders, isLoading, isError, refetch } = useGetAllOrdersByBuyerQuery();
   const orders = useSelector((state: RootState) => state.order.buyerOrders.buyerOrders);
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 6;
+
+  useEffect(() => {
+    refetch();
+  }, [location, refetch]);
 
   useEffect(() => {
     if (buyerOrders) {
@@ -37,10 +42,7 @@ const BuyerOrdersComponent: React.FC = () => {
       <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
     </div>
   );
-  if (isError) return (
-    <div className="text-center py-10 text-red-400 text-xl bg-gray-900 mt-20">Error fetching orders. Please try again later.</div>
-  );
-
+ 
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = Array.isArray(orders) ? orders.slice(indexOfFirstOrder, indexOfLastOrder) : [];

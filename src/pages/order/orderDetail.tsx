@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useGetOrderByIdQuery } from '../../slices/orderSlice/orderApiSlice';
+import { useGetOrderByIdQuery, useCancelOrderMutation } from '../../slices/orderSlice/orderApiSlice';
 import { setCurrentOrder } from '../../slices/orderSlice/orderSlice';
 import { RootState } from '../../store';
+import toast from "react-hot-toast";
+
 
 const StatusBadge = ({ status }: { status: string }) => {
   const statusStyles = {
@@ -22,11 +24,28 @@ const StatusBadge = ({ status }: { status: string }) => {
 const OrderDetailsComponent: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch();
-  const { data, isLoading, isError } = useGetOrderByIdQuery(id);
+  const { data, isLoading, isError, refetch } = useGetOrderByIdQuery(id);
   const currentOrder = useSelector((state: RootState) => state.order.currentOrder);
   const [activeSection, setActiveSection] = useState('items');
   const [currentPage, setCurrentPage] = useState(1);
 
+  const [cancelOrder, { isLoading: isCancelling }] = useCancelOrderMutation();
+  const navigate = useNavigate();
+
+  const [error, setError] = useState<string | null>(null);
+
+  const handleCancelOrder = async () => {
+  try {
+    const result = await cancelOrder(id).unwrap();
+    dispatch(setCurrentOrder({ ...currentOrder, status: 'cancelled' }));
+    toast.success("Order cancelled successfully!");
+    setTimeout(() => navigate('/my-orders'), 2000);
+  } catch (err) {
+    console.error('Failed to cancel order:', err);
+    setError('Failed to cancel order. Please try again.');
+    toast.error("Failed to cancel order. Please try again.");
+  }
+};
   useEffect(() => {
     if (data) {
       dispatch(setCurrentOrder(data.order));
@@ -162,12 +181,14 @@ const OrderDetailsComponent: React.FC = () => {
                 Customer support?
               </Link>
               <div className="space-x-4">
-                {currentOrder.status !== 'cancelled' && currentOrder.status !== 'completed' && (
-                  <button
-                    className="bg-red-600 text-white hover:bg-red-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider "
-                  >
-                    Cancel Order
-                  </button>
+        {currentOrder.status !== 'cancelled' && currentOrder.status !== 'completed' && (
+         <button
+         className="bg-red-600 text-white hover:bg-red-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+         onClick={handleCancelOrder}
+         disabled={isCancelling}
+       >
+         {isCancelling ? 'Cancelling...' : 'Cancel Order'}
+       </button>
                 )}
                 {currentOrder.status !== 'completed' && currentOrder.status !== 'cancelled' && (
                   <button
