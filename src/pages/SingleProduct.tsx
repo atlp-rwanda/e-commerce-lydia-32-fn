@@ -7,6 +7,7 @@ import Spinner from '../Components/Spinners';
 import toast from 'react-hot-toast'
 import 'react-toastify/dist/ReactToastify.css'
 import { useNavigate } from 'react-router-dom';
+import UpdateProductDialog from '../Components/UpdateProductDialog';
 
 interface ProductCardProps {
   product: {
@@ -30,6 +31,12 @@ const SingleProduct: React.FC = () => {
   const { refetch } = useGetCartQuery();
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
   const { data: productsData, isLoading } = useGetProductsQuery();
+
+  const [open,setOpen] = useState(false)
+
+  const handleClose=()=>{
+    setOpen(false)
+  }
 
   useEffect(() => {
     if (productsData && id) {
@@ -157,6 +164,8 @@ const SingleProduct: React.FC = () => {
             ))}
           </div>
         </div>
+
+        
       </div>
     );
   };
