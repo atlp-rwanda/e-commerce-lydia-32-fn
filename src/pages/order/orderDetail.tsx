@@ -190,26 +190,24 @@ useEffect(() => {
                 Customer support?
               </Link>
               <div className="space-x-4">
-        {currentOrder.status !== 'cancelled' && currentOrder.status !== 'completed' && (
-         <button
-         className="bg-red-600 text-white hover:bg-red-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
-         onClick={handleCancelOrder}
-         disabled={isCancelling}
-       >
-         {isCancelling ? 'Cancelling...' : 'Cancel Order'}
-       </button>
-                )}
-                
-                <Link to="/my-orders">
-                <button
-                  className="bg-gray-800 text-white hover:bg-gray-700 transition duration-300 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
-
-                  >
-                    Back to orders
-                  </button>
-                </Link>
-               
-              </div>
+  {currentOrder.status === 'pending' && (
+    <button
+      className="bg-red-600 text-white hover:bg-red-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+      onClick={handleCancelOrder}
+      disabled={isCancelling}
+    >
+      {isCancelling ? 'Cancelling...' : 'Cancel Order'}
+    </button>
+  )}
+  
+  <Link to="/my-orders">
+    <button
+      className="bg-gray-800 text-white hover:bg-gray-700 transition duration-300 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+    >
+      Back to orders
+    </button>
+  </Link>
+</div>
             </div>
           </div>
           </div>
