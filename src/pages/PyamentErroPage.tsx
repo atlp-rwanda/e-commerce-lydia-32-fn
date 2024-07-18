@@ -16,7 +16,7 @@ const PaymentErrorPage: React.FC = () => {
         <p className="text-lg mb-4">Please check your order details and try again.</p>
         <div className="mt-6">
           <Link 
-            to="/orders" 
+            to="/my-orders" 
             className="text-white bg-red-600 px-4 py-2 rounded-lg hover:bg-red-500 transition duration-300"
           >
             Go to Orders

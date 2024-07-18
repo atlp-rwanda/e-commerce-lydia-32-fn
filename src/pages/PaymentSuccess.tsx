@@ -24,7 +24,7 @@ const PaymentSuccessPage: React.FC = () => {
         </a>
         <div className="mt-6">
           <Link 
-            to="/orders" 
+            to="/my-orders" 
             className="text-white bg-teal-600 px-4 py-2 rounded-lg hover:bg-teal-500 transition duration-300"
           >
             Go to Orders
