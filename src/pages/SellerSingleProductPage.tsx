@@ -1,8 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import {
+  Product,
+  useDeleteProductMutation,
+} from "../slices/productSlice/productApiSlice";
+import { useGetSingleSellerProductQuery } from "../slices/sellerSlice/sellerProductsApiSlice";
 import UpdateProductDialog from "../Components/UpdateProductDialog";
-import { Product } from "../slices/productSlice/productApiSlice";
-import { useDispatch } from "react-redux";
 
 // interface Product {
 //   images: string;
@@ -21,14 +25,9 @@ import { useDispatch } from "react-redux";
 
 const SellerSingleProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [selectedProduct, setSelectedPRoduct] = useState<Product | null>(null);
 
   const [open, setOpen] = useState(false);
-
-  const dispatch = useDispatch();
 
   const handleClose = () => {
     setOpen(false);
@@ -39,42 +38,33 @@ const SellerSingleProductPage: React.FC = () => {
     setSelectedPRoduct(prod);
   };
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(
-          `https://team-lydia-demo.onrender.com/api/product/${id}`
-        );
-        if (!response.ok) {
-          throw new Error("Failed to fetch product data");
-        }
-        const data = await response.json();
-        console.log(data);
+  const navigate = useNavigate();
 
-        setProduct(data.product);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    };
+  const {
+    data: product,
+    isLoading,
+    isError,
+  } = useGetSingleSellerProductQuery(id as string);
 
-    fetchProduct();
-  }, [id]);
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
-  useEffect(() => {}, [id]);
+  const handleDelete = async () => {
+    try {
+      await deleteProduct(id as string).unwrap();
+      toast.success("Deletion successful");
+      setTimeout(() => {
+        navigate("/seller/products");
+      }, 2000);
+    } catch (error) {
+      toast.error(`Error: ${(error as Error).message}`);
+    }
+  };
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (!selectedProduct) {
+    console.log("none");
   }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!product) {
-    return <div>No product found</div>;
-  }
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading product</div>;
 
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
@@ -95,8 +85,8 @@ const SellerSingleProductPage: React.FC = () => {
         <div className="md:w-1/2 flex flex-row mr-20 justify-center items-center">
           <div className="md:w-1/2 bg-gray-100 w-full m-0 h-35">
             <img
-              src={product.images}
-              alt={product.productName}
+              src={product && product.product.product.images}
+              alt={product && product.product.product.productName}
               className="w-full"
             />
           </div>
@@ -104,9 +94,11 @@ const SellerSingleProductPage: React.FC = () => {
         <div className="md:w-1/2 md:pl-8">
           <h1 className="text-3xl font-semibold mb-2">
             {" "}
-            {product.productName}
+            {product && product.product.product.productName}
           </h1>
-          <p className="text-xl text-gray-700 mb-4">Rwf {product.price}</p>
+          <p className="text-xl text-gray-700 mb-4">
+            Rwf {product && product.product.product.price}
+          </p>
           <div className="flex items-center mb-2">
             {[...Array(5)].map((_, index) => (
               <svg
@@ -119,16 +111,22 @@ const SellerSingleProductPage: React.FC = () => {
               </svg>
             ))}
           </div>
-          <p className="text-gray-600 mb-4">{product.description}.</p>
+          <p className="text-gray-600 mb-4">
+            {product && product.product.product.description}.
+          </p>
           <div className="flex items-center justify-start align-middle ">
             <button
+              onClick={() => handleEdit(product.product.product)}
               className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105"
-              onClick={() => handleEdit(product)}
             >
               Edit
             </button>
-            <button className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-red-800 hover:scale-105">
-              Delete
+            <button
+              onClick={handleDelete}
+              disabled={isDeleting}
+              className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-red-800 hover:scale-105"
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
             </button>
           </div>
           <div className="mt-8">
@@ -140,7 +138,7 @@ const SellerSingleProductPage: React.FC = () => {
               Category:{" "}
               <span className="text-lg font-semibold mb-2">
                 {" "}
-                {product.productCategory}
+                {product && product.product.product.productCategory}
               </span>
             </h2>
           </div>
@@ -149,7 +147,7 @@ const SellerSingleProductPage: React.FC = () => {
               Quantity Remaining:{" "}
               <span className="text-lg font-semibold mb-2">
                 {" "}
-                {product.quantity}
+                {product && product.product.product.quantity}
               </span>
             </h2>
           </div>
@@ -158,7 +156,7 @@ const SellerSingleProductPage: React.FC = () => {
               Availability:{" "}
               <span className="text-lg font-semibold mb-2">
                 {" "}
-                {product.isAvailable}
+                {product && product.product.product.isAvailable}
               </span>
             </h2>
           </div>
@@ -166,7 +164,7 @@ const SellerSingleProductPage: React.FC = () => {
             <h2>
               Created At:{" "}
               <span className="text-lg font-semibold mb-2">
-                {formatDate(product?.createdAt)}
+                {product && formatDate(product.product.product.createdAt)}
               </span>
             </h2>
           </div>
@@ -174,7 +172,7 @@ const SellerSingleProductPage: React.FC = () => {
             <h2>
               Last Updated:{" "}
               <span className="text-lg font-semibold mb-2">
-                {formatDate(product!.updatedAt)}
+                {product && formatDate(product.product.product.updatedAt)}
               </span>
             </h2>
           </div>
@@ -200,7 +198,9 @@ const SellerSingleProductPage: React.FC = () => {
           </li>
         </ul>
         <div id="description" className="mt-4">
-          <p className="text-gray-600">{product.description}</p>
+          <p className="text-gray-600">
+            {product && product.product.product.description}
+          </p>
         </div>
         <div id="reviews" className="mt-4 hidden">
           <p className="text-gray-600">No reviews yet.</p>
