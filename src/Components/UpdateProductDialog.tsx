@@ -77,7 +77,7 @@ const UpdateProductDialog: React.FC<IEditProductProps> = ({
 
       try {
         await updateProduct(currentProduct).unwrap();
-        
+        window.location.reload()
         handleClose();
       } catch (err) {
         console.error("Failed to update the product:", err);
