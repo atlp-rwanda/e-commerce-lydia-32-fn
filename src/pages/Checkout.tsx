@@ -310,7 +310,7 @@ const Checkout: React.FC = () => {
           }`}
           disabled={!isFormValid || isLoading || hasErrors || initializingPayment}
         >
-          {isLoading || initializingPayment ? 'Initializing Payment....' : `Initialize Payment`}
+          {isLoading || initializingPayment ? 'Confirming an order....' : `Confirm Order`}
         </button>
       </form>
     </div>
