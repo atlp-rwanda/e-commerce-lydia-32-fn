@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 interface SellerProductCardProps {
   product: {
     productId: number;
-    images: string[];
+    images: string;
     productName: string;
     description: string;
     price: number;
@@ -22,7 +22,7 @@ const SellerProductCard: React.FC<SellerProductCardProps> = ({ product, onDelete
 
       <div>{product.productName}</div>
       <div className='w-[400px]'>{product.description}</div>
-      <img src={product.images[0]} alt={product.productName} className="h-20 w-20 object-cover mb-4 rounded-t-lg" />
+      <img src={product.images} alt={product.productName} className="h-20 w-20 object-cover mb-4 rounded-t-lg" />
       <div>{product.price}</div>
       <div>{product.quantity}</div>
       <div className='flex gap-5 items-center'>
