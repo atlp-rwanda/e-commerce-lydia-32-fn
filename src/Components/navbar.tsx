@@ -1,70 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
-import { logOut } from '../slices/authSlice/authSlice';
-import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
-import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
-import {FiSearch} from 'react-icons/fi';
-
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { logOut } from "../slices/authSlice/authSlice";
+import { useLogoutMutation } from "../slices/authSlice/authApiSlice";
+import { useGetCartQuery } from "../slices/cartSlice/cartApiSlice";
+import { FiSearch } from "react-icons/fi";
+import wishlistIcon from "../assets/wishlistIcon.svg";
 
 interface NavbarProps {
   onSearchToggle: () => void;
 }
 
-
-const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
+const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
-  const { data: cart} = useGetCartQuery();
+  const { data: cart } = useGetCartQuery();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [cartSize, setCartSize] = useState(0);
-  const [logout ]=useLogoutMutation()
+  const [logout] = useLogoutMutation();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-  setTimeout(()=>{
-    dispatch(logOut())
-  },1000*60*60)
+  setTimeout(
+    () => {
+      dispatch(logOut());
+    },
+    1000 * 60 * 60
+  );
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const toogleSearch = () => {
     onSearchToggle();
-};
+  };
 
-  const handleLogout = async(e: any) =>{
-  e.preventDefault()
-  setIsLoading(true)
-  try {
-    //@ts-ignore
+  const handleLogout = async (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      //@ts-ignore
       await logout().unwrap();
       dispatch(logOut());
-      localStorage.removeItem('userInfo');
+      localStorage.removeItem("userInfo");
       toast.success("You're Logged out");
-      navigate('/login')
-    }
-  catch(err:any){ 
-    if (err?.data?.message) {
+      navigate("/login");
+    } catch (err: any) {
+      if (err?.data?.message) {
         toast.error(err.data.message);
       } else if (err.status === 400) {
-        toast.error('already logged out or not logged in');
+        toast.error("already logged out or not logged in");
       } else if (err.status === 401) {
-        toast.error('User is not authenticated');
+        toast.error("User is not authenticated");
       } else {
-        toast.error('Internal Server Error');
+        toast.error("Internal Server Error");
       }
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
 
-  const loggedUserInfo = localStorage.getItem('userInfo');
+  const loggedUserInfo = localStorage.getItem("userInfo");
   useEffect(() => {
     setCartSize(cart?.items?.length || 0);
   }, [cart]);
@@ -151,8 +151,6 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
                       Logout
                     </button>
 
-
-
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
@@ -161,8 +159,6 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
                     </Link>
                   </div>
                 )}
-
-                
               </div>
             ) : (
               <Link
@@ -171,14 +167,29 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
               >
                 LOGIN
               </Link>
-
-              
             )}
-           {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
-                  <button onClick={ toogleSearch } className="text-gray-600 hover:text-black">
-                        <FiSearch className="h-5 w-5" />
-                   </button>
-        
+            {loggedUserInfo && (
+              <Link
+                to="/cart"
+                className="text-sm text-gray-600 hover:text-black"
+              >
+                CART ({cartSize})
+              </Link>
+            )}
+            {loggedUserInfo && (
+              <Link
+                to="/wishlist"
+                className="text-sm text-gray-600 hover:text-black"
+              >
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
+              </Link>
+            )}
+            <button
+              onClick={toogleSearch}
+              className="text-gray-600 hover:text-black"
+            >
+              <FiSearch className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
@@ -189,11 +200,38 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
           }`}
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link to="/" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">HOME</Link>
-            <Link to="/shop" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">SHOP</Link>
-            <Link to="/about" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">ABOUT</Link>
-            <Link to="/chat" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CHAT</Link>
-            {loggedUserInfo &&  <Link to="/cart" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CART ({cartSize})</Link>}
+            <Link
+              to="/"
+              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+            >
+              HOME
+            </Link>
+            <Link
+              to="/shop"
+              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+            >
+              SHOP
+            </Link>
+            <Link
+              to="/about"
+              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+            >
+              ABOUT
+            </Link>
+            <Link
+              to="/chat"
+              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+            >
+              CHAT
+            </Link>
+            {loggedUserInfo && (
+              <Link
+                to="/cart"
+                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+              >
+                CART ({cartSize})
+              </Link>
+            )}
             {userInfo ? (
               <Link
                 to="/logout"
