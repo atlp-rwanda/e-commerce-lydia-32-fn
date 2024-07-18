@@ -1,5 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useDeleteProductMutation } from '../slices/productSlice/productApiSlice';
+import { useGetSingleSellerProductQuery } from '../slices/sellerSlice/sellerProductsApiSlice';
 
 interface Product {
     images: string;
@@ -18,46 +21,31 @@ interface Product {
 
 const SellerSingleProductPage: React.FC = () => {
     const { id } = useParams<{ id: string; }>();
-    const [product, setProduct] = useState<Product | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await fetch(`https://team-lydia-demo.onrender.com/api/product/${id}`);
-                if (!response.ok) {
-                    throw new Error('Failed to fetch product data');
-                }
-                const data = await response.json();
-                console.log(data);
+    const { data, isLoading, isError } = useGetSingleSellerProductQuery(id);
 
-                setProduct(data.product);
-                setLoading(false);
-            } catch (error) {
-                setError(err);
-                setLoading(false);
-            }
-        };
+    const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
-        fetchProduct();
-    }, [id]);
+    const handleDelete = async () => {
+        try {
+            await deleteProduct(id).unwrap();
+            toast.success('Deletion successful');
+            setTimeout(() => {
+                navigate('/seller/products');
+            }, 2000);
+        } catch (error) {
+            toast.error(`Error: ${(error as Error).message}`);
+        }
+    };
 
-    useEffect(() => {
+    if (isLoading) return <div>Loading...</div>;
+    if (isError) return <div>Error loading product</div>;
+    if (!data || !data.product) return <div>No product found</div>;
 
-    }, [id]);
+    const product = data?.product;
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-
-    if (!product) {
-        return <div>No product found</div>;
-    }
+    console.log(product);
 
 
     const formatDate = (dateString: string) => {
@@ -95,7 +83,12 @@ const SellerSingleProductPage: React.FC = () => {
                     <p className="text-gray-600 mb-4">{product.description}.</p>
                     <div className='flex items-center justify-start align-middle '>
                         <button className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105">Edit</button>
-                        <button className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-red-800 hover:scale-105">Delete</button>
+                        <button
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-red-800 hover:scale-105">
+                            {isDeleting ? 'Deleting...' : 'Delete'}
+                        </button>
                     </div>
                     <div className="mt-8">
                         <h2 className="text-lg font-semibold mb-2">Dimensions:</h2>
