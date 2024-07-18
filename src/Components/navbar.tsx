@@ -140,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
                   onClick={toggleDropdown}
                   className="block text-sm text-gray-600 hover:text-black"
                 >
-                  {userInfo.user.firstname}
+                  {userInfo.user.firstname.toUpperCase()}
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
@@ -175,9 +175,12 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
               
             )}
            {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
+           <Link to="/my-orders"  className="text-sm text-gray-600 hover:text-black">ORDERS</Link>
+
                   <button onClick={ toogleSearch } className="text-gray-600 hover:text-black">
                         <FiSearch className="h-5 w-5" />
                    </button>
+
         
           </div>
         </div>
@@ -194,6 +197,8 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
             <Link to="/about" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">ABOUT</Link>
             <Link to="/chat" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CHAT</Link>
             {loggedUserInfo &&  <Link to="/cart" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CART ({cartSize})</Link>}
+           <Link to="/my-orders"  className="text-sm text-gray-600 hover:text-black">ORDERS</Link>
+
             {userInfo ? (
               <Link
                 to="/logout"
