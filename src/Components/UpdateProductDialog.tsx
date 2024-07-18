@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -12,7 +11,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Product } from "../slices/productSlice/productApiSlice";
-import { useAddProductMutation } from "../slices/productSlice/productApiSlice";
 import { useUpdateProductMutation } from "../slices/productSlice/updateProductSlice";
 
 interface IEditProductProps {
