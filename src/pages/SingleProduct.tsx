@@ -39,13 +39,6 @@ const SingleProduct: React.FC = () => {
   const [addingToWishlist, setAddingToWishlist] = useState<boolean>(false);
   const { data: productsData, isLoading } = useGetProductsQuery();
 
-<<<<<<< HEAD
-  const [open,setOpen] = useState(false)
-
-  const handleClose=()=>{
-    setOpen(false)
-  }
-=======
   const handleAddToWishlist = async () => {
     try {
       const userInfo = localStorage.getItem("userInfo");
@@ -81,7 +74,6 @@ const SingleProduct: React.FC = () => {
       setAddingToWishlist(false);
     }
   };
->>>>>>> develop
 
   useEffect(() => {
     if (productsData && id) {
