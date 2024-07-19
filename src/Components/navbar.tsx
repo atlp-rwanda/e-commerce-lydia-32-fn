@@ -22,15 +22,25 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
   const navigate = useNavigate();
   const [cartSize, setCartSize] = useState(0);
   const [logout] = useLogoutMutation();
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    document.body.style.overflow = isMenuOpen ? 'auto' : 'hidden';
   };
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   setTimeout(
     () => {
       dispatch(logOut());
     },
     1000 * 60 * 60
   );
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
@@ -39,11 +49,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
     onSearchToggle();
   };
 
-  const handleLogout = async (e: any) => {
+  const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      //@ts-ignore
       await logout().unwrap();
       dispatch(logOut());
       localStorage.removeItem("userInfo");
@@ -77,9 +86,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
             <Link to="/" className="text-sm text-gray-600 hover:text-black">
               HOME
             </Link>
-            <Link to="/shop" className="text-sm text-gray-600 hover:text-black">
-              SHOP
-            </Link>
             <Link
               to="/about"
               className="text-sm text-gray-600 hover:text-black"
@@ -95,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
           <div className="flex items-center justify-between w-full md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-gray-600 hover:text-black"
+              className="text-gray-600 hover:text-black md:hidden"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -115,19 +121,8 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
 
             <div className="text-xl font-bold">DEPOT</div>
 
-            <button className="text-gray-600 hover:text-black">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
+            <button onClick={toogleSearch} className="text-gray-600 hover:text-black">
+              <FiSearch className="h-5 w-5" />
             </button>
           </div>
 
@@ -140,12 +135,12 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                   onClick={toggleDropdown}
                   className="block text-sm text-gray-600 hover:text-black"
                 >
-                  {userInfo.user.firstname}
+                  {userInfo.user.firstname.toUpperCase()}
                 </button>
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                     <button
-                      className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
+                      className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 w-full text-left"
                       onClick={handleLogout}
                     >
                       Logout
@@ -176,12 +171,17 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 CART ({cartSize})
               </Link>
             )}
+           {loggedUserInfo && (
+    <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:text-black ">ORDERS</Link>
+
+)}
+
             {loggedUserInfo && (
               <Link
                 to="/wishlist"
                 className="text-sm text-gray-600 hover:text-black"
               >
-                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 " />
               </Link>
             )}
             <button
@@ -193,62 +193,64 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu with animation */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          className={`fixed top-0 left-0 w-64 h-full bg-white z-20 transform transition-all duration-300 ease-in-out ${
+            isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
           }`}
         >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link
-              to="/"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              HOME
-            </Link>
-            <Link
-              to="/shop"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              SHOP
-            </Link>
-            <Link
-              to="/about"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              ABOUT
-            </Link>
-            <Link
-              to="/chat"
-              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-            >
-              CHAT
-            </Link>
-            {loggedUserInfo && (
+          <div className="flex flex-col h-full">
+            <div className="p-4 border-b">
+              <button onClick={toggleMenu} className="text-gray-600 hover:text-black">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex-grow overflow-y-auto">
+              <Link to="/" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">HOME</Link>
+              <Link to="/about" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ABOUT</Link>
+              <Link to="/chat" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">CHAT</Link>
+              {loggedUserInfo && (
+                <Link to="/cart" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">
+                  CART ({cartSize})
+                </Link>
+              )}
+              <div className="w-full">
               <Link
-                to="/cart"
-                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+                to="/wishlist"
+                className="hover:text-black block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2"
               >
-                CART ({cartSize})
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 inline-block mr-2" />
               </Link>
-            )}
-            {userInfo ? (
-              <Link
-                to="/logout"
-                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-              >
-                LOGOUT
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-              >
-                LOGIN
-              </Link>
-            )}
+              </div>
+              {loggedUserInfo && (
+  <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
+)}
+              {userInfo ? (
+                <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">
+                  LOGOUT
+                </button>
+              ) : (
+                <Link to="/login" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">LOGIN</Link>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Overlay with fade-in animation */}
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black opacity-50 z-10"
+            onClick={toggleMenu}
+          ></div>
+        )}
       </div>
     </nav>
   );
