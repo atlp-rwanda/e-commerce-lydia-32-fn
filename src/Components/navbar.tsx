@@ -1,70 +1,80 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import toast from 'react-hot-toast';
-import { logOut } from '../slices/authSlice/authSlice';
-import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
-import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
-import {FiSearch} from 'react-icons/fi';
-
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { logOut } from "../slices/authSlice/authSlice";
+import { useLogoutMutation } from "../slices/authSlice/authApiSlice";
+import { useGetCartQuery } from "../slices/cartSlice/cartApiSlice";
+import { FiSearch } from "react-icons/fi";
+import wishlistIcon from "../assets/wishlistIcon.svg";
 
 interface NavbarProps {
   onSearchToggle: () => void;
 }
 
-
-const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
+const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
-  const { data: cart} = useGetCartQuery();
+  const { data: cart } = useGetCartQuery();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [cartSize, setCartSize] = useState(0);
-  const [logout ]=useLogoutMutation()
+  const [logout] = useLogoutMutation();
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+    document.body.style.overflow = isMenuOpen ? 'auto' : 'hidden';
   };
-  setTimeout(()=>{
-    dispatch(logOut())
-  },1000*60*60)
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
+  setTimeout(
+    () => {
+      dispatch(logOut());
+    },
+    1000 * 60 * 60
+  );
+
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const toogleSearch = () => {
     onSearchToggle();
-};
+  };
 
-  const handleLogout = async(e: any) =>{
-  e.preventDefault()
-  setIsLoading(true)
-  try {
-    //@ts-ignore
+  const handleLogout = async (e: any) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      //@ts-ignore
       await logout().unwrap();
       dispatch(logOut());
-      localStorage.removeItem('userInfo');
+      localStorage.removeItem("userInfo");
       toast.success("You're Logged out");
-      navigate('/login')
-    }
-  catch(err:any){ 
-    if (err?.data?.message) {
+      navigate("/login");
+    } catch (err: any) {
+      if (err?.data?.message) {
         toast.error(err.data.message);
       } else if (err.status === 400) {
-        toast.error('already logged out or not logged in');
+        toast.error("already logged out or not logged in");
       } else if (err.status === 401) {
-        toast.error('User is not authenticated');
+        toast.error("User is not authenticated");
       } else {
-        toast.error('Internal Server Error');
+        toast.error("Internal Server Error");
       }
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
-  }
+  };
 
-  const loggedUserInfo = localStorage.getItem('userInfo');
+  const loggedUserInfo = localStorage.getItem("userInfo");
   useEffect(() => {
     setCartSize(cart?.items?.length || 0);
   }, [cart]);
@@ -115,19 +125,8 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
 
             <div className="text-xl font-bold">DEPOT</div>
 
-            <button className="text-gray-600 hover:text-black">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                  clipRule="evenodd"
-                />
-              </svg>
+            <button onClick={toogleSearch} className="text-gray-600 hover:text-black">
+              <FiSearch className="h-5 w-5" />
             </button>
           </div>
 
@@ -151,8 +150,6 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
                       Logout
                     </button>
 
-
-
                     <Link
                       to="/profile"
                       className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
@@ -161,8 +158,6 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
                     </Link>
                   </div>
                 )}
-
-                
               </div>
             ) : (
               <Link
@@ -171,51 +166,83 @@ const Navbar: React.FC<NavbarProps> = ({onSearchToggle}) => {
               >
                 LOGIN
               </Link>
-
-              
             )}
-           {loggedUserInfo &&  <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
-           <Link to="/my-orders"  className="text-sm text-gray-600 hover:text-black">ORDERS</Link>
+            {loggedUserInfo && (
+              <Link
+                to="/cart"
+                className="text-sm text-gray-600 hover:text-black"
+              >
+                CART ({cartSize})
+              </Link>
+            )}
+            <Link to="/my-orders"  className="text-sm text-gray-600 hover:text-black">ORDERS</Link>
 
-                  <button onClick={ toogleSearch } className="text-gray-600 hover:text-black">
-                        <FiSearch className="h-5 w-5" />
-                   </button>
-
-        
+            {loggedUserInfo && (
+              <Link
+                to="/wishlist"
+                className="text-sm text-gray-600 hover:text-black"
+              >
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
+              </Link>
+            )}
+            <button
+              onClick={toogleSearch}
+              className="text-gray-600 hover:text-black"
+            >
+              <FiSearch className="h-5 w-5" />
+            </button>
           </div>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile menu with animation */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-            isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          className={`fixed top-0 left-0 w-64 h-full bg-white z-20 transform transition-all duration-300 ease-in-out ${
+            isMenuOpen ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
           }`}
         >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link to="/" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">HOME</Link>
-            <Link to="/shop" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">SHOP</Link>
-            <Link to="/about" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">ABOUT</Link>
-            <Link to="/chat" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CHAT</Link>
-            {loggedUserInfo &&  <Link to="/cart" className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2">CART ({cartSize})</Link>}
-           <Link to="/my-orders"  className="text-sm text-gray-600 hover:text-black">ORDERS</Link>
-
-            {userInfo ? (
-              <Link
-                to="/logout"
-                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-              >
-                LOGOUT
-              </Link>
-            ) : (
-              <Link
-                to="/login"
-                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-              >
-                LOGIN
-              </Link>
-            )}
+          <div className="flex flex-col h-full">
+            <div className="p-4 border-b">
+              <button onClick={toggleMenu} className="text-gray-600 hover:text-black">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="flex-grow overflow-y-auto">
+              <Link to="/" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">HOME</Link>
+              <Link to="/shop" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">SHOP</Link>
+              <Link to="/about" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ABOUT</Link>
+              <Link to="/chat" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">CHAT</Link>
+              {loggedUserInfo && (
+                <Link to="/cart" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">
+                  CART ({cartSize})
+                </Link>
+              )}
+              <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
+              {userInfo ? (
+                <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">
+                  LOGOUT
+                </button>
+              ) : (
+                <Link to="/login" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">LOGIN</Link>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Overlay with fade-in animation */}
+        <div
+          className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
+            isMenuOpen ? 'opacity-50 z-10' : 'opacity-0 -z-10'
+          }`}
+          onClick={toggleMenu}
+        ></div>
       </div>
     </nav>
   );
