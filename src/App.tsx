@@ -40,8 +40,10 @@ import OrderDetailComponent from "./pages/order/orderDetail";
 import CustomerSupportPage from './pages/customerSupport';
 import SellerAllProductsPage from './pages/SellerAllProductsPage';
 import SellerSingleProductPage from './pages/SellerSingleProductPage';
+import Checkout from "./pages/Checkout";
 import Wishlist from "./pages/wishlist";
 import WishlistEmpty from "./Components/wishlistEmpty";
+
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
@@ -107,8 +109,12 @@ const App: React.FC = () => {
           />
           <Route path="/seller/products" element={<SellerAllProductsPage />} />
         </Route>
+
+        <Route path='/checkout' element={<Checkout/>}/>
+
         <Route path="/wishlist" element={<Wishlist />}></Route>
         <Route path="/wishlist/empty" element={<WishlistEmpty />}></Route>
+
       </Route>
     )
   );

@@ -171,7 +171,9 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 CART ({cartSize})
               </Link>
             )}
-            <Link to="/my-orders"  className="text-sm text-gray-600 hover:text-black">ORDERS</Link>
+           {loggedUserInfo && (
+  <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
+)}
 
             {loggedUserInfo && (
               <Link
@@ -227,7 +229,9 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 inline-block mr-2" />
               </Link>
               </div>
-              <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
+              {loggedUserInfo && (
+  <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
+)}
               {userInfo ? (
                 <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">
                   LOGOUT
