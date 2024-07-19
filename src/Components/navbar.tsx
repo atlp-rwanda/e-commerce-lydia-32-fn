@@ -225,7 +225,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 className="hover:text-black block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2"
               >
                 <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 inline-block mr-2" />
-                WISHLIST
               </Link>
               </div>
               <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
