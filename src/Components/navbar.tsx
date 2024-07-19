@@ -172,7 +172,8 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
               </Link>
             )}
            {loggedUserInfo && (
-  <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
+    <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:text-black ">ORDERS</Link>
+
 )}
 
             {loggedUserInfo && (
@@ -180,7 +181,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 to="/wishlist"
                 className="text-sm text-gray-600 hover:text-black"
               >
-                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 " />
               </Link>
             )}
             <button
@@ -230,7 +231,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
               </Link>
               </div>
               {loggedUserInfo && (
-  <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
+  <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
 )}
               {userInfo ? (
                 <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">
