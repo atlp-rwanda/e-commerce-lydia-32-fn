@@ -8,6 +8,7 @@ import SellerDashboardLayout from "./layouts/sellerDashboardLayout";
 import AddNewProduct from "./pages/seller/AddProduct";
 import Dashboard from "./pages/seller/GeneralAnalysis";
 import NotificationBar from "./pages/seller/NotificationBar";
+import Checkout from "./pages/Checkout";
 import SellerAllProductsPage from "./pages/SellerAllProductsPage";
 import SellerSingleProductPage from "./pages/SellerSingleProductPage";
 import Wishlist from "./pages/wishlist";
@@ -41,6 +42,7 @@ import PaymentErrorPage from './pages/PyamentErroPage';
 import BuyerOrdersComponent from "./pages/order/orderHistory";
 import OrderDetailComponent from "./pages/order/orderDetail";
 import CustomerSupportPage from './pages/customerSupport';
+
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
@@ -112,8 +114,12 @@ const App: React.FC = () => {
           <Route path="/seller/product/:id" element={<SellerSingleProductPage />} />
           <Route path="/seller/products" element={<SellerAllProductsPage />} />     
         </Route>
+
+        <Route path='/checkout' element={<Checkout/>}/>
+
         <Route path="/wishlist" element={<Wishlist />}></Route>
         <Route path="/wishlist/empty" element={<WishlistEmpty />}></Route>
+
       </Route>
     )
   );

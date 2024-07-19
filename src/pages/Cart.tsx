@@ -8,7 +8,7 @@ import {
   useClearCartMutation,
 } from '../slices/cartSlice/cartApiSlice';
 import { useGetProductsQuery } from '../slices/productSlice/productApiSlice';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import toast from 'react-hot-toast'
 import 'react-toastify/dist/ReactToastify.css';
 import EmptyCart from '../Components/EmptyCart';
@@ -294,6 +294,7 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
           <span>Grand Total</span>
           <span className='text-lg sm:text-xl font-bold'>Rwf {total}</span>
         </div>
+        <Link to='/checkout'>
         <button 
           onClick={()=>{navigate('/checkout')}}
           disabled={!isSaveButtonDisabled()} 
@@ -301,6 +302,7 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
         >
           Proceed to Checkout
         </button>
+        </Link>
       </div>
     </div>
   </div>
