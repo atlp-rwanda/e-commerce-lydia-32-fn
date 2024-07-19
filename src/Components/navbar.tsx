@@ -87,9 +87,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
             <Link to="/" className="text-sm text-gray-600 hover:text-black">
               HOME
             </Link>
-            <Link to="/shop" className="text-sm text-gray-600 hover:text-black">
-              SHOP
-            </Link>
             <Link
               to="/about"
               className="text-sm text-gray-600 hover:text-black"
@@ -216,7 +213,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
             </div>
             <div className="flex-grow overflow-y-auto">
               <Link to="/" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">HOME</Link>
-              <Link to="/shop" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">SHOP</Link>
               <Link to="/about" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ABOUT</Link>
               <Link to="/chat" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">CHAT</Link>
               {loggedUserInfo && (
@@ -224,6 +220,14 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                   CART ({cartSize})
                 </Link>
               )}
+              <div className="w-full">
+              <Link
+                to="/wishlist"
+                className=" hover:text-black block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2 "
+              >
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 " />
+              </Link>
+              </div>
               <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
               {userInfo ? (
                 <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">
