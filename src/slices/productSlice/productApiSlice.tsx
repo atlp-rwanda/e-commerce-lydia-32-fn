@@ -40,7 +40,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
         url: `${BASE_URL}/search?${searchParams}`,
         method: "GET",
       }),
-      transformErrorResponse: (response: { status: string; data: any }) => {
+      transformErrorResponse: (response: { status: string; data: any; }) => {
         if (response.data && response.data.error) {
           return response.data.error;
         }
@@ -54,6 +54,12 @@ export const productApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    deleteProduct: builder.mutation({
+      query: (id: string) => ({
+        url: `${BASE_URL}/deleteProduct/${id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
@@ -61,4 +67,5 @@ export const {
   useGetProductsQuery,
   useSearchProductsQuery,
   useAddProductMutation,
+  useDeleteProductMutation,
 } = productApiSlice;
