@@ -223,6 +223,8 @@ const SingleProduct: React.FC = () => {
             </h2>
           </div>
         </div>
+
+        
       </div>
       <div className="mt-12">
         <ul className="flex border-b">
