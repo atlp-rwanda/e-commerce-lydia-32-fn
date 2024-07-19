@@ -35,7 +35,6 @@ import AdminDeletePermiFromRole from './pages/admin/AdminDeletePermiFromRole';
 import AdminAssignRoleToUser from './pages/admin/AdminAssignRoleToUser';
 import AdminEditRole from './pages/admin/AdminEditRole';
 import Profile from './pages/Profile';
-import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
 import PaymentSuccessPage from './pages/PaymentSuccess';
 import PaymentErrorPage from './pages/PyamentErroPage';
