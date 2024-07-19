@@ -3,64 +3,37 @@ import { useDispatch } from 'react-redux';
 import Spinner from '../Components/Spinners';
 import { setProductInfo } from '../slices/productSlice/productSlice';
 import SellerProductCard from '../Components/SellerProductCard';
+import { useGetSellerProductsQuery } from '../slices/sellerSlice/sellerProductsApiSlice';
+import { useDeleteProductMutation } from '../slices/productSlice/productApiSlice';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const SellerAllProductsPage: React.FC = () => {
     const dispatch = useDispatch();
-    const [products, setProducts] = useState(null);
-    const [loading, setLoading] = useState(true);
-
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-    const getUserToken = (): string | null => {
-        const userInfoString = localStorage.getItem('userInfo');
-        if (userInfoString) {
-            try {
-                const userInfo = JSON.parse(userInfoString);
-                return userInfo.token || null;
-            } catch (error) {
-                console.error('Error parsing userInfo from localStorage:', error);
-                return null;
-            }
-        }
-        return null;
-    };
-
-    // Usage
+    const navigate = useNavigate();
+    const { data: products } = useGetSellerProductsQuery();
+    const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            try {
-                const token = getUserToken();
-                if (!token) {
-                    console.error('No token found');
-                    setProducts([]);
-                    setLoading(false);
-                    return;
-                }
-                const response = await fetch(`${BACKEND_URL}api/seller/products`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    setProducts(data.products);
-                    dispatch(setProductInfo(data.products));
-                } else {
-                    setProducts([]);
-                }
-            } catch (error) {
-                console.error('Failed to fetch products', error);
-                setProducts([]);
-            } finally {
-                setLoading(false);
-            }
-        };
+        if (products) {
+            dispatch(setProductInfo(products));
+        }
+    }, [products, dispatch]);
 
-        fetchProducts();
-    }, [dispatch]);
+
+    const handleDelete = async (id: number) => {
+        try {
+            await deleteProduct(id).unwrap();
+            toast.success('Deletion successful');
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        } catch (error) {
+            toast.error(`Error: ${(error as Error).message}`);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-white py-12">
@@ -73,17 +46,18 @@ const SellerAllProductsPage: React.FC = () => {
                         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">FOOD</a>
                     </nav>
                     <div className="flex flex-col">
-                        {loading ? (
-                            <div className="col-span-full flex justify-center items-center">
-                                <Spinner />
-                            </div>
-                        ) : products && products.length > 0 ? (
-                            products.map((product) => (
-                                <SellerProductCard key={product.productId} product={product} />
+                        {products?.products ? (
+                            products.products.map((product) => (
+                                <SellerProductCard
+                                    key={product.productId}
+                                    product={product}
+                                    onDelete={handleDelete}
+                                    isDeleting={isDeleting}
+                                />
                             ))
                         ) : (
                             <div className="col-span-full flex justify-center items-center">
-                                <p>There are no products for this particular seller.</p>
+                                <Spinner />
                             </div>
                         )}
                     </div>
