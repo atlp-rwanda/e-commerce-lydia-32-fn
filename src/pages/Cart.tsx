@@ -14,8 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import EmptyCart from '../Components/EmptyCart';
 import ConfirmationDialog from '../Components/ConfirmationDialog';
 
-
-interface CartItem {
+export interface CartItem {
   id: number;
   productId: number;
   images: string[];
@@ -297,6 +296,7 @@ const decrementQuantity = (productId: number, cartItemId: number) => {
         </div>
         <Link to='/checkout'>
         <button 
+          onClick={()=>{navigate('/checkout')}}
           disabled={!isSaveButtonDisabled()} 
           className={`w-full py-2 sm:py-3 text-sm sm:text-lg ${!isSaveButtonDisabled() ? 'bg-gray-500' : 'bg-black'} text-white rounded mt-4 transition-colors duration-300`}
         >

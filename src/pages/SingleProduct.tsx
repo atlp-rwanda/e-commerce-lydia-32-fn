@@ -97,6 +97,10 @@ const SingleProduct: React.FC = () => {
   const handleAddToCart = async () => {
     try {
       const userInfo = localStorage.getItem("userInfo");
+      if (Number(cartItemQty) <= 0) {
+        toast.error("Product Quantity of 0 or Less is not allowed !");
+        return;
+      }
       if (userInfo) {
         setAddingToCart(true);
         const data = { productId: Number(id), quantity: Number(cartItemQty) };
