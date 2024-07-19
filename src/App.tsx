@@ -41,8 +41,6 @@ import PaymentErrorPage from './pages/PyamentErroPage';
 import BuyerOrdersComponent from "./pages/order/orderHistory";
 import OrderDetailComponent from "./pages/order/orderDetail";
 import CustomerSupportPage from './pages/customerSupport';
-import SellerAllProductsPage from './pages/SellerAllProductsPage';
-import SellerSingleProductPage from './pages/SellerSingleProductPage';
 
 const App: React.FC = () => {
   const router = createBrowserRouter(

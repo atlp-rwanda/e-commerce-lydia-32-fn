@@ -1,11 +1,8 @@
 import { apiSlice } from "../apiSlice";
-export const BASE_URL = "/order/admin"
-export const ORDER_URL = "/order"
 
 export const BASE_URL = "/order";
 export const ADMIN_BASE_URL = "/order/admin";
 
-export const orderApiSlice = apiSlice.injectEndpoints({
 export const orderApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllOrdersByBuyer: builder.query({
@@ -16,14 +13,14 @@ export const orderApiSlice = apiSlice.injectEndpoints({
     }),
     buyerPlaceOrder: builder.mutation({
       query: (data) => ({
-        url: `${ORDER_URL}/create`,
+        url: `${BASE_URL}/create`,
         method: "POST",
         body:data,
       }),
     }),
      buyerGetAllOrders: builder.query({
       query: () => ({
-        url: `${ORDER_URL}`,
+        url: `${BASE_URL}`,
         method: "GET"
       }),
     }),
@@ -53,10 +50,7 @@ export const {
   useAdminGetAllOrdersQuery,
   useBuyerGetAllOrdersQuery,
   useBuyerPlaceOrderMutation,
-} = orderApiSlice;
-
   useGetAllOrdersByBuyerQuery,
   useGetOrderByIdQuery,
   useCancelOrderMutation,
-  useAdminGetAllOrdersQuery
 } = orderApiSlice;
