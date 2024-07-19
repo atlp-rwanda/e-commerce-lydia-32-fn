@@ -49,11 +49,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
     onSearchToggle();
   };
 
-  const handleLogout = async (e: any) => {
+  const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      //@ts-ignore
       await logout().unwrap();
       dispatch(logOut());
       localStorage.removeItem("userInfo");
@@ -102,7 +101,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
           <div className="flex items-center justify-between w-full md:hidden">
             <button
               onClick={toggleMenu}
-              className="text-gray-600 hover:text-black"
+              className="text-gray-600 hover:text-black md:hidden"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +140,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
                     <button
-                      className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
+                      className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 w-full text-left"
                       onClick={handleLogout}
                     >
                       Logout
@@ -223,9 +222,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
               <div className="w-full">
               <Link
                 to="/wishlist"
-                className=" hover:text-black block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2 "
+                className="hover:text-black block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2"
               >
-                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 " />
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4 inline-block mr-2" />
+                WISHLIST
               </Link>
               </div>
               <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 transition-all duration-300 ease-in-out transform hover:translate-x-2">ORDERS</Link>
@@ -241,12 +241,12 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
         </div>
 
         {/* Overlay with fade-in animation */}
-        <div
-          className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${
-            isMenuOpen ? 'opacity-50 z-10' : 'opacity-0 -z-10'
-          }`}
-          onClick={toggleMenu}
-        ></div>
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black opacity-50 z-10"
+            onClick={toggleMenu}
+          ></div>
+        )}
       </div>
     </nav>
   );
