@@ -8,11 +8,12 @@ import SellerDashboardLayout from "./layouts/sellerDashboardLayout";
 import AddNewProduct from "./pages/seller/AddProduct";
 import Dashboard from "./pages/seller/GeneralAnalysis";
 import NotificationBar from "./pages/seller/NotificationBar";
+import SellerAllProductsPage from './pages/SellerAllProductsPage';
+import SellerSingleProductPage from './pages/SellerSingleProductPage';
 import Checkout from "./pages/Checkout";
-import SellerAllProductsPage from "./pages/SellerAllProductsPage";
-import SellerSingleProductPage from "./pages/SellerSingleProductPage";
 import Wishlist from "./pages/wishlist";
 import WishlistEmpty from "./Components/wishlistEmpty";
+
 import LoginForm from './pages/Login';
 import MainLayout from './layouts/MainLayout';
 import TeamSection from './pages/ourTeam';
@@ -113,8 +114,6 @@ const App: React.FC = () => {
           <Route path="/seller/product/:id" element={<SellerSingleProductPage />} />
           <Route path="/seller/products" element={<SellerAllProductsPage />} />     
         </Route>
-
-        <Route path='/checkout' element={<Checkout/>}/>
 
         <Route path="/wishlist" element={<Wishlist />}></Route>
         <Route path="/wishlist/empty" element={<WishlistEmpty />}></Route>

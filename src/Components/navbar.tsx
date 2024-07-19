@@ -26,18 +26,36 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
     const navigate = useNavigate();
     const [cartSize, setCartSize] = useState(0);
     const [logout] = useLogoutMutation();
-    const toggleMenu = () => {
-      setIsMenuOpen(!isMenuOpen);
-    };
+ 
     setTimeout(
       () => {
         dispatch(logOut());
       },
       1000 * 60 * 60
     );
-    const toggleDropdown = () => {
-      setIsDropdownOpen(!isDropdownOpen);
+
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+    document.body.style.overflow = isMenuOpen ? 'auto' : 'hidden';
+  };
+
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = 'auto';
     };
+  }, []);
+
+  setTimeout(
+    () => {
+      dispatch(logOut());
+    },
+    1000 * 60 * 60
+  );
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
     const handleNotificationClick = () => {
       setShowNotifications(!showNotifications);
@@ -46,29 +64,26 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
       onSearchToggle();
     };
 
-    const handleLogout = async (e: any) => {
-      e.preventDefault();
-      setIsLoading(true);
-      try {
-        //@ts-ignore
-        await logout().unwrap();
-        dispatch(logOut());
-        localStorage.removeItem("userInfo");
-        toast.success("You're Logged out");
-        navigate("/login");
-      } catch (err: any) {
-        if (err?.data?.message) {
-          toast.error(err.data.message);
-        } else if (err.status === 400) {
-          toast.error("already logged out or not logged in");
-        } else if (err.status === 401) {
-          toast.error("User is not authenticated");
-        } else {
-          toast.error("Internal Server Error");
-        }
-      } finally {
-        setIsLoading(false);
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      await logout().unwrap();
+      dispatch(logOut());
+      localStorage.removeItem("userInfo");
+      toast.success("You're Logged out");
+      navigate("/login");
+    } catch (err: any) {
+      if (err?.data?.message) {
+        toast.error(err.data.message);
+      } else if (err.status === 400) {
+        toast.error("already logged out or not logged in");
+      } else if (err.status === 401) {
+        toast.error("User is not authenticated");
+      } else {
+        toast.error("Internal Server Error");
       }
+    };
     };
 
     const loggedUserInfo = localStorage.getItem("userInfo");
@@ -196,7 +211,11 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 >
                   <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
                 </Link>
+                
               )}
+               {loggedUserInfo && (
+               <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
+               )}
             </div>
           </div>
 
@@ -238,6 +257,19 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                   CART ({cartSize})
                 </Link>
               )}
+              
+              {loggedUserInfo && (
+                <Link
+                  to="/wishlist"
+                  className="text-sm text-gray-600 hover:text-black"
+                >
+                  <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
+                </Link>
+                
+              )}
+               {loggedUserInfo && (
+               <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
+               )}
               {userInfo ? (
                 <Link
                   to="/logout"
@@ -255,10 +287,15 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
               )}
             </div>
           </div>
+           {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black opacity-50 z-10"
+            onClick={toggleMenu}
+          ></div>
+        )}
         </div>
       </nav>
     );
   };
-
 
 export default Navbar;
