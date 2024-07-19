@@ -37,7 +37,7 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
             <img
               src={notificationIcon}
               alt="Notification icon"
-              className="w-7"
+              className="w-7 hover:cursor-pointer"
             />
             {showNotifications && <NotificationBar />}
           </div>

@@ -14,9 +14,6 @@ const Notification: React.FC<{
           <span className="text-sm text-gray-500">{time}</span>
         </div>
       </div>
-      <button className="ml-4 bg-blue-500 text-white px-4 py-2 rounded flex-shrink-0">
-        Read
-      </button>
     </div>
   );
 };
