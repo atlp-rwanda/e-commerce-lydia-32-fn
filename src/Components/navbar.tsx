@@ -183,14 +183,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                   LOGIN
                 </Link>
               )}
-              {loggedUserInfo && (
-                <Link
-                  to="/cart"
-                  className="text-sm text-gray-600 hover:text-black"
-                >
-                  CART ({cartSize})
-                </Link>
-              )}
             
               {loggedUserInfo && <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
               <button onClick={toogleSearch} className="text-gray-600 hover:text-black">
@@ -205,12 +197,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                   <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
                 </Link>
               )}
-              <button
-                onClick={toogleSearch}
-                className="text-gray-600 hover:text-black"
-              >
-                <FiSearch className="h-5 w-5" />
-              </button>
             </div>
           </div>
 
