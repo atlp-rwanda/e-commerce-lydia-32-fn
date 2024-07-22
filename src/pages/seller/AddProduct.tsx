@@ -3,6 +3,7 @@ import Spinner from "../../Components/Spinners";
 import toast from "react-hot-toast";
 import { useAddProductMutation } from "../../slices/productSlice/productApiSlice";
 import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 
 const AddNewProduct: React.FC = () => {
   const [productName, setProductName] = useState("");

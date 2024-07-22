@@ -9,13 +9,22 @@ import { setWishlistInfo } from "../slices/wishlistSlice/wishlistSlice";
 import closeicon from "../assets/CLOSE-ICON.png";
 import toast from "react-hot-toast";
 import WishlistEmpty from "../Components/wishlistEmpty";
+import { Link, useNavigate } from "react-router-dom";
 
 const Wishlist: React.FC = () => {
+  const navigate = useNavigate();
   const LoadingOverlay: React.FC = () => (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <Spinner />
     </div>
   );
+
+  useEffect(() => {
+    const userInfo = localStorage.getItem("userInfo");
+    if (!userInfo) {
+      navigate('/login');
+    }
+  }, [navigate]);
 
   const [deletingWishlistItemId, setDeletingWishlistItemId] = useState<
     number | null
@@ -114,40 +123,45 @@ const Wishlist: React.FC = () => {
               (wishlistItem: any, index: number) => {
                 const product = AllWishlistItems.products[index];
                 return (
-                  <div
+                  <Link
+                    to={`/singleproduct/${product.productId}`}
+                    className="block"
                     key={wishlistItem.id}
-                    className="bg-white rounded-lg shadow-md p-4 mb-4"
                   >
-                    <div className="flex justify-between items-center">
-                      <div className="w-1/3 md:w-1/4 font-semibold">
-                        {product.productName}
-                      </div>
-                      <div className="hidden md:block w-1/4 text-sm">
-                        {product.description ||
-                          "electroacoustic transducer that converts an electrical audio signa a corresponding sound."}
-                      </div>
-                      <div className="hidden md:flex w-1/6 justify-center">
-                        <img
-                          src={product.images}
-                          alt={product.productName}
-                          className="w-20 h-20 object-cover rounded"
-                        />
-                      </div>
-                      <div className="w-1/4 md:w-1/12 text-right">
-                        {product.price}
-                      </div>
-                      <div className="w-1/3 md:w-1/6 flex justify-end">
-                        <button
-                          className="bg-gray-900 hover:bg-red-500 text-white px-4 py-2 rounded transition duration-300"
-                          onClick={() =>
-                            handleDeleteWishlistItem(wishlistItem.id)
-                          }
-                        >
-                          Delete
-                        </button>
+                    <div className="bg-white rounded-lg shadow-md p-4 mb-4 relative">
+                      <div className="flex justify-between items-center">
+                        <div className="w-1/3 md:w-1/4 font-semibold">
+                          {product.productName}
+                        </div>
+                        <div className="hidden md:block w-1/4 text-sm">
+                          {product.description ||
+                            "electroacoustic transducer that converts an electrical audio signa a corresponding sound."}
+                        </div>
+                        <div className="hidden md:flex w-1/6 justify-center">
+                          <img
+                            src={product.images}
+                            alt={product.productName}
+                            className="w-20 h-20 object-cover rounded"
+                          />
+                        </div>
+                        <div className="w-1/4 md:w-1/12 text-right">
+                          {product.price}
+                        </div>
+                        <div className="w-1/3 md:w-1/6 flex justify-end">
+                          <button
+                            className="bg-gray-900 hover:bg-red-500 text-white px-4 py-2 rounded transition duration-300 absolute right-4 top-1/2 transform -translate-y-1/2"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDeleteWishlistItem(wishlistItem.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 );
               }
             )}

@@ -66,8 +66,8 @@ const SingleProduct: React.FC = () => {
         toast.error("Product Already In Your Wishlist!");
       } else if (err.status === 403) {
         toast.error(err?.data?.message || "Authentication error");
-        navigate("/update-password");
-      } else {
+      } 
+      else {
         toast.error("Error adding product to wishlist");
       }
     } finally {
@@ -124,6 +124,10 @@ const SingleProduct: React.FC = () => {
         toast.error(err?.data?.message);
         console.log(err);
         navigate("/update-password");
+      }
+      else if(err.status === 406){
+        console.log(err.status)
+        toast.error(err?.data?.message || "You can't add your own product to cart");
       }
       console.error("Error adding product to cart:", err.status);
     } finally {
@@ -197,22 +201,25 @@ const SingleProduct: React.FC = () => {
                 className="border rounded w-16 p-1 text-center"
               />
             </div>
+            <div>
             <button
               onClick={handleAddToCart}
               className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105"
             >
               {addingToCart ? "Adding Item To Cart ......" : "Add to Cart"}
             </button>
-          </div>
-          <div className="mt-4">
             <button
               onClick={handleAddToWishlist}
-              className="text-gray-500 hover:text-gray-700 transition duration-300"
+               className="ml-10 px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105"
               disabled={addingToWishlist}
             >
               {addingToWishlist ? "Adding to Wishlist..." : "Add to Wishlist"}
             </button>
+            </div>
           </div>
+          
+          
+          
           <div className="mt-8">
             <h2 className="text-lg font-semibold mb-2">Dimensions:</h2>
             <p className="text-gray-600">10x10x10 cm</p>

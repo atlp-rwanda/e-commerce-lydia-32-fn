@@ -9,6 +9,7 @@ import {FiSearch} from 'react-icons/fi';
 import NotificationBar from '../pages/seller/NotificationBar';
 import notificationIcon from "../assets/notification.svg";
 import wishlistIcon from "../assets/wishlistIcon.svg";
+import { FaHome } from "react-icons/fa";
 
 interface NavbarProps {
   onSearchToggle: () => void;
