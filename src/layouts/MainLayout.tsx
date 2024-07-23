@@ -23,6 +23,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ useSellerNavbar = false }) => {
     "/login",
     "/register",
     "/verified",
+    "/chat",
     "/verification/failed",
     "/admin/dashboard",
     "/admin/create/role",

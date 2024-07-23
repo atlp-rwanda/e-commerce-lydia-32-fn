@@ -37,6 +37,7 @@ import Dashboard from "./pages/seller/GeneralAnalysis";
 import NotificationBar from "./pages/seller/NotificationBar";
 import SellerAllProductsPage from './pages/SellerAllProductsPage';
 import SellerSingleProductPage from './pages/SellerSingleProductPage';
+import Chat from "./pages/Chat";
 
 const App: React.FC = () => {
   const router = createBrowserRouter(
@@ -46,6 +47,7 @@ const App: React.FC = () => {
         <Route path="*" element={<NotFoundPage />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/update-password" element={<UpdatePassword />} />
+        <Route path="/chat" element={<Chat/>}/>
         <Route path="/about" element={<AboutUs />} />
         <Route path="/ourTeam" element={<TeamSection />} />
         <Route path="/forgot-password" element={<ForgotPasswordLayout />} />
