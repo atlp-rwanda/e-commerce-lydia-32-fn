@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import profileIcon from "../../assets/profileIcon.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import notificationIcon from "../../assets/notification.svg";
 import humburgerIcon from "../../assets/hamburgerIcon.svg";
 import NotificationBar from "../../pages/seller/NotificationBar";
-
+import NotificationIcon from "../NotificationIcon";
+import { useGetNotificationsQuery } from "../../slices/notificationSlice/notificationApiSlice";
+import { setSellerNotificationsInfo } from "../../slices/notificationSlice/notificationSlice";
 interface SellerDashboardNavbarProps {
   toggleSidebar: () => void;
 }
@@ -19,10 +20,35 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
   };
-
+    const dispatch = useDispatch();
   const handleNotificationClose = () => {
     setShowNotifications(false);
   };
+
+   const {
+   data: sellerAllNotifications,
+   refetch,
+   //@ts-ignore
+ } = useGetNotificationsQuery();
+ 
+ useEffect(() => {
+   if (sellerAllNotifications) {
+     dispatch(setSellerNotificationsInfo(sellerAllNotifications));
+     refetch();
+   }
+ }, [sellerAllNotifications, dispatch]);
+
+
+ const unreadNotifications = sellerAllNotifications
+   ? [...sellerAllNotifications.notifications]
+       .filter((notification) => notification.readstatus === false)
+       .sort(
+         (a, b) =>
+           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+       )
+   : [];
+const count = unreadNotifications.length
+
 
   return (
     <>
@@ -34,11 +60,7 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
         </div>
         <div className="flex items-center space-x-4">
           <div onClick={handleNotificationClick} className="relative">
-            <img
-              src={notificationIcon}
-              alt="Notification icon"
-              className="w-7 hover:cursor-pointer"
-            />
+            <NotificationIcon count={count}/>
             {showNotifications && <NotificationBar />}
           </div>
           <div className="flex items-center space-x-2">
