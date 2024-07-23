@@ -16,7 +16,7 @@ const Chat: React.FC = () => {
   const [messages, setMessages] = useState<Mymessages[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isDebouncedTyping, setIsDebouncedTyping] = useState(false);
-  const ENDPOINT = 'http://localhost:3000';
+  const ENDPOINT = import.meta.env.VITE_BACKEND_URL;
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
