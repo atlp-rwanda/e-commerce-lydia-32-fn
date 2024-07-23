@@ -27,4 +27,3 @@ package-lock.json
 # CUSTOM FILES
 *storybook.log
 .env
-yarn.lock
