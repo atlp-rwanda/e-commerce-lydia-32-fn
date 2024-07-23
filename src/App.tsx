@@ -80,6 +80,8 @@ const App: React.FC = () => {
         </Route>
 
         <Route path="" element={<AdminPageOnly />}>
+          <Route path="*" element={<NotFoundPage />} />
+
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/create/role" element={<AdminCreateRole />} />
           <Route
@@ -109,6 +111,8 @@ const App: React.FC = () => {
             </SellerDashboardLayout>
           }
         >
+          <Route path="*" element={<NotFoundPage />} />
+
           <Route index element={<Dashboard />} />
           <Route path="/seller/newproduct" element={<AddNewProduct />} />
           <Route path="/seller/dashboard" element={<Dashboard />} />
