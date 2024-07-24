@@ -19,6 +19,7 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
 
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
+    refetch()
   };
     const dispatch = useDispatch();
   const handleNotificationClose = () => {
