@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { setSellerProductsInfo } from "../../slices/sellerSlice/sellerProductSlice";
 import Spinner from "../../Components/Spinners";
 import { useGetSellerProductsQuery } from "../../slices/sellerSlice/sellerProductsApiSlice";
+import SellerStats from "./sellerStats";
 
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch();
@@ -84,6 +85,7 @@ const Dashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mt-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+
             <MetricCard
               title="Total Products"
               value={totalProducts}
@@ -125,7 +127,12 @@ const Dashboard: React.FC = () => {
               value={`${productWithHighestPrice.productName} ${productWithHighestPrice.price} RWF`}
               changeType="increase"
             />
+            
           </div>
+          <div className="bg-white p-4 rounded-lg shadow mb-6">
+          <h3 className="text-lg font-semibold mb-4">Product Statistics</h3>
+          <SellerStats />
+        </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <div className="bg-white p-4 rounded-lg shadow overflow-hidden">
@@ -142,9 +149,11 @@ const Dashboard: React.FC = () => {
               </h3>
               <div className="flex justify-center">
                 <CategoriesStatistics />
+
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
@@ -163,3 +172,6 @@ const MetricCard = ({ title, value, changeType }) => (
 );
 
 export default Dashboard;
+
+
+
