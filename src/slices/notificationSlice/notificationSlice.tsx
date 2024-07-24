@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { notify } from '../../utils/notifyUsers';
 
 const sellernotificationsInfo = localStorage.getItem("sellerNotificationsInfo");
 const parsedSellerNotificationsInfo = sellernotificationsInfo
@@ -16,11 +17,33 @@ const sellerNotificationSlice = createSlice({
   initialState,
   reducers: {
     setSellerNotificationsInfo(state, action: PayloadAction<any[]>) {
-      state.sellernotificationsInfo = action.payload;
-      localStorage.setItem(
-        "sellerNotificationsInfo",
-        JSON.stringify(action.payload)
-      );
+      const currentNotifications = action.payload;
+
+      if (Array.isArray(currentNotifications)) {
+        const previousNotifications = state.sellernotificationsInfo;
+        
+        // Find new notifications
+        const newNotifications = currentNotifications.filter(
+          (notification) =>
+            !previousNotifications.some(
+              (existingNotification) => existingNotification.id === notification.id
+            )
+        );
+
+        // Notify for new notifications
+        if (newNotifications.length > 0) {
+          newNotifications.forEach(notification => notify(notification.message));
+        }
+
+        // Update state and localStorage
+        state.sellernotificationsInfo = currentNotifications;
+        localStorage.setItem(
+          "sellerNotificationsInfo",
+          JSON.stringify(currentNotifications)
+        );
+      } else {
+        console.error("Expected payload to be an array but got:", currentNotifications);
+      }
     },
   },
 });

@@ -42,8 +42,7 @@ import PaymentErrorPage from './pages/PyamentErroPage';
 import BuyerOrdersComponent from "./pages/order/orderHistory";
 import OrderDetailComponent from "./pages/order/orderDetail";
 import CustomerSupportPage from './pages/customerSupport';
-
-
+import { NotificationProvider } from './contexts/notificationContext';
 const App: React.FC = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -131,7 +130,9 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <NotificationProvider>
+        <RouterProvider router={router} />
+      </NotificationProvider>
     </Provider>
   );
 };
