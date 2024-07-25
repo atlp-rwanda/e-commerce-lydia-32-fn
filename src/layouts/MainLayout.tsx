@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Outlet, useLocation } from "react-router-dom";
 import ChatRoom from "../pages/Chat";
+import { useSelector, UseSelector } from "react-redux";
 
 interface MainLayoutProps {
   useSellerNavbar?: boolean;
@@ -15,6 +16,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({ useSellerNavbar = false }) => {
   const location = useLocation();
   const path = location.pathname;
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+
+  const {userInfo} = useSelector((state: any) => state.auth)
 
   const toggleSearch = () => {
     setIsSearchVisible(!isSearchVisible);
@@ -48,7 +51,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ useSellerNavbar = false }) => {
         <ToastContainer />
         <Outlet context={{ isSearchVisible, setIsSearchVisible }} />
       </main>
-      <ChatRoom/>
+      {userInfo && <ChatRoom/>}
       {!isExcludedRoute && <Footer />}
     </div>
   );
