@@ -108,9 +108,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
               >
                 ABOUT
               </Link>
-              <Link to="/chat" className="text-sm text-gray-600 hover:text-black">
-                CHAT
-              </Link>
             </div>
 
             {/* Mobile layout */}
@@ -242,12 +239,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
               >
                 ABOUT
-              </Link>
-              <Link
-                to="/chat"
-                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-              >
-                CHAT
               </Link>
               {loggedUserInfo && (
                 <Link

@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import Spinner from "../Components/Spinners";
 import { setProductInfo } from "../slices/productSlice/productSlice";
 import { useGetProductsQuery } from "../slices/productSlice/productApiSlice";
-
+import ChatRoom from "./Chat";
 type OutletContext = {
   isSearchVisible: boolean;
   setIsSearchVisible: (isVisible: boolean) => void;
@@ -82,6 +82,7 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
+      <ChatRoom/>
     </div>
   );
 };

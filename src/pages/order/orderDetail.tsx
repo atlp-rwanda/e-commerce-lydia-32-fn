@@ -5,6 +5,7 @@ import { useGetOrderByIdQuery, useCancelOrderMutation } from '../../slices/order
 import { setCurrentOrder } from '../../slices/orderSlice/orderSlice';
 import { RootState } from '../../store';
 import toast from "react-hot-toast";
+import { useNewPaymentMutation } from '../../slices/paymentSlice/paymentApiSlice';
 
 
 const StatusBadge = ({ status }: { status: string }) => {
@@ -28,8 +29,9 @@ const OrderDetailsComponent: React.FC = () => {
   const currentOrder = useSelector((state: RootState) => state.order.currentOrder);
   const [activeSection, setActiveSection] = useState('items');
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [initializingPayment, setInitializingPayment] = useState<boolean>(false);
   const [cancelOrder, { isLoading: isCancelling }] = useCancelOrderMutation();
+  const [newPayment] = useNewPaymentMutation();
   const navigate = useNavigate();
 
   const [error, setError] = useState<string | null>(null);
@@ -81,6 +83,29 @@ useEffect(() => {
   };
 
   const pricePerItem = calculatePricePerItem();
+
+  const handlePayment = async () => {
+    try {
+      const paymentData = { orderId:id, currency: 'rwf' }
+      setInitializingPayment(true);
+      const paymentResponse = await newPayment(paymentData);
+      const stripe_url = paymentResponse?.data?.sessionUrl;
+      const sessionId = paymentResponse?.data?.sessionId;
+      sessionStorage.setItem('paymentSessionId', sessionId);
+      sessionStorage.setItem('paymentOrderId', String(id));
+      if (stripe_url) { 
+         // dispatch(setCurrentOrder({ ...currentOrder, status: 'paid' }));
+          window.location.href=stripe_url;
+      }
+      else {
+          toast.error("Initializing Payment Failed ");
+      }
+      setInitializingPayment(false);
+    } catch (err) { 
+      toast.error('Failed to finalize payment. Please try again.');
+    }
+  };
+
   return (
     <div className="bg-gradient-to-br from-black via-gray-800 to-gray-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 mt-20">
       <div className="max-w-4xl mx-auto">
@@ -189,20 +214,29 @@ useEffect(() => {
               <Link to="/customer-support" className="text-gray-300 hover:text-white transition-colors text-sm">
                 Customer support?
               </Link>
-              <div className="space-x-4">
+              <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4">
   {currentOrder.status === 'pending' && (
+    <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+      <button
+      className="bg-green-600 text-white hover:bg-green-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider w-full md:w-auto"
+      onClick={handlePayment}
+      disabled={initializingPayment}
+    >
+      {initializingPayment ? 'Initializing Payment...' : 'Complete Payment'}
+    </button>
     <button
-      className="bg-red-600 text-white hover:bg-red-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+      className="bg-red-600 text-white hover:bg-red-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider w-full md:w-auto"
       onClick={handleCancelOrder}
       disabled={isCancelling}
     >
       {isCancelling ? 'Cancelling...' : 'Cancel Order'}
     </button>
+    </div>
   )}
   
-  <Link to="/my-orders">
+  <Link to="/my-orders"  className="w-full md:w-auto">
     <button
-      className="bg-gray-800 text-white hover:bg-gray-700 transition duration-300 inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider"
+      className="bg-gray-800 text-white hover:bg-gray-700 transition duration-300 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider w-full md:w-auto"
     >
       Back to orders
     </button>

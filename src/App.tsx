@@ -42,9 +42,7 @@ import PaymentErrorPage from './pages/PyamentErroPage';
 import BuyerOrdersComponent from "./pages/order/orderHistory";
 import OrderDetailComponent from "./pages/order/orderDetail";
 import CustomerSupportPage from './pages/customerSupport';
-import Chat from "./pages/Chat";
-
-
+import { NotificationProvider } from './contexts/notificationContext';
 const App: React.FC = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -54,7 +52,6 @@ const App: React.FC = () => {
           <Route index element={<Home />} />
           <Route path="*" element={<NotFoundPage />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path='/chat' element={<Chat />}/>
           <Route path="/update-password" element={<UpdatePassword />} />
           <Route path="/about" element={<AboutUs />} />
           <Route path="/ourTeam" element={<TeamSection />} />
@@ -133,7 +130,9 @@ const App: React.FC = () => {
 
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <NotificationProvider>
+        <RouterProvider router={router} />
+      </NotificationProvider>
     </Provider>
   );
 };

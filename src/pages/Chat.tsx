@@ -1,23 +1,22 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Send, User, Image } from 'lucide-react';
-import ChatSideBar from '../Components/chat/ChatSideBar';
-import Header from '../Components/chat/Header';
+import React, { useState, useRef, useEffect } from 'react';
+import { MessageCircle, Send, X, User, Bot } from 'lucide-react';
 import io from 'socket.io-client';
 
 let socket: any;
-interface Mymessages{
+interface Message {
     username: string,
     text: string,
     time: string
 }
 
-const Chat: React.FC = () => {
+const ChatRoom: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
-  const [messages, setMessages] = useState<Mymessages[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [isDebouncedTyping, setIsDebouncedTyping] = useState(false);
-  const ENDPOINT = import.meta.env.VITE_BACKEND_URL;
+  // const [username, setUsername] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const ENDPOINT = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     socket = io(ENDPOINT, { withCredentials: true });
@@ -37,25 +36,10 @@ const Chat: React.FC = () => {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, inputMessage]);
-
-  const debounce = (func: any, delay: any) => {
-    let timeoutId: any;
-    return (...args: any) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => func(...args), delay);
-    };
-  };
-
-  const debouncedStopTyping = debounce(() => {
-    setIsDebouncedTyping(false);
-  }, 1000);
+  }, [messages]);
 
   const handleInputChange = (e: any) => {
     setInputMessage(e.target.value);
-    setIsTyping(true);
-    setIsDebouncedTyping(true);
-    debouncedStopTyping();
   };
 
   const handleSendMessage = (e: any) => {
@@ -63,84 +47,80 @@ const Chat: React.FC = () => {
     if (inputMessage.trim()) {
       socket.emit('chatMessage', inputMessage);
       setInputMessage('');
-      setIsTyping(false);
-      setIsDebouncedTyping(false);
     }
   };
-
-  const handleKeyPress = (e: any) => {
-    if (e.key === 'Enter') {
-      handleSendMessage(e);
-    }
+  const toggleChat = () => {
+    setIsOpen(!isOpen);
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <ChatSideBar />
-      <div className="flex flex-col flex-grow">
-        <Header />
-        <main className="flex-grow p-4 overflow-y-auto bg-gray-100">
-          <div className="space-y-4">
-            {messages.map((message, i) => (
+    <div className="fixed bottom-4 right-4 z-50">
+  {!isOpen && (
+    <button
+      onClick={toggleChat}
+      className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-full p-4 shadow-lg transition-all duration-300 transform hover:scale-110 hover:rotate-12 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+    >
+      <MessageCircle size={24} />
+    </button>
+  )}
+  {isOpen && (
+    <div className="bg-white rounded-lg shadow-2xl w-96 h-[32rem] flex flex-col overflow-hidden">
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-3 flex justify-between items-center">
+        <h1 className="text-lg font-bold">Multi-User Chat Room</h1>
+        <button onClick={toggleChat} className="text-white hover:text-gray-200 focus:outline-none">
+          <X size={20} />
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-50">
+        {messages.map((message, i) => (
+          <div
+            key={i}
+            className={`flex ${message.username === 'E-commerce Bot' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div className={`flex items-end space-x-1 max-w-[80%]`}>
+              {message.username !== 'E-commerce Bot' && (
+                <div className={`rounded-full p-1.5 ${message.username === 'E-commerce Bot' ? 'bg-green-500' : 'bg-blue-500'}`}>
+                  {message.username === 'E-commerce Bot' ? <Bot size={16} className="text-white" /> : <User size={16} className="text-white" />}
+                </div>
+              )}
               <div
-                key={i}
-                className={`flex ${
-                  message.username === 'E-commerce Bot' ? 'justify-end' : 'justify-start'
-                }`}
+                className={`rounded-lg p-2 text-sm ${
+                  message.username === 'E-commerce Bot'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-white text-gray-800'
+              
+                } shadow-md`}
               >
-                <div
-                  className={`max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl p-3 rounded-lg ${
-                    message.username !== 'E-commerce Bot' ? 'bg-white text-gray-800' : 'bg-yellow-100 text-yellow-800 self-center'
-                  }`}
-                >
-                  {message && (
-                    <div className="flex items-center mb-1">
-                      <User size={14} className="mr-1" />
-                      <span className="text-xs font-semibold">
-                        {message.username}
-                      </span>
-                    </div>
-                  )}
-                 
-                  <p className="text-sm">{message.text }</p>
-                </div>
+                {message.username && <div className="font-semibold text-xs mb-1">{message.username}</div>}
+                <div>{message.text}</div>
               </div>
-            ))}
-            {isDebouncedTyping && (
-              <div className="flex justify-end">
-                <div className="bg-gray-200 text-gray-500 p-3 rounded-lg">
-                  <p className="text-sm">You are typing...</p>
-                </div>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
+            </div>
           </div>
-        </main>
-
-        <footer className="bg-white border-t border-gray-200 p-4">
-          <div className="flex items-center space-x-2">
-            <button className="text-gray-400 hover:text-gray-600">
-              <Image size={20} />
-            </button>
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={handleInputChange}
-              onKeyPress={handleKeyPress}
-              placeholder="Type your message here..."
-              className="flex-grow p-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />      
-            <button
-              onClick={handleSendMessage}
-              className="bg-indigo-500 text-white p-2 rounded-full hover:bg-indigo-600 transition-colors"
-            >
-              <Send size={20} />
-            </button>
-          </div>
-        </footer>
+        ))}
+        <div ref={messagesEndRef} />
+      </div>
+      <div className="p-3 bg-white border-t">
+        <div className="flex items-center bg-gray-100 rounded-full overflow-hidden shadow-inner">
+          <input
+            type="text"
+            value={inputMessage}
+            onChange={handleInputChange}
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(e)}
+            placeholder="Type your message..."
+            className="flex-1 px-4 py-2 bg-transparent focus:outline-none text-gray-700 text-sm"
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-gradient-to-r from-purple-500 to-indigo-600 text-white rounded-full p-2 mx-1 transition-all duration-300 hover:shadow-lg focus:outline-none"
+          >
+            <Send size={16} />
+          </button>
+        </div>
       </div>
     </div>
+  )}
+</div>
   );
 };
 
-export default Chat;
+export default ChatRoom;
