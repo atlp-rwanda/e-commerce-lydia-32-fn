@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Outlet, useLocation } from "react-router-dom";
+import ChatRoom from "../pages/Chat";
 
 interface MainLayoutProps {
   useSellerNavbar?: boolean;
@@ -47,6 +48,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ useSellerNavbar = false }) => {
         <ToastContainer />
         <Outlet context={{ isSearchVisible, setIsSearchVisible }} />
       </main>
+      <ChatRoom/>
       {!isExcludedRoute && <Footer />}
     </div>
   );

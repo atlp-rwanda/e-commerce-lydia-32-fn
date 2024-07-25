@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Outlet, useLocation } from "react-router-dom";
+import ChatRoom from "../pages/Chat";
 
 const SellerLayout: React.FC = () => {
     const location = useLocation();
@@ -18,6 +19,7 @@ const SellerLayout: React.FC = () => {
                 <ToastContainer />
                 <Outlet />
             </main>
+            <ChatRoom/>
             {!isLoginPage && <Footer />}
         </div>
     );
