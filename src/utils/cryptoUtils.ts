@@ -2,7 +2,7 @@ import CryptoJS from 'crypto-js';
 
 const SECRET_KEY = import.meta.env.VITE_TOKEN_SECRET_KEY;
 const EXPIRATION_TIME = import.meta.env.VITE_EXPIRATION_TIME;
-const RealTime = EXPIRATION_TIME * 60 * 60;
+const RealTime = EXPIRATION_TIME * 60 * 60 * 1000;
 
 export function encodeToken(data: string): string {
     return CryptoJS.AES.encrypt(data, SECRET_KEY).toString();
