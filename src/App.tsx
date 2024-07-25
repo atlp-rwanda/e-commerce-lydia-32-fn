@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Home from './pages/Home';
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -17,8 +17,8 @@ import WishlistEmpty from "./Components/wishlistEmpty";
 import LoginForm from './pages/Login';
 import MainLayout from './layouts/MainLayout';
 import TeamSection from './pages/ourTeam';
-import ForgotPasswordLayout from './pages/ForgotPassword'
-import ResetPasswordLayout from './pages/ResetPassword'
+import ForgotPasswordLayout from './pages/ForgotPassword';
+import ResetPasswordLayout from './pages/ResetPassword';
 import AboutUs from './pages/AboutUs';
 import SignupForm from './pages/Register';
 import EmailVerificationPage from './pages/verified';
@@ -112,7 +112,7 @@ const App: React.FC = () => {
           />
           <Route path="/seller/products" element={<SellerAllProductsPage />} />
           <Route path="/seller/product/:id" element={<SellerSingleProductPage />} />
-          <Route path="/seller/products" element={<SellerAllProductsPage />} />     
+          <Route path="/seller/products" element={<SellerAllProductsPage />} />
         </Route>
 
         <Route path="/wishlist" element={<Wishlist />}></Route>
