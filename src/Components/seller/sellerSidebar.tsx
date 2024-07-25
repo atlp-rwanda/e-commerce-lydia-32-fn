@@ -47,7 +47,9 @@ const SellerSidebar: React.FC<SellerSidebarProps> = ({ isOpen, setIsOpen }) => {
     <div
       className={`bg-white text-gray-800 h-screen ${
         isOpen ? "w-64" : "w-20"
-      } fixed left-0 top-16 transition-all duration-300 shadow-md overflow-y-auto`}
+      } fixed left-0 top-16 transition-all duration-300 shadow-md overflow-y-auto lg:block ${
+        isOpen ? "block" : "hidden"
+      }`}
     >
       <nav className="mt-4">
         {sidebarItems.map((item) => (
