@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, Bell, User, ChevronDown } from "lucide-react";
+import toast from 'react-hot-toast';
 import NotificationBar from "../../pages/seller/NotificationBar";
+import { logOut } from '../../slices/authSlice/authSlice';
+import { useLogoutMutation } from '../../slices/authSlice/authApiSlice';
 
 interface SellerDashboardNavbarProps {
   toggleSidebar: () => void;
@@ -14,6 +17,9 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const { userInfo } = useSelector((state: any) => state.auth);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logout] = useLogoutMutation();
 
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
@@ -23,6 +29,27 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
   const handleProfileClick = () => {
     setShowProfileMenu(!showProfileMenu);
     setShowNotifications(false);
+  };
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await logout().unwrap();
+      dispatch(logOut());
+      localStorage.removeItem("userInfo");
+      toast.success("You're Logged out");
+      navigate("/login");
+    } catch (err: any) {
+      if (err?.data?.message) {
+        toast.error(err.data.message);
+      } else if (err.status === 400) {
+        toast.error("Already logged out or not logged in");
+      } else if (err.status === 401) {
+        toast.error("User is not authenticated");
+      } else {
+        toast.error("Internal Server Error");
+      }
+    }
   };
 
   return (
@@ -64,9 +91,8 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
                 <div className="py-1">
                   {userInfo ? (
                     <>
-                      <a href="#profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</a>
-                      <a href="#settings" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Settings</a>
-                      <a href="#logout" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</a>
+                      <Link to="/profile" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Profile</Link>
+                      <button onClick={handleLogout} className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Logout</button>
                     </>
                   ) : (
                     <Link to="/login" className="block px-4 py-2 text-gray-800 hover:bg-gray-100">Login</Link>

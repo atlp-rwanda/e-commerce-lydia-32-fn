@@ -114,7 +114,7 @@ const Dashboard: React.FC = () => {
             />
             <MetricCard
               title="Products Total Price"
-              value={`${totalProductsPrice} RWF`}
+              value={`RWF ${totalProductsPrice} `}
               changeType="increase"
             />
             <MetricCard
