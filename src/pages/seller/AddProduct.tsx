@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "../../Components/Spinners";
 import toast from "react-hot-toast";
 import { useAddProductMutation } from "../../slices/productSlice/productApiSlice";
 import { useNavigate } from "react-router-dom";
+import { useGetNotificationsQuery } from "../../slices/notificationSlice/notificationApiSlice";
+import { useDispatch } from "react-redux";
+import { setSellerNotificationsInfo } from "../../slices/notificationSlice/notificationSlice";
 
 const AddNewProduct: React.FC = () => {
   const [productName, setProductName] = useState("");
@@ -16,6 +19,27 @@ const AddNewProduct: React.FC = () => {
   const [addNewProduct] = useAddProductMutation();
   const navigate = useNavigate();
 
+  const [track, setTrack] = useState(false);
+
+  const {
+    data: sellerAllNotifications,
+    refetch,
+    //@ts-ignore
+  } = useGetNotificationsQuery();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (sellerAllNotifications) {
+      dispatch(setSellerNotificationsInfo(sellerAllNotifications));
+      refetch();
+    }
+  }, [sellerAllNotifications, dispatch, track]);
+
+  const handleNotification = async () => {
+    //  dispatch(setSellerNotificationsInfo(sellerAllNotifications));
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -28,7 +52,10 @@ const AddNewProduct: React.FC = () => {
         productCategory,
         price: productPrice,
         quantity: productQuantity,
-      }).unwrap();
+      })
+        .unwrap()
+        .then(() => setTrack((prev) => !prev));
+
       toast.success("Add product Successful");
 
       setProductName("");

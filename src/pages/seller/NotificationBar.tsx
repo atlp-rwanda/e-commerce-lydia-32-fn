@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { setSellerNotificationsInfo } from "../../slices/notificationSlice/notificationSlice";
 import { useDispatch } from "react-redux";
-import Spinner from "../../Components/Spinners";
-import { useGetNotificationsQuery } from "../../slices/notificationSlice/notificationApiSlice";
+import {
+  useGetNotificationsQuery,
+  useMarkAllAsReadMutation,
+} from "../../slices/notificationSlice/notificationApiSlice";
 import Notification from "../../Components/seller/Notification";
 import { formatDistanceToNow } from "date-fns";
 
@@ -17,15 +19,19 @@ const NotificationBar: React.FC = ({ onClose }) => {
     refetch,
     //@ts-ignore
   } = useGetNotificationsQuery();
+  const [markAllAsRead, { isLoading: isMarking }] = useMarkAllAsReadMutation();
+
+  
 
   useEffect(() => {
     if (sellerAllNotifications) {
       dispatch(setSellerNotificationsInfo(sellerAllNotifications));
+      console.log( sellerAllNotifications);
       refetch();
     }
   }, [sellerAllNotifications, dispatch]);
 
-  if (isLoading || !sellerAllNotifications) return '';
+  if (isLoading || !sellerAllNotifications) return "";
   if (error) return <div>Error: {JSON.stringify(error)}</div>;
 
   const sortedNotifications = [...sellerAllNotifications.notifications].sort(
@@ -33,26 +39,41 @@ const NotificationBar: React.FC = ({ onClose }) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     }
   );
+  const handleMarkAllAsRead = async () => {
+    try {
+      await markAllAsRead({}).unwrap();
+      refetch;
+    } catch (error) {
+      console.error("Failed to mark all as read: ", error);
+    }
+  };
   return (
-    <div className="fixed right-0 top-0 h-full w-full sm:w-96 md:w-1/2 lg:w-1/3 bg-gray-100 p-6 shadow-lg overflow-hidden flex flex-col">
+    <div className=" z-50 fixed right-0 top-0 h-full w-full sm:w-96 md:w-1/2 lg:w-1/3 bg-gray-100 p-6 shadow-lg overflow-hidden flex flex-col">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold">Notifications</h2>
+
         <button className="text-xl" onClick={onClose}>
           ✖️
         </button>
       </div>
+      <div className=" text-right py-2 cursor-pointer">
+        <button onClick={handleMarkAllAsRead}>Read all</button>
+      </div>
       <div className="overflow-y-auto flex-grow">
-        { sortedNotifications &&
-           sortedNotifications.map((notification: any) => (
-            <Notification
-              key={notification.id}
-              icon="🔔"
-              message={notification.message}
-              time={formatDistanceToNow(new Date(notification.createdAt), {
-                addSuffix: true,
-              })}
-            />
-          ))}
+        {!isMarking
+          ? sortedNotifications &&
+            sortedNotifications.map((notification: any) => (
+              <Notification
+                key={notification.id}
+                icon="🔔"
+                message={notification.message}
+                status={notification.readstatus}
+                time={formatDistanceToNow(new Date(notification.createdAt), {
+                  addSuffix: true,
+                })}
+              />
+            ))
+          : "Marking nots"}
       </div>
     </div>
   );
