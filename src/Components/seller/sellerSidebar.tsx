@@ -8,6 +8,7 @@ import { logOut } from "../../slices/authSlice/authSlice";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { useLogoutMutation } from "../../slices/authSlice/authApiSlice";
+import Home  from "../../assets/home.png";
 
 interface SellerSidebarProps {
   isOpen: boolean;
@@ -89,6 +90,18 @@ const SellerSidebar: React.FC<SellerSidebarProps> = ({ isOpen, setIsOpen }) => {
             className="w-6 h-6 mr-3"
           />
           {isOpen && "Add New Product"}
+        </Link>
+        <Link
+          to="/"
+          className="flex items-center py-2 px-4 mt-4 rounded-full hover:bg-gray-200"
+          onClick={closeSidebar}
+        >
+          <img
+            src={Home}
+            alt="Go shopping"
+            className="w-6 h-6 mr-3"
+          />
+          {isOpen && "Go Shopping"}
         </Link>
       </nav>
 
