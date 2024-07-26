@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Bell, User, ChevronDown } from "lucide-react";
@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 import NotificationBar from "../../pages/seller/NotificationBar";
 import { logOut } from '../../slices/authSlice/authSlice';
 import { useLogoutMutation } from '../../slices/authSlice/authApiSlice';
+import { useGetNotificationsQuery } from "../../slices/notificationSlice/notificationApiSlice";
+import { setSellerNotificationsInfo } from "../../slices/notificationSlice/notificationSlice";
 
 interface SellerDashboardNavbarProps {
   toggleSidebar: () => void;
@@ -21,9 +23,32 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
   const navigate = useNavigate();
   const [logout] = useLogoutMutation();
 
+  const {
+    data: sellerAllNotifications,
+    refetch,
+  } = useGetNotificationsQuery();
+
+  useEffect(() => {
+    if (sellerAllNotifications) {
+      dispatch(setSellerNotificationsInfo(sellerAllNotifications));
+      refetch();
+    }
+  }, [sellerAllNotifications, dispatch, refetch]);
+
+  const unreadNotifications = sellerAllNotifications
+    ? [...sellerAllNotifications.notifications]
+        .filter((notification) => notification.readstatus === false)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+    : [];
+  const count = unreadNotifications.length;
+
   const handleNotificationClick = () => {
     setShowNotifications(!showNotifications);
     setShowProfileMenu(false);
+    refetch();
   };
 
   const handleProfileClick = () => {
@@ -65,9 +90,14 @@ const SellerDashboardNavbar: React.FC<SellerDashboardNavbarProps> = ({
           <div className="relative">
             <button
               onClick={handleNotificationClick}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors relative"
             >
               <Bell size={20} />
+              {count > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {count}
+                </span>
+              )}
             </button>
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl z-10">
