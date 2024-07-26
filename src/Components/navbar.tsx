@@ -7,8 +7,11 @@ import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 import {FiSearch} from 'react-icons/fi';
 import NotificationBar from '../pages/seller/NotificationBar';
-import notificationIcon from "../assets/notification.svg";
+import { useGetNotificationsQuery } from "../slices/notificationSlice/notificationApiSlice";
 import wishlistIcon from "../assets/wishlistIcon.svg";
+import { setSellerNotificationsInfo } from '../slices/notificationSlice/notificationSlice';
+import NotificationIcon from './NotificationIcon';
+
 
 interface NavbarProps {
   onSearchToggle: () => void;
@@ -26,6 +29,8 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
     const navigate = useNavigate();
     const [cartSize, setCartSize] = useState(0);
     const [logout] = useLogoutMutation();
+
+    
  
     setTimeout(
       () => {
@@ -52,6 +57,30 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
     },
     1000 * 60 * 60
   );
+ //@ts-ignore
+ const {
+   data: sellerAllNotifications,
+   refetch,
+   //@ts-ignore
+ } = useGetNotificationsQuery();
+ 
+ useEffect(() => {
+   if (sellerAllNotifications) {
+     dispatch(setSellerNotificationsInfo(sellerAllNotifications));
+     refetch();
+   }
+ }, [sellerAllNotifications, dispatch]);
+
+
+ const unreadNotifications = sellerAllNotifications
+   ? [...sellerAllNotifications.notifications]
+       .filter((notification) => notification.readstatus === false)
+       .sort(
+         (a, b) =>
+           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+       )
+   : [];
+const count = unreadNotifications.length
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -154,11 +183,7 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
  
             <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
               {userInfo ? <div onClick={handleNotificationClick} className="relative">
-                <img
-                  src={notificationIcon}
-                  alt="Notification icon"
-                  className="w-7 hover:cursor-pointer h-5"
-                />
+                 <NotificationIcon count={count}/>
                 {showNotifications && <NotificationBar />}
               </div> : ''}
               {userInfo ? (
