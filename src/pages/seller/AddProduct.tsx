@@ -7,6 +7,7 @@ import { useGetNotificationsQuery } from "../../slices/notificationSlice/notific
 import { useDispatch } from "react-redux";
 import { setSellerNotificationsInfo } from "../../slices/notificationSlice/notificationSlice";
 
+
 const AddNewProduct: React.FC = () => {
   const [productName, setProductName] = useState("");
   const [productDescription, setProductDescription] = useState("");

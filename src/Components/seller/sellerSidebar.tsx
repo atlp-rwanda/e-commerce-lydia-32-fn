@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { logOut } from "../../slices/authSlice/authSlice";
 import toast from "react-hot-toast";
 import { useLogoutMutation } from "../../slices/authSlice/authApiSlice";
+import Home  from "../../assets/home.png";
 
 interface SellerSidebarProps {
   isOpen: boolean;

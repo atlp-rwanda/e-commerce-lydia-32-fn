@@ -12,6 +12,7 @@ import wishlistIcon from "../assets/wishlistIcon.svg";
 import { setSellerNotificationsInfo } from '../slices/notificationSlice/notificationSlice';
 import NotificationIcon from './NotificationIcon';
 
+
 interface NavbarProps {
   onSearchToggle: () => void;
 }
