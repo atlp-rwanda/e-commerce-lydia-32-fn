@@ -11,6 +11,7 @@ import { useGetNotificationsQuery } from "../slices/notificationSlice/notificati
 import wishlistIcon from "../assets/wishlistIcon.svg";
 import { setSellerNotificationsInfo } from '../slices/notificationSlice/notificationSlice';
 import NotificationIcon from './NotificationIcon';
+import useCheckAuth from './../hooks/useCheckAuth';
 
 
 interface NavbarProps {
@@ -19,6 +20,8 @@ interface NavbarProps {
 
 
 const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
+
+  useCheckAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -29,16 +32,6 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
   const navigate = useNavigate();
   const [cartSize, setCartSize] = useState(0);
   const [logout] = useLogoutMutation();
-
-
-
-  setTimeout(
-    () => {
-      dispatch(logOut());
-    },
-    1000 * 60 * 60
-  );
-
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
