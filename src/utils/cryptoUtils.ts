@@ -26,10 +26,6 @@ export function isTokenExpired(token: string): boolean {
     const loginTime = new Date(loginDate).getTime();
     const currentTime = new Date().getTime();
 
-    console.log(loginTime);
-    console.log(currentTime);
-    console.log(RealTime);
-
 
     return (currentTime - loginTime) > RealTime;
 }
