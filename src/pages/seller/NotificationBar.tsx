@@ -4,6 +4,7 @@ import {
   useGetNotificationsQuery,
   useMarkAllAsReadMutation,
 } from "../../slices/notificationSlice/notificationApiSlice";
+import { setSellerNotificationsInfo } from "../../slices/notificationSlice/notificationSlice";
 import Notification from "../../Components/seller/Notification";
 import { formatDistanceToNow } from "date-fns";
 
@@ -25,10 +26,13 @@ const NotificationBar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   useEffect(() => {
     if (sellerAllNotifications) {
       dispatch(setSellerNotificationsInfo(sellerAllNotifications));
-      console.log( sellerAllNotifications);
-      refetch();
+      console.log(sellerAllNotifications);
+      if (sellerAllNotifications && Array.isArray(sellerAllNotifications.notifications)) {
+        dispatch(setSellerNotificationsInfo(sellerAllNotifications.notifications));
+        refetch();
+      }
     }
-  }, [sellerAllNotifications, dispatch, refetch]);
+    },[sellerAllNotifications, dispatch, refetch]);
 
   if (isLoading || !sellerAllNotifications) return "";
   if (error) return <div>Error: {JSON.stringify(error)}</div>;
@@ -44,6 +48,7 @@ const NotificationBar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       console.error("Failed to mark all as read: ", error);
     }
   };
+  
   return (
     <div className=" z-50 fixed right-0 top-0 h-full w-full sm:w-96 md:w-1/2 lg:w-1/3 bg-gray-100 p-6 shadow-lg overflow-hidden flex flex-col">
       <div className="flex justify-between items-center mb-6">
@@ -71,6 +76,17 @@ const NotificationBar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               />
             ))
           : "Marking nots"}
+        {sortedNotifications &&
+          sortedNotifications.map((notification: any) => (
+            <Notification
+              key={notification.id}
+              icon="🔔"
+              message={notification.message}
+              time={formatDistanceToNow(new Date(notification.createdAt), {
+                addSuffix: true,
+              })}
+            />
+          ))}
       </div>
     </div>
   );
