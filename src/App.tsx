@@ -42,37 +42,45 @@ import PaymentErrorPage from './pages/PyamentErroPage';
 import BuyerOrdersComponent from "./pages/order/orderHistory";
 import OrderDetailComponent from "./pages/order/orderDetail";
 import CustomerSupportPage from './pages/customerSupport';
-
-
+import { NotificationProvider } from './contexts/notificationContext';
 const App: React.FC = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<Home />} />
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/update-password" element={<UpdatePassword />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/ourTeam" element={<TeamSection />} />
-        <Route path='/checkout' element={<Checkout />} />
-        <Route path='/singleProduct/:id' element={<SingleProduct />} />
-        <Route path='/orderConfirmation/:sessionId/:orderId' element={<OrderConfirmation />} />
-        <Route path="/payment-success" element={<PaymentSuccessPage />} />
-        <Route path="/payment-error" element={<PaymentErrorPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordLayout />} />
-        <Route path="/reset-password" element={<ResetPasswordLayout />} />
-        <Route path="/register" element={<SignupForm />} />
-        <Route path="/verified" element={<EmailVerificationPage />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/my-orders" element={<BuyerOrdersComponent />} />
-        <Route path="/order/:id" element={<OrderDetailComponent />} />
-        <Route path="/customer-support" element={<CustomerSupportPage />} />
-        <Route
-          path="/verification/failed"
-          element={<EmailVerificationFailedPage />}
-        />
-        <Route path="/cart" element={<Cart />} />
+
+      <>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<Home />} />
+          <Route path="*" element={<NotFoundPage />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/update-password" element={<UpdatePassword />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/ourTeam" element={<TeamSection />} />
+          <Route path='/checkout' element={<Checkout />} />
+          <Route path='/singleProduct/:id' element={<SingleProduct />} />
+          <Route path='/orderConfirmation/:sessionId/:orderId' element={<OrderConfirmation />} />
+          <Route path="/payment-success" element={<PaymentSuccessPage />} />
+          <Route path="/payment-error" element={<PaymentErrorPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordLayout />} />
+          <Route path="/reset-password" element={<ResetPasswordLayout />} />
+          <Route path="/register" element={<SignupForm />} />
+          <Route path="/verified" element={<EmailVerificationPage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/my-orders" element={<BuyerOrdersComponent />} />
+          <Route path="/order/:id" element={<OrderDetailComponent />} />
+          <Route path="/customer-support" element={<CustomerSupportPage />} />
+          <Route
+            path="/verification/failed"
+            element={<EmailVerificationFailedPage />}
+          />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />}></Route>
+          <Route path="/wishlist/empty" element={<WishlistEmpty />}></Route>
+
+        </Route>
+
         <Route path="" element={<AdminPageOnly />}>
+          <Route path="*" element={<NotFoundPage />} />
+
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/create/role" element={<AdminCreateRole />} />
           <Route
@@ -102,6 +110,8 @@ const App: React.FC = () => {
             </SellerDashboardLayout>
           }
         >
+          <Route path="*" element={<NotFoundPage />} />
+
           <Route index element={<Dashboard />} />
           <Route path="/seller/newproduct" element={<AddNewProduct />} />
           <Route path="/seller/dashboard" element={<Dashboard />} />
@@ -114,17 +124,15 @@ const App: React.FC = () => {
           <Route path="/seller/product/:id" element={<SellerSingleProductPage />} />
           <Route path="/seller/products" element={<SellerAllProductsPage />} />
         </Route>
-
-        <Route path="/wishlist" element={<Wishlist />}></Route>
-        <Route path="/wishlist/empty" element={<WishlistEmpty />}></Route>
-
-      </Route>
+      </>
     )
   );
 
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <NotificationProvider>
+        <RouterProvider router={router} />
+      </NotificationProvider>
     </Provider>
   );
 };

@@ -1,22 +1,38 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const sellernotificationsInfo = localStorage.getItem("sellerNotificationsInfo");
+export interface INotification {
+  createdAt: Date;
+  id: number;
+  message: string;
+  readstatus: boolean;
+  updatedAt: Date;
+  userId: number;
+}
+
+const sellernotificationsInfo: INotification[] = localStorage.getItem(
+  "sellerNotificationsInfo"
+)
 const parsedSellerNotificationsInfo = sellernotificationsInfo
   ? JSON.parse(sellernotificationsInfo)
   : [];
 
-const initialState = {
+const initialState: SellerNotificationsState = {
   sellernotificationsInfo: Array.isArray(parsedSellerNotificationsInfo)
     ? parsedSellerNotificationsInfo
     : [],
+  unReadCount: 0,
 };
 
 const sellerNotificationSlice = createSlice({
   name: "sellernotifications",
   initialState,
   reducers: {
-    setSellerNotificationsInfo(state, action: PayloadAction<any[]>) {
+    setSellerNotificationsInfo(state, action: PayloadAction<INotification[]>) {
       state.sellernotificationsInfo = action.payload;
+      // const unReadNots = state.sellernotificationsInfo.filter(
+      //   (not) => not.readstatus !== true
+
+      // );
       localStorage.setItem(
         "sellerNotificationsInfo",
         JSON.stringify(action.payload)

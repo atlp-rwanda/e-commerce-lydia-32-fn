@@ -1,26 +1,46 @@
 import { apiSlice } from "../apiSlice";
 
-export const BASE_URL = "/order";
-export const ADMIN_BASE_URL = "/order/admin";
+export interface SellerStatItem {
+  id: number;
+  cartId: number;
+  productId: number;
+  quantity: number;
+  createdAt: string;
+  updatedAt: string;
+  product: {
+    images: string[];
+    productId: number;
+    userId: number;
+    productName: string;
+    description: string;
+    productCategory: string;
+    price: number;
+    quantity: number;
+    dimensions: string;
+    isAvailable: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
 
 export const orderApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllOrdersByBuyer: builder.query({
       query: () => ({
-        url: `${BASE_URL}`,
+        url: `/order`,
         method: "GET"
       }),
     }),
     buyerPlaceOrder: builder.mutation({
       query: (data) => ({
-        url: `${BASE_URL}/create`,
+        url: `/order/create`,
         method: "POST",
-        body:data,
+        body: data,
       }),
     }),
-     buyerGetAllOrders: builder.query({
+    buyerGetAllOrders: builder.query({
       query: () => ({
-        url: `${BASE_URL}`,
+        url: `/order`,
         method: "GET"
       }),
     }),
@@ -30,18 +50,24 @@ export const orderApiSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }),
-
     getOrderById: builder.query({
       query: (id) => ({
-        url: `${BASE_URL}/${id}`,
+        url: `/order/${id}`,
         method: "GET"
       }),
     }),
     adminGetAllOrders: builder.query({
       query: () => ({
-        url: `${ADMIN_BASE_URL}`,
+        url: `/order/admin`,
         method: "GET"
       }),
+    }),
+    getSellerStats: builder.query<SellerStatItem[], void>({
+      query: () => '/seller/stats',
+      transformResponse: (response: { stats: SellerStatItem[] }) => {
+        console.log('Raw response in transformResponse:', response);
+        return response.stats || [];
+      },
     }),
   }),
 });
@@ -53,4 +79,5 @@ export const {
   useGetAllOrdersByBuyerQuery,
   useGetOrderByIdQuery,
   useCancelOrderMutation,
+  useGetSellerStatsQuery,
 } = orderApiSlice;

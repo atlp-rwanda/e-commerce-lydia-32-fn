@@ -24,7 +24,7 @@ import UpdateProductDialog from "../Components/UpdateProductDialog";
 // }
 
 const SellerSingleProductPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string; }>();
   const [selectedProduct, setSelectedPRoduct] = useState<Product | null>(null);
 
   const [open, setOpen] = useState(false);
@@ -80,7 +80,7 @@ const SellerSingleProductPage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-20">
+    <div className="container mx-auto px-4 py-8">
       <div className="flex flex-col md:flex-row">
         <div className="md:w-1/2 flex flex-row mr-20 justify-center items-center">
           <div className="md:w-1/2 bg-gray-100 w-full m-0 h-35">
