@@ -9,9 +9,10 @@ import { FiSearch } from 'react-icons/fi';
 import NotificationBar from '../pages/seller/NotificationBar';
 import { useGetNotificationsQuery } from "../slices/notificationSlice/notificationApiSlice";
 import wishlistIcon from "../assets/wishlistIcon.svg";
-import useCheckAuth from '../hooks/useCheckAuth';
 import { setSellerNotificationsInfo } from '../slices/notificationSlice/notificationSlice';
 import NotificationIcon from './NotificationIcon';
+import useCheckAuth from './../hooks/useCheckAuth';
+
 
 interface NavbarProps {
   onSearchToggle: () => void;
@@ -21,6 +22,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
 
   useCheckAuth();
+
   const [showNotifications, setShowNotifications] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -31,6 +33,8 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
   const navigate = useNavigate();
   const [cartSize, setCartSize] = useState(0);
   const [logout] = useLogoutMutation();
+
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -212,121 +216,98 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 LOGIN
               </Link>
             )}
-            <div className="hidden md:block text-xl font-bold">DEPOT</div>
 
-            <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
-              {userInfo ? <div onClick={handleNotificationClick} className="relative">
-                <NotificationIcon count={count} />
-                {showNotifications && <NotificationBar />}
-              </div> : ''}
-              {userInfo ? (
-                <div className="relative">
-                  <button
-                    onClick={toggleDropdown}
-                    className="block text-sm text-gray-600 hover:text-black"
-                  >
-                    {userInfo.user.firstname}
-                  </button>
-                  {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </button>
+            {loggedUserInfo && <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
+            <button onClick={toogleSearch} className="text-gray-600 hover:text-black">
+              <FiSearch className="h-5 w-5" />
+            </button>
 
-                      {loggedUserInfo && <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
-                      <button onClick={toogleSearch} className="text-gray-600 hover:text-black">
-                        <FiSearch className="h-5 w-5" />
-                      </button>
+            {loggedUserInfo && (
+              <Link
+                to="/wishlist"
+                className="text-sm text-gray-600 hover:text-black"
+              >
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
+              </Link>
 
-                      {loggedUserInfo && (
-                        <Link
-                          to="/wishlist"
-                          className="text-sm text-gray-600 hover:text-black"
-                        >
-                          <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
-                        </Link>
-
-                      )}
-                      {loggedUserInfo && (
-                        <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
-                      )}
-                    </div>
+            )}
+            {loggedUserInfo && (
+              <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
+            )}
+          </div>
         </div>
 
         {/* Mobile menu */}
-              <div
-                className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                  }`}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isMenuOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+            }`}
+        >
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <Link
+              to="/"
+              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+            >
+              HOME
+            </Link>
+            <Link
+              to="/shop"
+              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+            >
+              SHOP
+            </Link>
+            <Link
+              to="/about"
+              className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+            >
+              ABOUT
+            </Link>
+            {loggedUserInfo && (
+              <Link
+                to="/cart"
+                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
               >
-                <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                  <Link
-                    to="/"
-                    className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-                  >
-                    HOME
-                  </Link>
-                  <Link
-                    to="/shop"
-                    className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-                  >
-                    SHOP
-                  </Link>
-                  <Link
-                    to="/about"
-                    className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-                  >
-                    ABOUT
-                  </Link>
-                  {loggedUserInfo && (
-                    <Link
-                      to="/cart"
-                      className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-                    >
-                      CART ({cartSize})
-                    </Link>
-                  )}
+                CART ({cartSize})
+              </Link>
+            )}
 
-                  {loggedUserInfo && (
-                    <Link
-                      to="/wishlist"
-                      className="text-sm text-gray-600 hover:text-black"
-                    >
-                      <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
-                    </Link>
+            {loggedUserInfo && (
+              <Link
+                to="/wishlist"
+                className="text-sm text-gray-600 hover:text-black"
+              >
+                <img src={wishlistIcon} alt="Wishlist Icon" className="w-4" />
+              </Link>
 
-                  )}
-                  {loggedUserInfo && (
-                    <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
-                  )}
-                  {userInfo ? (
-                    <Link
-                      to="/logout"
-                      className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-                    >
-                      LOGOUT
-                    </Link>
-                  ) : (
-                    <Link
-                      to="/login"
-                      className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
-                    >
-                      LOGIN
-                    </Link>
-                  )}
-                </div>
-              </div>
-              {isMenuOpen && (
-                <div
-                  className="fixed inset-0 bg-black opacity-50 z-10"
-                  onClick={toggleMenu}
-                ></div>
-              )}
-            </div>
-          </nav>
-          );
+            )}
+            {loggedUserInfo && (
+              <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-600 ">ORDERS</Link>
+            )}
+            {userInfo ? (
+              <Link
+                to="/logout"
+                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+              >
+                LOGOUT
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="block text-sm text-gray-600 hover:text-black transition-transform duration-200 ease-in-out transform hover:translate-x-2"
+              >
+                LOGIN
+              </Link>
+            )}
+          </div>
+        </div>
+        {isMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black opacity-50 z-10"
+            onClick={toggleMenu}
+          ></div>
+        )}
+      </div>
+    </nav>
+  );
 };
 
-          export default Navbar;;
+export default Navbar;
