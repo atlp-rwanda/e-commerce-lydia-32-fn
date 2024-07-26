@@ -9,7 +9,14 @@ export const notificationsApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
+    markAllAsRead: builder.mutation({
+      query: () => ({
+        url: `${BASE_URL}/markasread`,
+        method: "PUT",
+      }),
+    }),
   }),
 });
 
-export const { useGetNotificationsQuery } = notificationsApiSlice;
+export const { useGetNotificationsQuery, useMarkAllAsReadMutation } =
+  notificationsApiSlice;
