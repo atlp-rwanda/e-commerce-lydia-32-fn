@@ -7,9 +7,11 @@ import { useLogoutMutation } from '../slices/authSlice/authApiSlice';
 import { useGetCartQuery } from '../slices/cartSlice/cartApiSlice';
 import { FiSearch } from 'react-icons/fi';
 import NotificationBar from '../pages/seller/NotificationBar';
-import notificationIcon from "../assets/notification.svg";
+import { useGetNotificationsQuery } from "../slices/notificationSlice/notificationApiSlice";
 import wishlistIcon from "../assets/wishlistIcon.svg";
 import useCheckAuth from '../hooks/useCheckAuth';
+import { setSellerNotificationsInfo } from '../slices/notificationSlice/notificationSlice';
+import NotificationIcon from './NotificationIcon';
 
 interface NavbarProps {
   onSearchToggle: () => void;
@@ -17,7 +19,7 @@ interface NavbarProps {
 
 
 const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
-
+  
   useCheckAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,6 +49,30 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
     },
     1000 * 60 * 60
   );
+ //@ts-ignore
+ const {
+   data: sellerAllNotifications,
+   refetch,
+   //@ts-ignore
+ } = useGetNotificationsQuery();
+ 
+ useEffect(() => {
+   if (sellerAllNotifications) {
+     dispatch(setSellerNotificationsInfo(sellerAllNotifications));
+     refetch();
+   }
+ }, [sellerAllNotifications, dispatch]);
+
+
+ const unreadNotifications = sellerAllNotifications
+   ? [...sellerAllNotifications.notifications]
+       .filter((notification) => notification.readstatus === false)
+       .sort(
+         (a, b) =>
+           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+       )
+   : [];
+const count = unreadNotifications.length
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -193,6 +219,29 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                 LOGIN
               </Link>
             )}
+            <div className="hidden md:block text-xl font-bold">DEPOT</div>
+ 
+            <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
+              {userInfo ? <div onClick={handleNotificationClick} className="relative">
+                 <NotificationIcon count={count}/>
+                {showNotifications && <NotificationBar />}
+              </div> : ''}
+              {userInfo ? (
+                <div className="relative">
+                  <button
+                    onClick={toggleDropdown}
+                    className="block text-sm text-gray-600 hover:text-black"
+                  >
+                    {userInfo.user.firstname}
+                  </button>
+                  {isDropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100 "
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
 
             {loggedUserInfo && <Link to="/cart" className="text-sm text-gray-600 hover:text-black">CART ({cartSize})</Link>}
             <button onClick={toogleSearch} className="text-gray-600 hover:text-black">
