@@ -11,7 +11,9 @@ interface SellerNotificationsState {
   sellernotificationsInfo: Notification[];
 }
 
-const sellernotificationsInfo = localStorage.getItem("sellerNotificationsInfo");
+const sellernotificationsInfo: INotification[] = localStorage.getItem(
+  "sellerNotificationsInfo"
+)
 const parsedSellerNotificationsInfo = sellernotificationsInfo
   ? JSON.parse(sellernotificationsInfo)
   : [];
@@ -20,6 +22,7 @@ const initialState: SellerNotificationsState = {
   sellernotificationsInfo: Array.isArray(parsedSellerNotificationsInfo)
     ? parsedSellerNotificationsInfo
     : [],
+  unReadCount: 0,
 };
 
 const sellerNotificationSlice = createSlice({
