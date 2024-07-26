@@ -16,7 +16,7 @@ const parsedSellerNotificationsInfo = sellernotificationsInfo
   ? JSON.parse(sellernotificationsInfo)
   : [];
 
-const initialState = {
+const initialState: SellerNotificationsState = {
   sellernotificationsInfo: Array.isArray(parsedSellerNotificationsInfo)
     ? parsedSellerNotificationsInfo
     : [],

@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { setSellerNotificationsInfo } from "../../slices/notificationSlice/notificationSlice";
 import { useDispatch } from "react-redux";
 import {
   useGetNotificationsQuery,
@@ -9,7 +8,7 @@ import Notification from "../../Components/seller/Notification";
 import { formatDistanceToNow } from "date-fns";
 
 //@ts-ignore
-const NotificationBar: React.FC = ({ onClose }) => {
+const NotificationBar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const dispatch = useDispatch();
   //@ts-ignore
   const {
@@ -29,15 +28,13 @@ const NotificationBar: React.FC = ({ onClose }) => {
       console.log( sellerAllNotifications);
       refetch();
     }
-  }, [sellerAllNotifications, dispatch]);
+  }, [sellerAllNotifications, dispatch, refetch]);
 
   if (isLoading || !sellerAllNotifications) return "";
   if (error) return <div>Error: {JSON.stringify(error)}</div>;
 
   const sortedNotifications = [...sellerAllNotifications.notifications].sort(
-    (a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    }
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
   const handleMarkAllAsRead = async () => {
     try {
