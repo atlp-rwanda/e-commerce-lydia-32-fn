@@ -95,18 +95,27 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
     open: { x: 0 }
   };
 
+  const isAdmin = userInfo?.user?.roleId === 1;
+  const isSeller = userInfo?.user?.roleId === 2;
+
   return (
     <nav className="bg-white fixed top-0 left-0 right-0 z-50 shadow-md">
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Desktop layout - structure maintained, icons updated */}
+          {/* Desktop layout */}
           <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
             <Link to="/" className="text-sm text-gray-600 hover:text-black">HOME</Link>
             <Link to="/shop" className="text-sm text-gray-600 hover:text-black">SHOP</Link>
             <Link to="/about" className="text-sm text-gray-600 hover:text-black">ABOUT</Link>
+            {isSeller && (
+              <Link to="/seller/dashboard" className="text-sm text-gray-600 hover:text-black">DASHBOARD</Link>
+            )}
+            {isAdmin && (
+              <Link to="/admin/dashboard" className="text-sm text-gray-600 hover:text-black">DASHBOARD</Link>
+            )}
           </div>
 
-          {/* Mobile layout - improved version from first design */}
+          {/* Mobile layout */}
           <div className="flex items-center md:hidden">
             <button
               onClick={toggleMenu}
@@ -116,10 +125,10 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
             </button>
           </div>
 
-          {/* Logo - visible on all screen sizes */}
+          {/* Logo */}
           <Link to="/" className="font-bold text-xl text-gray-800">DEPOT</Link>
 
-          {/* Desktop right side - structure maintained, icons updated */}
+          {/* Desktop right side */}
           <div className="hidden md:flex items-center space-x-4 sm:space-x-6">
             {userInfo && (
               <button onClick={handleNotificationClick} className="text-gray-600 hover:text-black relative">
@@ -148,6 +157,22 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                     >
                       Profile
                     </Link>
+                    {isSeller && (
+                      <Link
+                        to="/seller/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
+                      >
+                        Seller Dashboard
+                      </Link>
+                    )}
+                    {isAdmin && (
+                      <Link
+                        to="/admin/dashboard"
+                        className="block px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
+                      >
+                        Admin Dashboard
+                      </Link>
+                    )}
                     <button
                       className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-100"
                       onClick={handleLogout}
@@ -239,6 +264,12 @@ const Navbar: React.FC<NavbarProps> = ({ onSearchToggle }) => {
                   <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Home</Link>
                   <Link to="/shop" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Shop</Link>
                   <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">About</Link>
+                  {isSeller && (
+                    <Link to="/seller/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Dashboard</Link>
+                  )}
+                  {isAdmin && (
+                    <Link to="/admin/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Admin Dashboard</Link>
+                  )}
                   {userInfo && (
                     <>
                       <Link to="/cart" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">Cart</Link>
