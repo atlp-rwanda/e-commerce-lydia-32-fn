@@ -72,7 +72,7 @@ const App: React.FC = () => {
               />
             </div>
           )}
-       <nav className="flex flex-wrap justify-center mb-8 py-12">
+       <nav className="flex flex-wrap  mb-8 py-12">
   {categories.map((category) => (
     <button 
       key={category} 
