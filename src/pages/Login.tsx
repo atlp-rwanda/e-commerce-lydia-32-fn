@@ -4,7 +4,6 @@ import toast from "react-hot-toast";
 import { getCredentials } from "../slices/authSlice/authSlice";
 import { FcGoogle } from "react-icons/fc";
 import { useGoogleLogin } from "@react-oauth/google";
-import { encodeToken } from "../utils/cryptoUtils";
 import {
   useLoginMutation,
   useLoginByGoogleMutation,
@@ -71,16 +70,10 @@ const Login: React.FC = () => {
       if (res.user.roleId === 1) {
         dispatch(getCredentials({ ...res }));
         toast.success("Login successful!");
-        const loginDate = new Date().toISOString();
-        const encodedLogState = encodeToken(loginDate);
-       localStorage.setItem('logState', encodedLogState);
         navigate("/admin/dashboard");
       } else {
         dispatch(getCredentials({ ...res }));
         toast.success("Login successful!");
-        const loginDate = new Date().toISOString();
-        const encodedLogState = encodeToken(loginDate);
-        localStorage.setItem('logState', encodedLogState);
         navigate("/");
       }
     } catch (err: any) {
@@ -114,9 +107,6 @@ const Login: React.FC = () => {
       }
       dispatch(getCredentials({ ...res }));
       toast.success("Login successful!");
-      const loginDate = new Date().toISOString();
-      const encodedLogState = encodeToken(loginDate);
-       localStorage.setItem('logState', encodedLogState);
       navigate("/seller/dashboard");
     } catch (err: any) {
       console.error(err);
@@ -140,9 +130,6 @@ const Login: React.FC = () => {
         const res = await loginByGoogle({ accessToken }).unwrap();
         dispatch(getCredentials({ ...res }));
         toast.success("login successfully");
-        const loginDate = new Date().toISOString();
-        const encodedLogState = encodeToken(loginDate);
-        localStorage.setItem('logState', encodedLogState);
         navigate("/");
       } catch (err) {
         //@ts-ignore
