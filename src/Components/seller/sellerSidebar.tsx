@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { BarChart2, Package, PlusCircle, LogOut, Home } from "lucide-react";
+import { BarChart2, Package, PlusCircle, LogOut, Home, ShoppingCart } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../slices/authSlice/authSlice";
 import toast from "react-hot-toast";
@@ -17,7 +17,7 @@ const SellerSidebar: React.FC<SellerSidebarProps> = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleLogout = async (e: React.MouseEvent) => {
+  const handleLogout = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
       await logout().unwrap();
@@ -25,15 +25,8 @@ const SellerSidebar: React.FC<SellerSidebarProps> = ({ isOpen, setIsOpen }) => {
       toast.success("You're Logged out");
       navigate("/login");
     } catch (err: any) {
-      if (err?.data?.message) {
-        toast.error(err.data.message);
-      } else if (err.status === 400) {
-        toast.error("Already logged out or not logged in");
-      } else if (err.status === 401) {
-        toast.error("User is not authenticated");
-      } else {
-        toast.error("Internal Server Error");
-      }
+      const message = err?.data?.message || "Internal Server Error";
+      toast.error(message);
     }
   };
 
@@ -41,6 +34,7 @@ const SellerSidebar: React.FC<SellerSidebarProps> = ({ isOpen, setIsOpen }) => {
     { path: "/seller/dashboard", icon: Home, label: "Home" },
     { path: "/seller/products", icon: Package, label: "Products" },
     { path: "/seller/newproduct", icon: PlusCircle, label: "Add Product" },
+    { path: "/", icon: ShoppingCart, label: "Go Shopping" }, 
   ];
 
   return (

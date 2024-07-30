@@ -50,9 +50,9 @@ const BuyerOrdersComponent: React.FC = () => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-20">
+    <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-23/5">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl font-extrabold text-white mb-10 text-center">Your Orders</h2>
+        <h2 className="text-4xl font-extrabold text-white mb-10 text-center mt-14">Your Orders</h2>
         {Array.isArray(orders) && orders.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8 mt-20">
