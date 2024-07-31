@@ -25,7 +25,7 @@ const SellerStats = () => {
   if (!data || isError) return <ErrorMessage />;
 
   const totalQuantity = sellerStats.reduce((sum, item) => sum + item.quantity, 0);
-  const totalRevenue = sellerTotalAmount * 100; // Multiply by 100 to get the correct value
+  const totalRevenue = sellerTotalAmount * 100;   
   const averagePrice = totalRevenue / totalQuantity;
 
   const doughnutData = {
