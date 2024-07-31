@@ -38,8 +38,8 @@ const SellerAllProductsPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-white py-12">
             <div className="container mx-auto px-4">
-                <div className="flex flex-col">
-                    <nav className="flex space-x-4 mb-8">
+                <div className="flex flex-col ml-5">
+                    <nav className="flex space-x-4 mb-10">
                         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">ALL</a>
                         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">ELECTRONIC</a>
                         <a href="#" className="text-sm text-gray-600 hover:text-gray-900">CLOTHES</a>

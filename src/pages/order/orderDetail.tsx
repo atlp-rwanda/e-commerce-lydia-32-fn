@@ -107,7 +107,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="bg-gradient-to-br from-black via-gray-800 to-gray-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 mt-20">
+    <div className="bg-gradient-to-br from-black via-gray-800 to-gray-900 min-h-screen py-10 px-4 sm:px-6 lg:px-8 mt-16">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg rounded-2xl overflow-hidden shadow-xl">
           <div className="p-6 sm:p-8">

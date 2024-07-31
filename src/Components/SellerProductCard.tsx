@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { Edit, Trash } from 'lucide-react';
 
 interface SellerProductCardProps {
   product: {
@@ -17,35 +17,44 @@ interface SellerProductCardProps {
 
 const SellerProductCard: React.FC<SellerProductCardProps> = ({ product, onDelete, isDeleting }) => {
   return (
-
-    <Link to={`/seller/product/${product.productId}`} className="flex p-4 justify-between items-center border border-gray-200 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out mt-10">
-
-      <div>{product.productName}</div>
-      <div className='w-[400px]'>{product.description}</div>
-      <img src={product.images} alt={product.productName} className="h-20 w-20 object-cover mb-4 rounded-t-lg" />
-      <div>{product.price}</div>
-      <div>{product.quantity}</div>
-      <div className='flex gap-5 items-center'>
-        <button
-          type="submit"
-          className="w-[100px] bg-black text-white p-3 rounded-md hover:bg-gray-800 transform hover:-translate-y-1 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Edit
-        </button>
-
-        <button
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            onDelete(product.productId);
-          }}
-          disabled={isDeleting}
-          className="w-[100px] bg-black text-white p-3 rounded-md hover:bg-gray-800 transform hover:-translate-y-1 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Delete
-        </button>
-      </div>
-    </Link>
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg mb-6">
+      <Link to={`/seller/product/${product.productId}`} className="block">
+        <div className="flex flex-col sm:flex-row">
+          <div className="sm:w-1/3">
+            <img src={product.images} alt={product.productName} className="h-48 w-full object-cover" />
+          </div>
+          <div className="p-4 flex flex-col justify-between w-full ml-2 sm:ml-4 md:ml-10 lg:ml-8">
+            <div>
+              <h2 className="text-xl font-semibold text-gray-800 mb-2">{product.productName}</h2>
+              <p className="text-gray-600 line-clamp-2 mb-4">{product.description}</p>
+            </div>
+            <div className="flex items-center justify-between">
+              <div>
+                <span className="text-2xl font-bold text-gray-900">${product.price.toFixed(2)}</span>
+                <span className="ml-2 text-sm text-gray-600">Qty: {product.quantity}</span>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  className="p-2 bg-black text-white rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-300"
+                >
+                  <Edit size={20} />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onDelete(product.productId);
+                  }}
+                  disabled={isDeleting}
+                  className="p-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isDeleting ? '...' : <Trash size={20} />}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Link>
+    </div>
   );
 };
 
