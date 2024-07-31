@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { encodeToken, decodeToken } from "./../../utils/cryptoUtils";
+import { decodeToken } from "./../../utils/cryptoUtils";
 
 const userInfo = localStorage.getItem('userInfo');
 const logState = localStorage.getItem('logState');
@@ -18,12 +18,9 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     getCredentials(state, action: PayloadAction<string>) {
-      const loginDate = new Date().toISOString();
-      const encodedLogState = encodeToken(loginDate);
       state.userInfo = action.payload;
-      state.logState = loginDate;
       localStorage.setItem('userInfo', JSON.stringify(action.payload));
-      localStorage.setItem('logState', encodedLogState);
+     
     },
     logOut(state) {
       state.userInfo = null;
