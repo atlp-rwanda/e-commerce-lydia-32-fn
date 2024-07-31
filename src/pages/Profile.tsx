@@ -6,7 +6,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useUpdateUserMutation, useChangePasswordMutation } from "../slices/authSlice/authApiSlice";
 import toast from "react-hot-toast";
 import { getCredentials } from "../slices/authSlice/authSlice";
-import background from '../assets/Background.jpg';
+import background from '../assets/Background.jpg';   
 
 interface FormData {
   firstname: string;
@@ -147,17 +147,17 @@ const Profile: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 py-12 ">
       <div className="relative h-64 md:h-80 lg:h-96 bg-gray-100">
-          <img 
-            src={background} 
-            alt="Office Interior" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
-            <h1 className="text-white text-4xl md:text-1xl font-semi-bold">
-              ACCOUNT
-            </h1>
-          </div>
+        <img
+          src={background}
+          alt="Office Interior"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center">
+          <h1 className="text-white text-4xl md:text-1xl font-semi-bold">
+            ACCOUNT
+          </h1>
         </div>
+      </div>
       <div className="container mx-auto mt-8 px-4">
         <div className="flex flex-col md:flex-row">
           {/* Sidebar */}
@@ -167,12 +167,26 @@ const Profile: React.FC = () => {
                 <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center mb-4">
                   <SlUser className="text-4xl text-gray-600" />
                 </div>
-                <h2 className="text-xl font-semibold">Hello, {userInfo.user.firstname}</h2>
+                <h2 className="text-xl font-semibold">
+                  Hello, {userInfo.user.firstname}
+                </h2>
               </div>
               <nav className="space-y-2">
-                <Link to="/" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 rounded">Home</Link>
-                <Link to="/my-orders" className="block py-2 px-4 text-gray-700 hover:bg-gray-100 rounded">Orders</Link>
-                <span className="block py-2 px-4 text-blue-600 font-semibold">Edit Profile</span>
+                <Link
+                  to="/"
+                  className="block py-2 px-4 text-gray-700 hover:bg-gray-100 rounded"
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/my-orders"
+                  className="block py-2 px-4 text-gray-700 hover:bg-gray-100 rounded"
+                >
+                  Orders
+                </Link>
+                <span className="block py-2 px-4 text-blue-600 font-semibold">
+                  Edit Profile
+                </span>
               </nav>
             </div>
           </div>
@@ -182,10 +196,17 @@ const Profile: React.FC = () => {
             <form onSubmit={handleUpdate}>
               {/* Personal Information */}
               <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-                <h2 className="text-2xl font-semibold mb-6">Personal Information</h2>
+                <h2 className="text-2xl font-semibold mb-6">
+                  Personal Information
+                </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="firstname">First Name</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="firstname"
+                    >
+                      First Name
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <SlUser />
@@ -199,10 +220,19 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.firstname && <p className="mt-1 text-sm text-red-600">{errors.firstname}</p>}
+                    {errors.firstname && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.firstname}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="othername">Last Name</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="othername"
+                    >
+                      Last Name
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <SlUser />
@@ -216,10 +246,19 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.othername && <p className="mt-1 text-sm text-red-600">{errors.othername}</p>}
+                    {errors.othername && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.othername}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="phone">Phone Number</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="phone"
+                    >
+                      Phone Number
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaPhone />
@@ -233,7 +272,11 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone}</p>}
+                    {errors.phone && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.phone}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -243,7 +286,12 @@ const Profile: React.FC = () => {
                 <h2 className="text-2xl font-semibold mb-6">Address</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="country">Country</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="country"
+                    >
+                      Country
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaGlobeAmericas />
@@ -257,10 +305,19 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.country && <p className="mt-1 text-sm text-red-600">{errors.country}</p>}
+                    {errors.country && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.country}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="state">State</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="state"
+                    >
+                      State
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaFlag />
@@ -274,10 +331,19 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.state && <p className="mt-1 text-sm text-red-600">{errors.state}</p>}
+                    {errors.state && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.state}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="city">City</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="city"
+                    >
+                      City
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaCity />
@@ -291,10 +357,17 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city}</p>}
+                    {errors.city && (
+                      <p className="mt-1 text-sm text-red-600">{errors.city}</p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="street">Street</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="street"
+                    >
+                      Street
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaRoad />
@@ -308,10 +381,19 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.street && <p className="mt-1 text-sm text-red-600">{errors.street}</p>}
+                    {errors.street && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.street}
+                      </p>
+                    )}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="postalcode">Postal Code</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="postalcode"
+                    >
+                      Postal Code
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaMapMarkerAlt />
@@ -325,7 +407,11 @@ const Profile: React.FC = () => {
                         className="pl-10 w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
                       />
                     </div>
-                    {errors.postalcode && <p className="mt-1 text-sm text-red-600">{errors.postalcode}</p>}
+                    {errors.postalcode && (
+                      <p className="mt-1 text-sm text-red-600">
+                        {errors.postalcode}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -339,13 +425,18 @@ const Profile: React.FC = () => {
               </button>
             </form>
 
-          {/* Change Password */}
-          <div className="bg-white rounded-lg shadow-md p-6 mt-8">
+            {/* Change Password */}
+            <div className="bg-white rounded-lg shadow-md p-6 mt-8">
               <h2 className="text-2xl font-semibold mb-6">Change Password</h2>
               <form onSubmit={handleChangePassword}>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="oldPassword">Old Password</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="oldPassword"
+                    >
+                      Old Password
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaLock />
@@ -361,7 +452,12 @@ const Profile: React.FC = () => {
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="newPassword">New Password</label>
+                    <label
+                      className="block text-sm font-medium text-gray-700 mb-1"
+                      htmlFor="newPassword"
+                    >
+                      New Password
+                    </label>
                     <div className="relative">
                       <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">
                         <FaLock />
@@ -376,14 +472,20 @@ const Profile: React.FC = () => {
                       />
                     </div>
                   </div>
-                  {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
+                  {errors.password && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
                 <button
                   type="submit"
                   className="mt-4 w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300"
                   disabled={isChangePassword}
                 >
-                  {isChangePassword ? "Changing Password..." : "Change Password"}
+                  {isChangePassword
+                    ? "Changing Password..."
+                    : "Change Password"}
                 </button>
               </form>
             </div>
