@@ -5,9 +5,9 @@ import "@testing-library/jest-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore, Store } from "@reduxjs/toolkit";
-import Profile from "../pages/Profile"; // Adjust the import based on your folder structure
+import Profile from "../pages/Profile"; 
 import authReducer from "../slices/authSlice/authSlice";
-import { userApiSlice } from "../slices/authSlice/authApiSlice"; // Updated import
+import { userApiSlice } from "../slices/authSlice/authApiSlice"; 
 
 vi.mock("react-hot-toast", async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
