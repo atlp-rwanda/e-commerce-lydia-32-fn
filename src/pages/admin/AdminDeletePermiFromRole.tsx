@@ -59,14 +59,18 @@ const AdminDeletePermiFromRole = () => {
     toast.success('permission removed successfully')
     refetch()
     navigate('/admin/dashboard')
-   } catch (error) {
+   } catch (err) {
     //@ts-ignore
-    if(err.status === 400) {
+    if(err?.data?.error) {
       //@ts-ignore
-  toast.error(err?.data?.errors)
+  toast.error(err?.data?.error)
 }
- //@ts-ignore
-toast.error(err?.data?.message) 
+//@ts-ignore
+    if(err?.data?.message) {
+       //@ts-ignore
+    toast.error(err?.data?.message) 
+}
+
    }
   };
 

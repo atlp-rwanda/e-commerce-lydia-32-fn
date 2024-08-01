@@ -15,8 +15,9 @@ export default defineConfig({
     environment: 'jsdom',
     css: true,
     coverage: {
-      provider: 'istanbul'
-    }
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+    },
   },
   server: {
     host: "0.0.0.0",

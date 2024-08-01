@@ -76,6 +76,29 @@ const App: React.FC = () => {
           <Route path="/wishlist" element={<Wishlist />}></Route>
           <Route path="/wishlist/empty" element={<WishlistEmpty />}></Route>
 
+          <Route path="" element={<AdminPageOnly />}>
+          <Route path="*" element={<NotFoundPage />} />
+
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/create/role" element={<AdminCreateRole />} />
+          <Route
+            path="/admin/create/permission"
+            element={<AdminCreatePermission />}
+          />
+          <Route
+            path="/admin/assign/permission/:id"
+            element={<AdminAssignPermiToRole />}
+          />
+          <Route
+            path="/admin/delete/permission/:id"
+            element={<AdminDeletePermiFromRole />}
+          />
+          <Route
+            path="/admin/assign/role/:id"
+            element={<AdminAssignRoleToUser />}
+          />
+          <Route path="/admin/edit/role/:id" element={<AdminEditRole />} />
+        </Route>
         </Route>
 
         <Route path="" element={<AdminPageOnly />}>
