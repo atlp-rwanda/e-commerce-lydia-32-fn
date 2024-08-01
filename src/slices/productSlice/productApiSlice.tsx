@@ -19,12 +19,13 @@ export interface Product {
   expiryDate?: Date;
 }
 
-export interface SearchProductsResponse {
-  message: string;
-  products: Product[];
-  total: number;
-  currentPage: number;
-  totalPages: number;
+interface SearchParams {
+  name?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  category?: string;
+  page: number;
+  limit: number;
 }
 
 export const productApiSlice = apiSlice.injectEndpoints({
@@ -35,10 +36,11 @@ export const productApiSlice = apiSlice.injectEndpoints({
         method: "GET",
       }),
     }),
-    searchProducts: builder.query<SearchProductsResponse, string>({
-      query: (searchParams) => ({
-        url: `${BASE_URL}/search?${searchParams}`,
-        method: "GET",
+    searchProducts: builder.query<SearchResult, SearchParams>({
+      query: (params) => ({
+        url: '/product/search',
+        method: 'GET',
+        params,
       }),
       transformErrorResponse: (response: { status: string; data: any; }) => {
         if (response.data && response.data.error) {

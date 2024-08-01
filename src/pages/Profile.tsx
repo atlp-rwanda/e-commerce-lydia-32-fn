@@ -145,7 +145,7 @@ const Profile: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 mt-10">
+    <div className="min-h-screen bg-gray-100 py-12 ">
       <div className="relative h-64 md:h-80 lg:h-96 bg-gray-100">
           <img 
             src={background} 
