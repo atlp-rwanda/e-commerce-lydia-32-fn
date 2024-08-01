@@ -17,6 +17,25 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      include: ['src/**/*'],
+      exclude: [
+        'src/stories/**/*.tsx',
+        'src/stories/**/*.ts',
+        'src/utils/**/*.ts',
+        'src/utils/**/*.tsx',
+        'src/pages/**/*.tsx',
+        'src/Components/seller/**/*.tsx',
+        'src/hooks.ts',
+        'src/main.tsx',
+        'src/Components/Button.tsx',
+        'src/Components/ForgotPassword.tsx',
+        'src/Components/NotificationIcon.tsx',
+        'src/Components/ResetPassword.tsx',
+        'src/layouts/SellerLayout.tsx',
+        'src/slices/productSlice/singleApiSlice.tsx',
+        'src/slices/sellerSlice/editSlice.ts',
+        'src/slices/sellerSlice/sellerProductsApiSlice.tsx'
+      ]
     },
   },
   server: {
@@ -28,5 +47,5 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
-},
+  },
 });

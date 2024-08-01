@@ -48,6 +48,7 @@
     "@storybook/addon-essentials": "^8.1.11",
     "@storybook/addon-links": "^8.1.11",
     "@storybook/react": "^8.1.11",
+    "@testing-library/react-hooks": "^8.0.1",
     "@types/chart.js": "^2.9.41",
     "@types/crypto-js": "^4.2.2",
     "@types/react-chartjs-2": "^2.5.7",
