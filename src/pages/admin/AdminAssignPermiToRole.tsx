@@ -22,17 +22,21 @@ const AssignPermissionToRole = () => {
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
    try {
-    await AssignPermission({permissionId: +selectedPermission, id}).unwrap()
+     await AssignPermission({permissionId: +selectedPermission, id}).unwrap()
     toast.success('Permission Assigned Successfully')
     navigate('/admin/dashboard')
    } catch (err) {
     //@ts-ignore
-    if(err.status === 400) {
+    if(err?.data?.error){
       //@ts-ignore
-  toast.error(err?.data?.errors)
-}
- //@ts-ignore
-toast.error(err?.data?.message) 
+      toast.error(err?.data?.error)
+    }
+    //@ts-ignore
+    if(err?.data?.message){
+      //@ts-ignore
+      toast.error(err?.data?.message)
+    }
+
    }
   };
 
