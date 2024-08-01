@@ -20,13 +20,13 @@ vi.mock("react-hot-toast", async (importOriginal) => {
 
 const mockUserInfo = {
   user: {
-    firstname: "John",
-    othername: "Doe",
+    firstname: "Test",
+    othername: "Demo",
     phone: "1234567890",
-    street: "123 Main St",
-    city: "Metropolis",
-    country: "Countryland",
-    state: "Stateville",
+    street: "123 kk St",
+    city: "Kigali",
+    country: "Rwanda",
+    state: "Kigali",
     postal_code: "12345",
   },
 };
