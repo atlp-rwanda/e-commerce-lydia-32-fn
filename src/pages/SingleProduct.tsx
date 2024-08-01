@@ -122,6 +122,7 @@ const SingleProduct: React.FC = () => {
       } else if (err.status === 403) {
         // @ts-ignore
         toast.error(err?.data?.message);
+        navigate('/update-password')
       }
       else if(err.status === 406){
         console.log(err.status)

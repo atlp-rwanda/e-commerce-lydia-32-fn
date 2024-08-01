@@ -229,6 +229,7 @@ const Checkout: React.FC = () => {
         <div className="mb-6">
           <label htmlFor="payment" className="block mb-2 font-semibold">Payment Method</label>
           <select
+            data-testid='payment-method'
             id="payment"
             name="payment"
             value={orderData.payment}
@@ -252,6 +253,7 @@ const Checkout: React.FC = () => {
             <div>
               <label htmlFor="street" className="block mb-1">Street</label>
               <input
+                data-testid='street'
                 type="text"
                 id="street"
                 name="address.street"
@@ -269,6 +271,7 @@ const Checkout: React.FC = () => {
             <div>
               <label htmlFor="city" className="block mb-1">City</label>
               <input
+                data-testid='city'
                 type="text"
                 id="city"
                 name="address.city"
@@ -286,6 +289,7 @@ const Checkout: React.FC = () => {
             <div>
               <label htmlFor="country" className="block mb-1">Country</label>
               <input
+                data-testid='country'
                 type="text"
                 id="country"
                 name="address.country"
