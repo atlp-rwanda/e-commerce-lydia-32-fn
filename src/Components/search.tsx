@@ -15,7 +15,6 @@ interface SearchProps {
 const ITEMS_PER_PAGE = 6;
 
 const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
-
   const categories = [
     "Electronics",
     "Clothes",
@@ -33,6 +32,7 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
     "Musical Instruments",
     "Arts & Crafts"
   ];
+
   const dispatch = useDispatch();
   const { searchTerm, minPrice, maxPrice, category } = useSelector((state: RootState) => state.search);
 
@@ -40,17 +40,19 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
   const [localMinPrice, setLocalMinPrice] = useState(minPrice);
   const [localMaxPrice, setLocalMaxPrice] = useState(maxPrice);
   const [localCategory, setLocalCategory] = useState(category);
-  const [searchParams, setSearchParams] = useState('');
+  const [searchParams, setSearchParams] = useState<Record<string, any>>({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [localSearchResults, setLocalSearchResults] = useState<Product[]>([]);
+  const [paginatedResults, setPaginatedResults] = useState<Product[]>([]);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [isSearching, setIsSearching] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { data: searchResults, isLoading, isError, error } = useSearchProductsQuery(
-    searchParams,
+    { ...searchParams, page: currentPage, limit: ITEMS_PER_PAGE },
     {
-      skip: !searchParams
+      skip: Object.keys(searchParams).length === 0
     }
   );
 
@@ -61,40 +63,39 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
   }, [isVisible]);
 
   useEffect(() => {
-    if (searchResults && searchResults.products.length === 0) {
-      toast.error('No products that match your criteria were found');
-    } else if (searchResults) {
-      localStorage.setItem('searchResults', JSON.stringify(searchResults.products));
-      setLocalSearchResults(searchResults.products.slice(0, ITEMS_PER_PAGE));
+    if (searchResults) {
+      setPaginatedResults(searchResults.products);
+      setTotalItems(searchResults.total);
+      setTotalPages(searchResults.totalPages);
+      setCurrentPage(searchResults.currentPage);
+      setIsSearching(false);
     }
-    setIsSearching(false);
   }, [searchResults]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSearching(true);
-    setLocalSearchResults([]);
+    setPaginatedResults([]);
+    setCurrentPage(1);
     
-    if (localSearchTerm || localMinPrice || localMaxPrice || localCategory) {
-      const params = new URLSearchParams();
-      
-      if (localSearchTerm) params.append('name', localSearchTerm);
-      if (localMinPrice) params.append('minPrice', localMinPrice.toString());
-      if (localMaxPrice) params.append('maxPrice', localMaxPrice.toString());
-      if (localCategory) params.append('category', localCategory);
-      
+    const params: Record<string, any> = {};
+    
+    if (localSearchTerm) params.name = localSearchTerm;
+    if (localMinPrice) params.minPrice = Number(localMinPrice);
+    if (localMaxPrice) params.maxPrice = Number(localMaxPrice);
+    if (localCategory) params.category = localCategory;
+    
+    if (Object.keys(params).length > 0) {
       dispatch(setSearchTerm(localSearchTerm));
       dispatch(setMinPrice(localMinPrice ? Number(localMinPrice) : 0));
       dispatch(setMaxPrice(localMaxPrice ? Number(localMaxPrice) : 0));
       dispatch(setCategory(localCategory));
       
-      setSearchParams(params.toString());
-      setCurrentPage(1);
+      setSearchParams(params);
     } else {
       toast.error('Please provide at least one search parameter');
       setIsSearching(false);
     }
-    
   };
 
   const handleClear = () => {
@@ -103,24 +104,14 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
     setLocalMinPrice('');
     setLocalMaxPrice('');
     setLocalCategory('');
-    setSearchParams('');
+    setSearchParams({});
     setCurrentPage(1);
-    setLocalSearchResults([]);
-    localStorage.removeItem('searchResults');
+    setPaginatedResults([]);
   };
 
   const handlePageChange = (newPage: number) => {
-    const storedResults = JSON.parse(localStorage.getItem('searchResults') || '[]');
-    const startIndex = (newPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    const totalItems = JSON.parse(localStorage.getItem('searchResults') || '[]').length;
-    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
-    setLocalSearchResults(storedResults.slice(startIndex, endIndex));
     setCurrentPage(newPage);
   };
-
-  const totalPages = Math.ceil((JSON.parse(localStorage.getItem('searchResults') || '[]').length) / ITEMS_PER_PAGE);
-
 
   return (
     <div className="bg-white rounded-lg p-4 w-full max-w-4xl mx-auto">
@@ -135,6 +126,7 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
           />
           <select
+            data-testid="category-select"
             value={localCategory}
             onChange={(e) => setLocalCategory(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
@@ -149,14 +141,14 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input
-            type="number"
+            type="text"
             value={localMinPrice}
             onChange={(e) => setLocalMinPrice(e.target.value)}
             placeholder="Min Price"
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black"
           />
           <input
-            type="number"
+            type="text"
             value={localMaxPrice}
             onChange={(e) => setLocalMaxPrice(e.target.value)}
             placeholder="Max Price"
@@ -178,7 +170,9 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
       </div>
 
       {isLoading || isSearching ? (
-        <Spinner/>
+        <div data-testid="loading-spinner">
+          <Spinner />
+        </div>
       ) : isError && error ? (
         <p>Error occurred while searching: {
           typeof error === 'object' && error !== null && 'data' in error
@@ -186,30 +180,30 @@ const Search: React.FC<SearchProps> = ({ isVisible, onClose }) => {
             : 'An unknown error occurred'
         }</p>
       ) : (
-        localSearchResults.length > 0 ? (
+        paginatedResults.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {localSearchResults.map((product: any) => (
+              {paginatedResults.map((product: any) => (
                 <ProductCard key={product.productId} product={product} />
               ))}
             </div>
             <div className="mt-4 flex justify-center">
-            <button 
-              onClick={() => handlePageChange(currentPage - 1)} 
-              disabled={currentPage === 1}
-              className="mx-1 px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              Previous
-            </button>
-            <span className="mx-2">{`Page ${currentPage}`}</span>
-            <button 
-              onClick={() => handlePageChange(currentPage + 1)} 
-              disabled={currentPage >= totalPages}
-              className="mx-1 px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div>
+              <button 
+                onClick={() => handlePageChange(currentPage - 1)} 
+                disabled={currentPage === 1}
+                className="mx-1 px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="mx-2">{`Page ${currentPage} of ${totalPages}`}</span>
+              <button 
+                onClick={() => handlePageChange(currentPage + 1)} 
+                disabled={currentPage >= totalPages}
+                className="mx-1 px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
           </>
         ) : (
           <p>No products found</p>
