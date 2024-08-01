@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
 import { Provider } from 'react-redux';
-import  store  from '../store'; // Adjust based on your store setup
+import  store  from '../store'; 
 import { BrowserRouter } from 'react-router-dom';
 import App from '../App';
 
