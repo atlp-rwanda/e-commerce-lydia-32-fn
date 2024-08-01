@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>6/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/3</span>
+                <span class='fraction'>6/20</span>
             </div>
         
             
@@ -90,34 +90,34 @@
 <a name='L25'></a><a href='#L25'>25</a>
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L28'></a><a href='#L28'>28</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react'
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react'
 import { FaBars } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -126,23 +126,23 @@ interface HeaderProps {
   toggleSidebar: () =&gt; void;
 }
 &nbsp;
-const Header: React.FC&lt;HeaderProps&gt; = <span class="fstat-no" title="function not covered" >({</span> toggleSidebar }) =&gt; {
-  const {userInfo} = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >(s</span>tate: any) =&gt; <span class="cstat-no" title="statement not covered" >state.auth)</span></span>
+const Header: React.FC&lt;HeaderProps&gt; = <span class="fstat-no" title="function not covered" >({ toggleSidebar }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const {userInfo} = useSelector((state: any) =&gt; state.auth)</span>
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;div className="p-4 bg-white shadow flex justify-between items-center"&gt;
-      &lt;button onClick={toggleSidebar} className="text-gray-700 focus:outline-none lg:hidden"&gt;
-        &lt;i className="fas fa-bars"&gt;&lt;FaBars/&gt;&lt;/i&gt;
-      &lt;/button&gt;
-      &lt;h1 className="text-xl font-bold"&gt;
-        &lt;Link to='/admin/dashboard'&gt;Dashboard&lt;/Link&gt;
-        &lt;/h1&gt;
-      &lt;div className="flex items-center"&gt;
-        &lt;span className="mr-4"&gt;{userInfo &amp;&amp; userInfo.user.firstname}&lt;/span&gt;
+<span class="cstat-no" title="statement not covered" >    &lt;div className="p-4 bg-white shadow flex justify-between items-center"&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;button onClick={toggleSidebar} className="text-gray-700 focus:outline-none lg:hidden"&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;i className="fas fa-bars"&gt;&lt;FaBars/&gt;&lt;/i&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;/button&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;h1 className="text-xl font-bold"&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;Link to='/admin/dashboard'&gt;Dashboard&lt;/Link&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;/h1&gt;</span>
+<span class="cstat-no" title="statement not covered" >      &lt;div className="flex items-center"&gt;</span>
+<span class="cstat-no" title="statement not covered" >        &lt;span className="mr-4"&gt;{userInfo &amp;&amp; userInfo.user.firstname}&lt;/span&gt;</span>
         
-      &lt;/div&gt;
-    &lt;/div&gt;
+<span class="cstat-no" title="statement not covered" >      &lt;/div&gt;</span>
+<span class="cstat-no" title="statement not covered" >    &lt;/div&gt;</span>
   );
-}
+<span class="cstat-no" title="statement not covered" >}</span>
 &nbsp;
 export default Header</pre></td></tr></table></pre>
 
@@ -151,7 +151,7 @@ export default Header</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-01T15:39:37.758Z
+                at 2024-08-01T16:47:11.931Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

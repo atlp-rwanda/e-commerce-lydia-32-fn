@@ -53,6 +53,7 @@
     "@types/react-chartjs-2": "^2.5.7",
     "@types/react-modal": "^3.16.3",
     "@vitest/coverage-istanbul": "^2.0.5",
+    "@vitest/coverage-v8": "^2.0.5",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "crypto-js": "^4.2.0",

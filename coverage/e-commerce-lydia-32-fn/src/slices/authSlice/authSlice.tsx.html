@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">74.07% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>20/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/4</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">74.07% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>20/27</span>
             </div>
         
             
@@ -99,42 +99,42 @@
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { decodeToken } from "./../../utils/cryptoUtils";
 &nbsp;
@@ -142,8 +142,8 @@ const userInfo = localStorage.getItem('userInfo');
 const logState = localStorage.getItem('logState');
 &nbsp;
 &nbsp;
-const parsedUserInfo = userInfo ? <span class="branch-0 cbranch-no" title="branch not covered" >JSON.parse(userInfo) : n</span>ull;
-const parsedLogState = logState ? <span class="branch-0 cbranch-no" title="branch not covered" >decodeToken(logState) : n</span>ull;
+const parsedUserInfo = <span class="branch-0 cbranch-no" title="branch not covered" >userInfo ? JSON.parse(userInfo) : n</span>ull;
+const parsedLogState = <span class="branch-0 cbranch-no" title="branch not covered" >logState ? decodeToken(logState) : n</span>ull;
 &nbsp;
 const initialState = {
   userInfo: parsedUserInfo,
@@ -154,16 +154,16 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-<span class="fstat-no" title="function not covered" >    getCredentials(s</span>tate, action: PayloadAction&lt;string&gt;) {
+<span class="fstat-no" title="function not covered" >    getCredentials(state, action: PayloadAction&lt;string&gt;) {</span>
 <span class="cstat-no" title="statement not covered" >      state.userInfo = action.payload;</span>
 <span class="cstat-no" title="statement not covered" >      localStorage.setItem('userInfo', JSON.stringify(action.payload));</span>
      
-    },
-<span class="fstat-no" title="function not covered" >    logOut(s</span>tate) {
+<span class="cstat-no" title="statement not covered" >    },</span>
+<span class="fstat-no" title="function not covered" >    logOut(state) {</span>
 <span class="cstat-no" title="statement not covered" >      state.userInfo = null;</span>
 <span class="cstat-no" title="statement not covered" >      localStorage.removeItem('userInfo');</span>
 <span class="cstat-no" title="statement not covered" >      localStorage.removeItem('logState');</span>
-    },
+<span class="cstat-no" title="statement not covered" >    },</span>
 &nbsp;
   }
 });
@@ -178,7 +178,7 @@ export default authSlice.reducer;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-01T15:39:37.758Z
+                at 2024-08-01T16:47:11.931Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

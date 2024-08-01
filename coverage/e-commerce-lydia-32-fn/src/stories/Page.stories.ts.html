@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
@@ -95,25 +95,8 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,44 +104,61 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import type { Meta, StoryObj } from '@storybook/react';
-import { within, userEvent, expect } from '@storybook/test';
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" >import type { Meta, StoryObj } from '@storybook/react';</span></span></span>
+<span class="cstat-no" title="statement not covered" >import { within, userEvent, expect } from '@storybook/test';</span>
 &nbsp;
-import { Page } from './Page';
+<span class="cstat-no" title="statement not covered" >import { Page } from './Page';</span>
 &nbsp;
-const meta = <span class="cstat-no" title="statement not covered" >{</span>
-  title: 'Example/Page',
-  component: Page,
-  parameters: {
+<span class="cstat-no" title="statement not covered" >const meta = {</span>
+<span class="cstat-no" title="statement not covered" >  title: 'Example/Page',</span>
+<span class="cstat-no" title="statement not covered" >  component: Page,</span>
+<span class="cstat-no" title="statement not covered" >  parameters: {</span>
     // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
-    layout: 'fullscreen',
-  },
-} satisfies Meta&lt;typeof Page&gt;;
+<span class="cstat-no" title="statement not covered" >    layout: 'fullscreen',</span>
+<span class="cstat-no" title="statement not covered" >  },</span>
+<span class="cstat-no" title="statement not covered" >} satisfies Meta&lt;typeof Page&gt;;</span>
 &nbsp;
-export default meta;
+<span class="cstat-no" title="statement not covered" >export default meta;</span>
 type Story = StoryObj&lt;typeof meta&gt;;
 &nbsp;
-export const LoggedOut: Story = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >export const LoggedOut: Story = {};</span>
 &nbsp;
 // More on interaction testing: https://storybook.js.org/docs/writing-tests/interaction-testing
-export const LoggedIn: Story = <span class="cstat-no" title="statement not covered" >{</span>
-  play: <span class="fstat-no" title="function not covered" >async ({</span> canvasElement }) =&gt; {
-    const canvas = <span class="cstat-no" title="statement not covered" >within(canvasElement);</span>
-    const loginButton = <span class="cstat-no" title="statement not covered" >canvas.getByRole('button', { name: /Log in/i });</span>
+<span class="cstat-no" title="statement not covered" >export const LoggedIn: Story = {</span>
+<span class="cstat-no" title="statement not covered" >  play: async ({ canvasElement }) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const canvas = within(canvasElement);</span>
+<span class="cstat-no" title="statement not covered" >    const loginButton = canvas.getByRole('button', { name: /Log in/i });</span>
 <span class="cstat-no" title="statement not covered" >    await expect(loginButton).toBeInTheDocument();</span>
 <span class="cstat-no" title="statement not covered" >    await userEvent.click(loginButton);</span>
 <span class="cstat-no" title="statement not covered" >    await expect(loginButton).not.toBeInTheDocument();</span>
 &nbsp;
-    const logoutButton = <span class="cstat-no" title="statement not covered" >canvas.getByRole('button', { name: /Log out/i });</span>
+<span class="cstat-no" title="statement not covered" >    const logoutButton = canvas.getByRole('button', { name: /Log out/i });</span>
 <span class="cstat-no" title="statement not covered" >    await expect(logoutButton).toBeInTheDocument();</span>
-  },
-};
+<span class="cstat-no" title="statement not covered" >  },</span>
+<span class="cstat-no" title="statement not covered" >};</span>
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -166,7 +166,7 @@ export const LoggedIn: Story = <span class="cstat-no" title="statement not cover
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-01T15:39:37.758Z
+                at 2024-08-01T16:47:11.931Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

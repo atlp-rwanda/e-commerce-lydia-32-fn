@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/23</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/20</span>
+                <span class='fraction'>0/26</span>
             </div>
         
             
@@ -100,7 +100,7 @@
 <a name='L35'></a><a href='#L35'>35</a>
 <a name='L36'></a><a href='#L36'>36</a>
 <a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L38'></a><a href='#L38'>38</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -124,64 +124,64 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState, useEffect } from 'react';
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import { useState, useEffect } from 'react';<span class="fstat-no" title="function not covered" ><span class="branch-0 cbranch-no" title="branch not covered" ></span></span></span>
 &nbsp;
 interface QueueItem {
   id: string;
   fetch: () =&gt; Promise&lt;any&gt;;
 }
 &nbsp;
-export const useDataFetchQueue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(i</span>nitialQueue: QueueItem[]) =&gt; {</span>
-  const [queue, setQueue] = <span class="cstat-no" title="statement not covered" >useState&lt;QueueItem[]&gt;(initialQueue);</span>
-  const [currentItem, setCurrentItem] = <span class="cstat-no" title="statement not covered" >useState&lt;QueueItem | null&gt;(null);</span>
-  const [results, setResults] = <span class="cstat-no" title="statement not covered" >useState&lt;Record&lt;string, any&gt;&gt;({});</span>
-  const [isLoading, setIsLoading] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
+<span class="cstat-no" title="statement not covered" >export const useDataFetchQueue = (initialQueue: QueueItem[]) =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >  const [queue, setQueue] = useState&lt;QueueItem[]&gt;(initialQueue);</span>
+<span class="cstat-no" title="statement not covered" >  const [currentItem, setCurrentItem] = useState&lt;QueueItem | null&gt;(null);</span>
+<span class="cstat-no" title="statement not covered" >  const [results, setResults] = useState&lt;Record&lt;string, any&gt;&gt;({});</span>
+<span class="cstat-no" title="statement not covered" >  const [isLoading, setIsLoading] = useState(false);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-    const processQueue = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >      if (queue.length === 0 || currentItem) <span class="cstat-no" title="statement not covered" >return;</span></span>
+<span class="cstat-no" title="statement not covered" >  useEffect(() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    const processQueue = async () =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >      if (queue.length === 0 || currentItem) return;</span>
 &nbsp;
-      const nextItem = <span class="cstat-no" title="statement not covered" >queue[0];</span>
+<span class="cstat-no" title="statement not covered" >      const nextItem = queue[0];</span>
 <span class="cstat-no" title="statement not covered" >      setCurrentItem(nextItem);</span>
 <span class="cstat-no" title="statement not covered" >      setIsLoading(true);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      try {</span>
-        const result = <span class="cstat-no" title="statement not covered" >await nextItem.fetch();</span>
-<span class="cstat-no" title="statement not covered" >        setResults(<span class="fstat-no" title="function not covered" >prev =&gt; (<span class="cstat-no" title="statement not covered" >{</span> ...prev, [nextItem.id]: result }))</span>;</span>
-      } catch (error) {
+<span class="cstat-no" title="statement not covered" >        const result = await nextItem.fetch();</span>
+<span class="cstat-no" title="statement not covered" >        setResults(prev =&gt; ({ ...prev, [nextItem.id]: result }));</span>
+<span class="cstat-no" title="statement not covered" >      } catch (error) {</span>
 <span class="cstat-no" title="statement not covered" >        console.error(`Error fetching data for ${nextItem.id}:`, error);</span>
-      }
+<span class="cstat-no" title="statement not covered" >      }</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      setQueue(<span class="fstat-no" title="function not covered" >prev =&gt; <span class="cstat-no" title="statement not covered" >p</span>rev.slice(1))</span>;</span>
+<span class="cstat-no" title="statement not covered" >      setQueue(prev =&gt; prev.slice(1));</span>
 <span class="cstat-no" title="statement not covered" >      setCurrentItem(null);</span>
 <span class="cstat-no" title="statement not covered" >      setIsLoading(false);</span>
-    };
+<span class="cstat-no" title="statement not covered" >    };</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    processQueue();</span>
-  }, [queue, currentItem]);
+<span class="cstat-no" title="statement not covered" >  }, [queue, currentItem]);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return { results, isLoading };</span>
-};</pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >};</span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-08-01T15:39:37.758Z
+                at 2024-08-01T16:47:11.931Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
