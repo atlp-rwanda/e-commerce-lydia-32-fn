@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from '../../Components/admin/Sidebar';
 import Header from '../../Components/admin/Header';
 import { useUpdateRoleMutation } from '../../slices/roleSlice/requestroleApiSlice';
 import Spinner from '../../Components/Spinners';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { useSelector, UseSelector } from 'react-redux';
 
 const AdminEditRole = () => {
   const [role, setRole] = useState('');
@@ -13,6 +14,15 @@ const AdminEditRole = () => {
   const navigate = useNavigate()
   const {id} = useParams()
   const [editRole, {isLoading}] = useUpdateRoleMutation()
+
+  const {roleInfo} = useSelector((state: any) => state.role)
+
+  useEffect(() => {
+   if(roleInfo) {
+    const myRole = roleInfo.roles.filter((role: any) => role.id == id)
+    setRole(myRole[0].name)
+   }
+  }, [roleInfo])
 
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
