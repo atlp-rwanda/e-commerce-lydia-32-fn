@@ -11,6 +11,13 @@ import toast from "react-hot-toast";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { useAddToWishlistMutation } from "../slices/wishlistSlice/wishlistSliceApi";
+import { useDispatch } from "react-redux";
+import { useAddReviewMutation } from "../slices/reviewSlice/productReviewsApiSlice";
+import {
+  addReview,
+  setError,
+  setLoading,
+} from "../slices/reviewSlice/reviewSlice";
 
 interface ProductCardProps {
   product: {
@@ -21,12 +28,17 @@ interface ProductCardProps {
     description: string;
     productCategory: string;
     quantity: number;
+    reviews: String[];
+    averageRating: number;
   };
 }
+
+// product.averageRating
 
 const SingleProduct: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [product, setProduct] = useState<ProductCardProps["product"] | null>(
     null
   );
@@ -37,11 +49,20 @@ const SingleProduct: React.FC = () => {
   const { refetch } = useGetCartQuery();
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
   const [addingToWishlist, setAddingToWishlist] = useState<boolean>(false);
-  const { data: productsData, isLoading } = useGetProductsQuery();
+  const {
+    data: productsData,
+    isLoading,
+    refetch: RefetchProductdata,
+  } = useGetProductsQuery();
+  const [activeTab, setActiveTab] = useState("description");
+  const dispatch = useDispatch();
+  const [addReviewMutation] = useAddReviewMutation();
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(5);
+  const userInfo = localStorage.getItem("userInfo");
 
   const handleAddToWishlist = async () => {
     try {
-      const userInfo = localStorage.getItem("userInfo");
       if (!userInfo) {
         toast.error("Please Login First To Proceed");
         return;
@@ -66,8 +87,7 @@ const SingleProduct: React.FC = () => {
         toast.error("Product Already In Your Wishlist!");
       } else if (err.status === 403) {
         toast.error(err?.data?.message || "Authentication error");
-      } 
-      else {
+      } else {
         toast.error("Error adding product to wishlist");
       }
     } finally {
@@ -88,8 +108,32 @@ const SingleProduct: React.FC = () => {
           p.productId.toString() !== id
       );
       setRelatedProducts(related);
+      if (currentProduct && currentProduct.reviews) {
+        const totalRating = currentProduct.reviews.reduce(
+          (acc: any, review: { RatingValue: any }) => acc + review.RatingValue,
+          0
+        );
+        const averageRating = totalRating / currentProduct.reviews.length;
+        const roundedAverage = Math.floor(averageRating);
+
+        setProduct({ ...currentProduct, averageRating: roundedAverage });
+
+        console.log(
+          "THIS IS THE AVERAGE RATING OF THIS PRODUCT",
+          averageRating,
+          roundedAverage
+        );
+      }
     }
   }, [productsData, id]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      RefetchProductdata();
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [RefetchProductdata]);
 
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     SetCartItemQty(Number(e.target.value));
@@ -122,15 +166,76 @@ const SingleProduct: React.FC = () => {
       } else if (err.status === 403) {
         // @ts-ignore
         toast.error(err?.data?.message);
-        navigate('/update-password')
-      }
-      else if(err.status === 406){
-        console.log(err.status)
-        toast.error(err?.data?.message || "You can't add your own product to cart");
+        navigate("/update-password");
+      } else if (err.status === 406) {
+        console.log(err.status);
+        toast.error(
+          err?.data?.message || "You can't add your own product to cart"
+        );
       }
       console.error("Error adding product to cart:", err.status);
     } finally {
       setAddingToCart(false);
+    }
+  };
+
+  const getRatingWord = (rating: number): string => {
+    switch (rating) {
+      case 1:
+        return "Poor";
+      case 2:
+        return "Fair";
+      case 3:
+        return "Good";
+      case 4:
+        return "Very Good";
+      case 5:
+        return "Amazing!";
+      default:
+        return "Unknown";
+    }
+  };
+
+  const handleAddreview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(setLoading(true));
+
+    const reviewData = {
+      productId: product?.productId,
+      RatingValue: rating,
+      review: reviewText,
+    };
+
+    console.log("Sending review data:", reviewData);
+
+    const userInfo = localStorage.getItem("userInfo");
+    if (!userInfo) {
+      toast.error("Please Login First To Proceed");
+      return;
+    }
+
+    try {
+      const result = await addReviewMutation(reviewData).unwrap();
+      dispatch(addReview(result));
+      setReviewText("");
+      setRating(5);
+      toast.success("Review submitted successfully");
+      RefetchProductdata();
+    } catch (err: any) {
+      console.error("Error details:", err);
+      const errorMessage =
+        err.data?.message || err.message || "An unknown error occurred";
+      dispatch(setError(errorMessage));
+      toast.error(errorMessage);
+
+      if (
+        errorMessage === "You didn't buy this product" &&
+        err.status === 400
+      ) {
+        console.log("400 ERROR YOU DIDN'T BUTY THE PRODUCT");
+      }
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -141,6 +246,13 @@ const SingleProduct: React.FC = () => {
   if (!product) {
     return <div>Product not found</div>;
   }
+
+  // const sortedReviews = product.reviews.sort(
+  //   (a: any, b: any) =>
+  //     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  // );
+
+  // console.log("this is the product", product.reviews, sortedReviews);
 
   const sideImages =
     product.images.length <= 1
@@ -175,18 +287,27 @@ const SingleProduct: React.FC = () => {
             {product.productName}
           </h1>
           <p className="text-xl text-gray-700 mb-4">Rwf {product.price}</p>
-          <div className="flex items-center mb-2">
-            {[...Array(5)].map((_, index) => (
-              <svg
-                key={index}
-                className="w-5 h-5 text-yellow-100 fill-current"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 .587l3.668 7.568L24 9.423l-6 6.097 1.428 8.485L12 18.908l-7.428 5.097L6 15.52 0 9.423l8.332-1.268L12 .587z" />
-              </svg>
-            ))}
-          </div>
+          {product.reviews.length !== 0 ? (
+            <div className="flex items-center mb-2">
+              {[...Array(product.averageRating)].map((_, index) => (
+                <svg
+                  key={index}
+                  className="w-5 h-5 text-yellow-400 fill-current"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 .587l3.668 7.568L24 9.423l-6 6.097 1.428 8.485L12 18.908l-7.428 5.097L6 15.52 0 9.423l8.332-1.268L12 .587z" />
+                </svg>
+              ))}{" "}
+              <br />
+              <p className="text-gray-700 font-bold ">
+                &nbsp; {` Based on ${product.reviews.length}`}{" "}
+                {product.reviews.length <= 1 ? "Review" : "Reviews"}
+              </p>
+            </div>
+          ) : (
+            <p className="font-bold text-xl">No reviews yet</p>
+          )}
           <p className="text-gray-600 mb-4">{product.description}.</p>
           <div className="flex items-center justify-start align-middle ">
             <div className="flex items-center">
@@ -201,24 +322,22 @@ const SingleProduct: React.FC = () => {
               />
             </div>
             <div className="ml-5 flex flex-col sm:flex-row sm:flex-wrap gap-4 px-4 sm:px-0">
-            <button
-              onClick={handleAddToCart}
-              className="w-full sm:w-auto mb-4 sm:mb-0 px-4 sm:px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105 text-sm sm:text-base"
-            >
-              {addingToCart ? "Adding Item To Cart..." : "Add to Cart"}
-            </button>
-            <button
-              onClick={handleAddToWishlist}
-              className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105 text-sm sm:text-base"
-              disabled={addingToWishlist}
-            >
-              {addingToWishlist ? "Adding to Wishlist..." : "Add to Wishlist"}
-            </button>
+              <button
+                onClick={handleAddToCart}
+                className="w-full sm:w-auto mb-4 sm:mb-0 px-4 sm:px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105 text-sm sm:text-base"
+              >
+                {addingToCart ? "Adding Item To Cart..." : "Add to Cart"}
+              </button>
+              <button
+                onClick={handleAddToWishlist}
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 bg-black text-white rounded transition duration-300 ease-in-out transform hover:bg-gray-800 hover:scale-105 text-sm sm:text-base"
+                disabled={addingToWishlist}
+              >
+                {addingToWishlist ? "Adding to Wishlist..." : "Add to Wishlist"}
+              </button>
+            </div>
           </div>
-          </div>
-          
-          
-          
+
           <div className="mt-8">
             <h2 className="text-lg font-semibold mb-2">Dimensions:</h2>
             <p className="text-gray-600">10x10x10 cm</p>
@@ -233,33 +352,124 @@ const SingleProduct: React.FC = () => {
             </h2>
           </div>
         </div>
-
-        
       </div>
       <div className="mt-12">
         <ul className="flex border-b">
           <li className="mr-1">
             <a
-              className="bg-white inline-block py-2 px-4 text-black font-semibold"
-              href="#description"
+              className={`inline-block py-2 px-4 font-semibold ${
+                activeTab === "description"
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
+              }`}
+              href="#"
+              onClick={() => setActiveTab("description")}
             >
               Description
             </a>
           </li>
           <li className="mr-1">
             <a
-              className="bg-white inline-block py-2 px-4 text-gray-400 hover:text-black font-semibold"
-              href="#reviews"
+              className={`inline-block py-2 px-4 font-semibold ${
+                activeTab === "reviews"
+                  ? "bg-black text-white"
+                  : "bg-white text-black"
+              }`}
+              href="#"
+              onClick={() => setActiveTab("reviews")}
             >
               Reviews
             </a>
           </li>
         </ul>
-        <div id="description" className="mt-4">
+        <div
+          id="description"
+          className={`mt-4 ${activeTab === "description" ? "" : "hidden"}`}
+        >
           <p className="text-gray-600">{product.description}</p>
         </div>
-        <div id="reviews" className="mt-4 hidden">
-          <p className="text-gray-600">No reviews yet.</p>
+        <div
+          id="reviews"
+          className={`mt-4 ${activeTab === "reviews" ? "" : "hidden"}`}
+        >
+          <h2 className="text-2xl font-bold mb-4 text-gray-600">
+            {product.reviews.length}{" "}
+            {product.reviews.length <= 1 ? "REVIEW" : "REVIEWS"}
+            {` FOR ${product.productName.toUpperCase()}`}
+          </h2>
+
+          {/* New review form */}
+
+          {userInfo ? (
+            <form onSubmit={handleAddreview} className="mb-10">
+              <h3 className="text-xl font-semibold mb-2">
+                Your Review<span className="text-red-400">*</span>
+              </h3>
+              <textarea
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                className="w-full p-2 border rounded mb-4"
+                rows={6}
+                required
+              />
+              <div className="mb-4">
+                <label className="block mb-2">Your Rating:</label>
+                <input
+                  type="number"
+                  min="1"
+                  max="5"
+                  value={rating}
+                  onChange={(e) =>
+                    setRating(
+                      Math.min(5, Math.max(1, parseInt(e.target.value)))
+                    )
+                  }
+                  className="border rounded p-2 w-20"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-black text-white py-2 px-4 rounded"
+                onClick={handleAddreview}
+                // disabled={isLoading}
+              >
+                {isLoading ? "Submitting..." : "Submit"}
+                {isLoading && <span className="loading-dots">...</span>}
+              </button>
+            </form>
+          ) : (
+            ""
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {product.reviews.map((review: any) => (
+              <div className="bg-gray-50 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ease-in-out mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <p className="font-bold">{`${review.user.firstname} ${review.user.othername}`}</p>
+                    <div className="flex">
+                      {[...Array(review.RatingValue)].map((_, index) => (
+                        <svg
+                          key={index}
+                          className="w-5 h-5 text-yellow-400 fill-current"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M12 .587l3.668 7.568L24 9.423l-6 6.097 1.428 8.485L12 18.908l-7.428 5.097L6 15.52 0 9.423l8.332-1.268L12 .587z" />
+                        </svg>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-gray-500">
+                    {new Date(review.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <p className="font-bold mb-2">
+                  {getRatingWord(review.RatingValue)}
+                </p>
+                <p>{review.review}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <div className="mt-12">
