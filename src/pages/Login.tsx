@@ -54,7 +54,9 @@ const Login: React.FC = () => {
 
     try {
       const res = await login({ email, password }).unwrap();
-
+     if(res.message === 'Your account is blocked, check your email to see the reason why') {
+       return toast.error(res.message)
+     }
       if (res.message === "2FA code sent to your email") {
         setIs2FARequired(true);
         return toast.success("2FA code sent to your email");

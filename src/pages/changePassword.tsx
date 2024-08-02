@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useUpdatePasswordMutation } from '../slices/authSlice/authApiSlice';
+import { useChangePasswordMutation } from '../slices/authSlice/authApiSlice';
 import { clearCredentials } from '../slices/authSlice/authSlice';
 import toast from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -18,7 +18,7 @@ const ChangePassword: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state: any) => state.auth);
-  const [updatePassword] = useUpdatePasswordMutation();
+  const [changePassword] = useChangePasswordMutation();
 
   useEffect(() => {
     if (!userInfo || !userInfo.passwordExpired) {
@@ -37,7 +37,7 @@ const ChangePassword: React.FC = () => {
     }
 
     try {
-      await updatePassword({ currentPassword, newPassword }).unwrap();
+      await changePassword({ currentPassword, newPassword }).unwrap();
       toast.success('Password updated successfully');
       dispatch(clearCredentials());
       navigate('/login');
