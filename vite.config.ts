@@ -47,11 +47,11 @@ export default defineConfig({
         'src/layouts/sellerDashboardLayout.tsx',
         'src/slices/notificationSlice/notificationSlice.tsx',
         'src/Components/ConfirmationDialog.tsx',
-        'src/Components/EmptyCart.tsx',
+        // 'src/Components/EmptyCart.tsx',
         'src/Components/SellerProductCard.tsx',
         'src/Components/UpdateProductDialog.tsx',
         'src/Components/navbar.tsx',
-        'src/Components/wishlistEmpty.tsx',
+        // 'src/Components/wishlistEmpty.tsx',
       ]
     },
   },
