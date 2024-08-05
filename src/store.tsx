@@ -11,6 +11,7 @@ import orderSlice from "./slices/orderSlice/orderSlice";
 import sellerProductSlice from "./slices/sellerSlice/sellerProductSlice";
 import sellerNotificationSlice from "./slices/notificationSlice/notificationSlice";
 import wishlistSlice from "./slices/wishlistSlice/wishlistSlice";
+import reviewSlice from "./slices/reviewSlice/reviewSlice";
 
 const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
     users: userSlice,
     order: orderSlice,
     wishlist: wishlistSlice,
+    review: reviewSlice,
     [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
