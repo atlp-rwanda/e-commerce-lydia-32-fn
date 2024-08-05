@@ -10,7 +10,6 @@ import * as userApiSlice from '../slices/authSlice/authApiSlice';
 import * as authSlice from '../slices/authSlice/authSlice';
 import toast from 'react-hot-toast';
 
-// Mocks
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
