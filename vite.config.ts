@@ -18,21 +18,11 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       include: ['src/**/*'],
-      exclude: [
-        'src/stories/**/*.tsx',
-        'src/stories/**/*.ts',
-        'src/utils/**/*.tsx',
+      exclude: [   
         'src/utils/api.ts',
         'src/pages/**/*.tsx',
         'src/Components/seller/**/*.tsx',
-        'src/hooks.ts',
-        'src/main.tsx',
-        'src/slices/sellerSlice/editSlice.ts',
-        'src/slices/sellerSlice/sellerProductsApiSlice.tsx',
-        'src/layouts/sellerDashboardLayout.tsx',
-        'src/slices/notificationSlice/notificationSlice.tsx',
-        'src/Components/UpdateProductDialog.tsx',
-        'src/Components/navbar.tsx',
+       
       ]
     },
   },

@@ -25,12 +25,7 @@ const  AdminAssignRoleToUser = () => {
     await AssignRole({roleId: +selectedRole, id}).unwrap()
     toast.success('Permission Assigned Successfully')
     navigate('/admin/dashboard')
-   } catch (error) {
-    //@ts-ignore
-    if(err.status === 400) {
-      //@ts-ignore
-  toast.error(err?.data?.errors)
-}
+   } catch (err) {
  //@ts-ignore
 toast.error(err?.data?.message) 
    }
