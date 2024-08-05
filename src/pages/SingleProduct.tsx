@@ -49,6 +49,7 @@ const SingleProduct: React.FC = () => {
   const { refetch } = useGetCartQuery();
   const [addingToCart, setAddingToCart] = useState<boolean>(false);
   const [addingToWishlist, setAddingToWishlist] = useState<boolean>(false);
+  const [addingReview, setAddingReview] = useState<boolean>(false);
   const {
     data: productsData,
     isLoading,
@@ -214,6 +215,8 @@ const SingleProduct: React.FC = () => {
       return;
     }
 
+    setAddingReview(true);
+
     try {
       const result = await addReviewMutation(reviewData).unwrap();
       dispatch(addReview(result));
@@ -235,6 +238,7 @@ const SingleProduct: React.FC = () => {
         console.log("400 ERROR YOU DIDN'T BUTY THE PRODUCT");
       }
     } finally {
+      setAddingReview(false);
       dispatch(setLoading(false));
     }
   };
@@ -289,16 +293,20 @@ const SingleProduct: React.FC = () => {
           <p className="text-xl text-gray-700 mb-4">Rwf {product.price}</p>
           {product.reviews.length !== 0 ? (
             <div className="flex items-center mb-2">
-              {[...Array(product.averageRating)].map((_, index) => (
+              {[...Array(5)].map((_, index) => (
                 <svg
                   key={index}
-                  className="w-5 h-5 text-yellow-400 fill-current"
+                  className={`w-5 h-5 ${
+                    index < product.averageRating
+                      ? "text-yellow-500"
+                      : "text-gray-200"
+                  } fill-current`}
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                 >
-                  <path d="M12 .587l3.668 7.568L24 9.423l-6 6.097 1.428 8.485L12 18.908l-7.428 5.097L6 15.52 0 9.423l8.332-1.268L12 .587z" />
+                  <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
                 </svg>
-              ))}{" "}
+              ))}
               <br />
               <p className="text-gray-700 font-bold ">
                 &nbsp; {` Based on ${product.reviews.length}`}{" "}
@@ -433,8 +441,8 @@ const SingleProduct: React.FC = () => {
                 onClick={handleAddreview}
                 // disabled={isLoading}
               >
-                {isLoading ? "Submitting..." : "Submit"}
-                {isLoading && <span className="loading-dots">...</span>}
+                {addingReview ? "Submitting..." : "Submit"}
+                {addingReview && <span className="loading-dots">...</span>}
               </button>
             </form>
           ) : (
@@ -447,14 +455,18 @@ const SingleProduct: React.FC = () => {
                   <div>
                     <p className="font-bold">{`${review.user.firstname} ${review.user.othername}`}</p>
                     <div className="flex">
-                      {[...Array(review.RatingValue)].map((_, index) => (
+                      {[...Array(5)].map((_, index) => (
                         <svg
                           key={index}
-                          className="w-5 h-5 text-yellow-400 fill-current"
+                          className={`w-5 h-5 ${
+                            index < review.RatingValue
+                              ? "text-yellow-500"
+                              : "text-gray-200"
+                          } fill-current`}
                           xmlns="http://www.w3.org/2000/svg"
                           viewBox="0 0 24 24"
                         >
-                          <path d="M12 .587l3.668 7.568L24 9.423l-6 6.097 1.428 8.485L12 18.908l-7.428 5.097L6 15.52 0 9.423l8.332-1.268L12 .587z" />
+                          <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
                         </svg>
                       ))}
                     </div>

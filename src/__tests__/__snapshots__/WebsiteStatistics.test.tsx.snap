@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WebsiteStatistics Component > should match snapshot 1`] = `
+<div>
+  <div
+    class="bg-white p-4 shadow rounded"
+  >
+    <h2
+      class="text-lg font-bold mb-4"
+    >
+      Website Statistics
+    </h2>
+    <canvas
+      data-testid="chart"
+    />
+  </div>
+</div>
+`;

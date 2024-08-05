@@ -1,0 +1,20 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WishlistEmpty Component > should match the snapshot 1`] = `
+<DocumentFragment>
+  <section
+    class="text-center flex flex-col justify-center items-center h-96 bg-gray-50 mt-16"
+  >
+    <div
+      class="text-5xl font-semibold tracking-widest"
+    >
+      WISHLIST
+    </div>
+    <div
+      class="text-lg text-gray-400 tracking-tight font-medium"
+    >
+      No Items in your wishlist
+    </div>
+  </section>
+</DocumentFragment>
+`;

@@ -20,13 +20,8 @@ const AdminCreateRole = () => {
       toast.success('role created successfully')
       navigate('/admin/dashboard')
     } catch (err) {
-    //@ts-ignore
-      if(err.status === 400) {
-            //@ts-ignore
-        toast.error(err?.data?.errors)
-      }
        //@ts-ignore
-      toast.error(err?.data?.message)  
+      toast.error(err?.data?.error)  
     }    
   };
 
